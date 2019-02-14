@@ -17,3 +17,5 @@
 |DE01|De demo gebruikt de interface om de robotarm het volgende scenario te laten doorlopen: <br>• Opstart en initialisatie.<br>• Korte pauze.<br>• Voorgeprogrammeerde posities: Ready en Straight up.<br>• Verschillende opeenvolgende armverplaatsingen naar verschillende locaties.<br>• Noodstop (werking moet duidelijk zichtbaar zijn).<br>• Park.|4|
 |Totaal:||40|
 ### Should
+|ID|Omschrijving|Punten|
+|---|---|---|
