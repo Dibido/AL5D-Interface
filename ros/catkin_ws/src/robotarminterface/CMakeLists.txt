@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8.3)
+cmake_minimum_required(VERSION 3.7.2)
 project(robotarminterface)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
@@ -17,7 +17,7 @@ find_package(catkin REQUIRED COMPONENTS
 )
 
 ## System dependencies are found with CMake's conventions
-# find_package(Boost REQUIRED COMPONENTS system)
+find_package(Boost REQUIRED COMPONENTS system)
 
 
 ## Uncomment this if the package has a setup.py. This macro ensures
@@ -71,10 +71,11 @@ find_package(catkin REQUIRED COMPONENTS
 # )
 
 ## Generate added messages and services with any dependencies listed here
-# generate_messages(
-#   DEPENDENCIES
-#   actionlib_msgs#   std_msgs
-# )
+generate_messages(
+  DEPENDENCIES
+  actionlib_msgs
+  std_msgs
+)
 
 ################################################
 ## Declare ROS dynamic reconfigure parameters ##
@@ -109,7 +110,7 @@ catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES robotarminterface
 #  CATKIN_DEPENDS actionlib actionlib_msgs message_generation roscpp rospy std_msgs
-#  DEPENDS system_lib
+ DEPENDS roscpp rospy std_msgs actionlib actionlib_msgs message_runtime system_lib 
 )
 
 ###########
@@ -119,7 +120,7 @@ catkin_package(
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
 include_directories(
-# include
+  include
   ${catkin_INCLUDE_DIRS}
 )
 
@@ -127,6 +128,8 @@ include_directories(
 # add_library(${PROJECT_NAME}
 #   src/${PROJECT_NAME}/robotarminterface.cpp
 # )
+
+# add_library(lowleveldriver src/lowlevel.cpp)
 
 ## Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries

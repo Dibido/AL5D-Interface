@@ -1,5 +1,8 @@
-#Ignore build dir
+# Ignore build dir
 ros/catkin_ws/build
+
+# Ignore devel dir
+ros/catkin_ws/devel
 
 # Prerequisites
 *.d
