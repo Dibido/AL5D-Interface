@@ -1,5 +1,5 @@
 /**
- * @file lowlevel.h
+ * @file lowlevel.hpp
  * @author your name (you@domain.com)
  * @brief lowlevel interface
  * @version 0.1
@@ -10,7 +10,14 @@
 
 class lowlevel
 {
+  public:
+  lowlevel();
+  virtual ~lowlevel();
 
+  inline int addNumbers(int a, int b)
+  {
+    return a + b;
+  }
 };
 
 #endif
