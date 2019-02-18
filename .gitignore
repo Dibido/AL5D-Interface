@@ -33,3 +33,6 @@ ros/catkin_ws/build
 *.exe
 *.out
 *.app
+
+# Lock file (used by astah amongst others)
+*.lock
