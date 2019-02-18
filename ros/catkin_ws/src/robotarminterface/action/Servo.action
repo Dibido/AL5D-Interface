@@ -1,0 +1,8 @@
+#goal definition
+uint16 pulsewidth
+---
+#result definition
+uint16 pulsewidth
+---
+#feedback
+uint16 pulsewidth
