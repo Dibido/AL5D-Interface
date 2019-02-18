@@ -129,7 +129,15 @@ include_directories(
 #   src/${PROJECT_NAME}/robotarminterface.cpp
 # )
 
-# add_library(lowleveldriver src/lowlevel.cpp)
+add_library(lowleveldriver SHARED src/lowlevel.cpp)
+
+add_executable(robotarmclient src/robotarm_client.cpp)
+add_dependencies(robotarmclient robotarminterface_generate_messages_cpp)
+target_link_libraries(robotarmclient ${catkin_LIBRARIES})
+
+add_executable(highleveldriver src/highlevel.cpp)
+add_dependencies(highleveldriver robotarminterface_generate_messages_cpp)
+target_link_libraries(highleveldriver ${catkin_LIBRARIES} lowleveldriver)
 
 ## Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries
