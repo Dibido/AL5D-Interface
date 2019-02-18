@@ -1,0 +1,8 @@
+prefix=/home/owner/git/AL5D-Interface/ros/catkin_ws/devel
+
+Name: robotarminterface
+Description: Description of robotarminterface
+Version: 0.0.0
+Cflags: 
+Libs: -L/home/owner/git/AL5D-Interface/ros/catkin_ws/devel/lib 
+Requires: 

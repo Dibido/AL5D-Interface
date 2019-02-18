@@ -1,0 +1,2 @@
+- setup-file:
+    local-name: /home/owner/git/AL5D-Interface/ros/catkin_ws/devel/setup.sh
