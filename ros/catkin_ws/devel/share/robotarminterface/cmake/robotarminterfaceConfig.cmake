@@ -67,14 +67,14 @@ set(robotarminterface_CONFIG_INCLUDED TRUE)
 
 # set variables for source/devel/install prefixes
 if("TRUE" STREQUAL "TRUE")
-  set(robotarminterface_SOURCE_PREFIX /home/owner/git/AL5D-Interface/ros/catkin_ws/src/robotarminterface)
-  set(robotarminterface_DEVEL_PREFIX /home/owner/git/AL5D-Interface/ros/catkin_ws/devel)
+  set(robotarminterface_SOURCE_PREFIX /home/marnix/WoR/World/Interface/AL5D-Interface/ros/catkin_ws/src/robotarminterface)
+  set(robotarminterface_DEVEL_PREFIX /home/marnix/WoR/World/Interface/AL5D-Interface/ros/catkin_ws/devel)
   set(robotarminterface_INSTALL_PREFIX "")
   set(robotarminterface_PREFIX ${robotarminterface_DEVEL_PREFIX})
 else()
   set(robotarminterface_SOURCE_PREFIX "")
   set(robotarminterface_DEVEL_PREFIX "")
-  set(robotarminterface_INSTALL_PREFIX /home/owner/git/AL5D-Interface/ros/catkin_ws/install)
+  set(robotarminterface_INSTALL_PREFIX /home/marnix/WoR/World/Interface/AL5D-Interface/ros/catkin_ws/install)
   set(robotarminterface_PREFIX ${robotarminterface_INSTALL_PREFIX})
 endif()
 
@@ -91,9 +91,9 @@ endif()
 # flag project as catkin-based to distinguish if a find_package()-ed project is a catkin project
 set(robotarminterface_FOUND_CATKIN_PROJECT TRUE)
 
-if(NOT "/home/owner/git/AL5D-Interface/ros/catkin_ws/devel/include " STREQUAL " ")
+if(NOT "/home/marnix/WoR/World/Interface/AL5D-Interface/ros/catkin_ws/devel/include " STREQUAL " ")
   set(robotarminterface_INCLUDE_DIRS "")
-  set(_include_dirs "/home/owner/git/AL5D-Interface/ros/catkin_ws/devel/include")
+  set(_include_dirs "/home/marnix/WoR/World/Interface/AL5D-Interface/ros/catkin_ws/devel/include")
   if(NOT " " STREQUAL " ")
     set(_report "Check the issue tracker '' and consider creating a ticket if the problem has not been reported yet.")
   elseif(NOT " " STREQUAL " ")
@@ -110,7 +110,7 @@ if(NOT "/home/owner/git/AL5D-Interface/ros/catkin_ws/devel/include " STREQUAL " 
         message(FATAL_ERROR "Project 'robotarminterface' specifies '${idir}' as an include dir, which is not found.  It does not exist in '${include}'.  ${_report}")
       endif()
     else()
-      message(FATAL_ERROR "Project 'robotarminterface' specifies '${idir}' as an include dir, which is not found.  It does neither exist as an absolute directory nor in '/home/owner/git/AL5D-Interface/ros/catkin_ws/src/robotarminterface/${idir}'.  ${_report}")
+      message(FATAL_ERROR "Project 'robotarminterface' specifies '${idir}' as an include dir, which is not found.  It does neither exist as an absolute directory nor in '/home/marnix/WoR/World/Interface/AL5D-Interface/ros/catkin_ws/src/robotarminterface/${idir}'.  ${_report}")
     endif()
     _list_append_unique(robotarminterface_INCLUDE_DIRS ${include})
   endforeach()
@@ -129,7 +129,7 @@ foreach(library ${libraries})
     set(lib_path "")
     set(lib "${library}-NOTFOUND")
     # since the path where the library is found is returned we have to iterate over the paths manually
-    foreach(path /home/owner/git/AL5D-Interface/ros/catkin_ws/devel/lib;/home/owner/git/AL5D-Interface/ros/catkin_ws/devel/lib;/opt/ros/melodic/lib)
+    foreach(path /home/marnix/WoR/World/Interface/AL5D-Interface/ros/catkin_ws/devel/lib;/home/marnix/WoR/World/Interface/AL5D-Interface/ros/catkin_ws/devel/lib;/opt/ros/melodic/lib)
       find_library(lib ${library}
         PATHS ${path}
         NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH)
