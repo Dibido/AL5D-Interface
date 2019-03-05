@@ -1,32 +1,35 @@
 #include "ros/ros.h"
 #include <iostream>
-#include <actionlib/client/simple_action_client.h>
-#include <actionlib/client/terminal_state.h>
 
-#include "robotarminterface/ServoAction.h"
+#include "robotarminterface/robotarm.h"
 
 int main(int argc, char** argv)
 {
-  ros::init(argc, argv, "servo_actionclient");
+  ros::init(argc, argv, "servo_client");
 
-  if(argc != 2)
+  ros::NodeHandle lNodeHandler;
+  ros::Publisher lRobotarmPublisher = lNodeHandler.advertise<robotarminterface::robotarm>("robotarm", 1000);
+
+  if(argc != 4)
   {
-    ROS_INFO("%d",argc);
-    ROS_WARN("Usage: servo_actionclient <goal>");
+    ROS_WARN("Usage: servo_actionclient [servoId] [position] [time]");
     return 1;
   }
-
-  actionlib::SimpleActionClient<robotarminterface::ServoAction> actionClient("servo_action", true);
-
-  ROS_INFO("Waiting for servo action server to start.");
-  actionClient.waitForServer();
-
-  ROS_INFO("Servo action server available, sending goal.");
-
-  robotarminterface::ServoGoal goal;
-  goal.pulsewidth = static_cast<unsigned short>(atoi(argv[1]));
-  ROS_INFO("Sending target pulsewidth: %d",goal.pulsewidth);
-  actionClient.sendGoal(goal);
-
+  else
+  {
+    if(ros::ok())
+    {
+      //Create message
+      robotarminterface::robotarm lMessage;
+      lMessage.servoId = atoi(argv[1]);
+      lMessage.position = atoi(argv[2]);
+      lMessage.time = atoi(argv[3]);
+      //Show command
+      ROS_INFO("Sending data, ServoId : %d, Position : %d, Time : %d", lMessage.servoId, lMessage.position, lMessage.time);
+      //Send message
+      lRobotarmPublisher.publish(lMessage);
+      ros::spinOnce();
+    }
+  }
   return 0;
 }

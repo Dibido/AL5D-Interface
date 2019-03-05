@@ -8,8 +8,6 @@ project(robotarminterface)
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
-  actionlib
-  actionlib_msgs
   message_generation
   roscpp
   rospy
@@ -50,11 +48,10 @@ find_package(Boost REQUIRED COMPONENTS system)
 ##   * add every package in MSG_DEP_SET to generate_messages(DEPENDENCIES ...)
 
 ## Generate messages in the 'msg' folder
-# add_message_files(
-#   FILES
-#   Message1.msg
-#   Message2.msg
-# )
+add_message_files(
+  FILES
+  robotarm.msg
+)
 
 ## Generate services in the 'srv' folder
 # add_service_files(
@@ -64,15 +61,13 @@ find_package(Boost REQUIRED COMPONENTS system)
 # )
 
 ## Generate actions in the 'action' folder
-add_action_files(
-  FILES
-  Servo.action
-)
+# add_action_files(
+#   FILES
+# )
 
 ## Generate added messages and services with any dependencies listed here
 generate_messages(
   DEPENDENCIES
-  actionlib_msgs
   std_msgs
 )
 
@@ -109,7 +104,7 @@ catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES robotarminterface
 #  CATKIN_DEPENDS actionlib actionlib_msgs message_generation roscpp rospy std_msgs
- DEPENDS roscpp rospy std_msgs actionlib actionlib_msgs message_runtime system_lib 
+ DEPENDS roscpp rospy std_msgs message_runtime
 )
 
 ###########

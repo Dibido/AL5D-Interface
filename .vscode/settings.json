@@ -1,0 +1,6 @@
+{
+  "files.associations": {
+    "*.msg": "cpp",
+    "unordered_map": "cpp"
+  }
+}
