@@ -33,7 +33,7 @@ int main(int argc, char** argv)
       //Send message
       lRobotarmPublisher.publish(lMessage);
       ros::spinOnce();
-      sleep(1);
+      sleep(0.5);
     }
     else
     {

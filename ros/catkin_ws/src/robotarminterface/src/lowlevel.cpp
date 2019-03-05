@@ -8,7 +8,7 @@ lowlevel::lowlevel() : serial(ioservice)
 
   if (!ec)
   {
-    serial.set_option(boost::asio::serial_port_base::baud_rate(19200));
+    serial.set_option(boost::asio::serial_port_base::baud_rate(115200));
     serial.set_option(boost::asio::serial_port::flow_control(boost::asio::serial_port::flow_control::none));
     serial.set_option(boost::asio::serial_port::parity(boost::asio::serial_port::parity::none));
     serial.set_option(boost::asio::serial_port::stop_bits(boost::asio::serial_port::stop_bits::one));
@@ -30,6 +30,7 @@ void lowlevel::moveServoToPos(unsigned int aPin, unsigned int aDegrees, unsigned
   lCommand.append("T" + std::to_string(aMillis));
   lCommand.append("\r");
 
+  std::cout << lCommand << std::endl;
   sendSerial(lCommand);
 }
 
@@ -41,13 +42,12 @@ unsigned int lowlevel::convertDegreesToPulsewidth(unsigned int aDegrees) const
   // Degree range of the servo's
   unsigned int lDegreeRange = 180;
 
-  double lFactor = aDegrees / lDegreeRange;
+  double lFactor = (double)aDegrees / (double)lDegreeRange;
 
   unsigned int lReturn = MIN_PULSEWIDTH + lPulseRange * lFactor;
-
   // Bounds checking
-  lReturn = lReturn < MIN_PULSEWIDTH ? MIN_PULSEWIDTH : lReturn;
-  lReturn = lReturn > MAX_PULSEWIDTH ? MAX_PULSEWIDTH : lReturn;
+  lReturn = (lReturn < MIN_PULSEWIDTH) ? MIN_PULSEWIDTH : lReturn;
+  lReturn = (lReturn > MAX_PULSEWIDTH) ? MAX_PULSEWIDTH : lReturn;
 
   return lReturn;
 }

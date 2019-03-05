@@ -25,17 +25,13 @@ protected:
   ros::Subscriber mSubscriber; 
 
 public:
-  highlevel()
-  {
-    mSubscriber = mNodeHandler.subscribe("robotarm", 1000, mRobotarmCallback);
-  }
+  
+  highlevel();
 
-  ~highlevel(void)
-  {
-  }
+  virtual ~highlevel();
 
 private:
-  static void mRobotarmCallback(const robotarminterface::robotarmConstPtr& aRobotarmMessage);
+  void robotarmCallback(const robotarminterface::robotarmConstPtr& aRobotarmMessage);
 };
 
 #endif
