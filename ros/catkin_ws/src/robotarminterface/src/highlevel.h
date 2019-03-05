@@ -25,7 +25,7 @@ protected:
   ros::Subscriber mSubscriber; 
 
 public:
-  highlevel(std::string name)
+  highlevel()
   {
     mSubscriber = mNodeHandler.subscribe("robotarm", 1000, mRobotarmCallback);
   }
