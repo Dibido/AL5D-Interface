@@ -20,7 +20,7 @@ lowlevel::~lowlevel()
 {
 }
 
-void lowlevel::moveServoToPos(unsigned int aPin, unsigned int aDegrees, unsigned int aMillis) const
+void lowlevel::moveServoToPos(unsigned int aPin, unsigned int aDegrees, unsigned int aMillis)
 {
   unsigned int lPulseWidth = convertDegreesToPulsewidth(aDegrees);
 
@@ -29,6 +29,8 @@ void lowlevel::moveServoToPos(unsigned int aPin, unsigned int aDegrees, unsigned
   lCommand.append("P" + std::to_string(lPulseWidth));
   lCommand.append("T" + std::to_string(aMillis));
   lCommand.append("\r");
+
+  sendSerial(lCommand);
 }
 
 unsigned int lowlevel::convertDegreesToPulsewidth(unsigned int aDegrees) const
@@ -50,7 +52,7 @@ unsigned int lowlevel::convertDegreesToPulsewidth(unsigned int aDegrees) const
   return lReturn;
 }
 
-void lowlevel::sendSerial(const std::string &aCommand) const
+void lowlevel::sendSerial(std::string aCommand)
 {
   boost::asio::streambuf b;
   boost::system::error_code ec;
@@ -59,8 +61,6 @@ void lowlevel::sendSerial(const std::string &aCommand) const
   os << aCommand << std::endl;
 
   // serial.open("/dev/ttyUSB0");
-  serial.write_some("test");
-  
   if (serial.is_open())
   {
     boost::asio::write(serial, b.data());

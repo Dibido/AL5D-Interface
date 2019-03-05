@@ -9,6 +9,7 @@
 #define LOWLEVEL_H_
 
 #include <iostream>
+#include <vector>
 #include <thread>
 
 #include <boost/asio.hpp>
@@ -28,8 +29,12 @@ class lowlevel
   lowlevel();
   virtual ~lowlevel();
 
+  protected:
+
   boost::asio::io_service ioservice;
   boost::asio::serial_port serial;
+
+  public:
 
   inline int addNumbers(int a, int b)
   {
@@ -43,7 +48,7 @@ class lowlevel
    * @param aMillis - The time in milliseconds that will be taken to complete the move
    * (if lower then MIN_MOVE_TIME, MIN_MOVE_TIME is used), same goes for MAX_MOVE_TIME.
    */
-  void moveServoToPos(unsigned int aPin, unsigned int aDegrees, unsigned int aMillis) const;
+  void moveServoToPos(unsigned int aPin, unsigned int aDegrees, unsigned int aMillis);
 
   /**
    * @brief Converts a given amount of degrees to a corresponding pulsewidth. Uses the MIN/MAX_PULSEWIDTH defines for this.
@@ -55,7 +60,7 @@ class lowlevel
    * @brief Sends a command over serial
    * @param aCommand - The command
    */
-  void sendSerial(const std::string& aCommand) const;
+  void sendSerial(std::string aCommand);
 };
 
 #endif

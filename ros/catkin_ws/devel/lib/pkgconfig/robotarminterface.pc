@@ -1,8 +1,8 @@
-prefix=/home/marnix/WoR/World/Interface/AL5D-Interface/ros/catkin_ws/devel
+prefix=/home/owner/git/AL5D-Interface/ros/catkin_ws/devel
 
 Name: robotarminterface
 Description: Description of robotarminterface
 Version: 0.0.0
-Cflags: -I/home/marnix/WoR/World/Interface/AL5D-Interface/ros/catkin_ws/devel/include
-Libs: -L/home/marnix/WoR/World/Interface/AL5D-Interface/ros/catkin_ws/devel/lib 
+Cflags: -I/home/owner/git/AL5D-Interface/ros/catkin_ws/devel/include
+Libs: -L/home/owner/git/AL5D-Interface/ros/catkin_ws/devel/lib 
 Requires: roscpp rospy std_msgs message_runtime
