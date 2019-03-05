@@ -26,10 +26,20 @@ int main(int argc, char** argv)
       lMessage.time = atoi(argv[3]);
       //Show command
       ROS_INFO("Sending data, ServoId : %d, Position : %d, Time : %d", lMessage.servoId, lMessage.position, lMessage.time);
+      while(lRobotarmPublisher.getNumSubscribers() == 0)
+      {
+        //Wait for subs
+      }
       //Send message
       lRobotarmPublisher.publish(lMessage);
       ros::spinOnce();
+      sleep(1);
     }
+    else
+    {
+      ROS_ERROR("Ros core not ok");
+    }
+    
   }
   return 0;
 }

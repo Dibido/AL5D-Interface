@@ -6,12 +6,10 @@ int main(int argc, char** argv)
   ros::init(argc, argv, "highlevel");
   ROS_INFO("Starting Servo high level driver");
 
-  highlevel highLevelDriver("highlevel");
+  highlevel lHighlevelDriver = highlevel();
 
-  while(ros::ok())
-  {
-    ros::spin();
-  }
+  ros::spin();
+
   return 0;
 }
 
