@@ -26,13 +26,13 @@ void lowlevel::moveServosToPos(std::vector<unsigned int> aPins, std::vector<unsi
   if (aPins.size() == aDegrees.size())
   {
     std::string lCommand = "";
-   
-    for(int i = 0; i < aPins.size(); ++i)
-    {
-    unsigned int lPulseWidth = convertDegreesToPulsewidth(aDegrees.at(i));
 
-    lCommand.append("#" + std::to_string(aPins.at(i)));
-    lCommand.append("P" + std::to_string(lPulseWidth));
+    for (int i = 0; i < aPins.size(); ++i)
+    {
+      unsigned int lPulseWidth = convertDegreesToPulsewidth(aDegrees.at(i));
+
+      lCommand.append("#" + std::to_string(aPins.at(i)));
+      lCommand.append("P" + std::to_string(lPulseWidth));
     }
 
     lCommand.append("T" + std::to_string(aMillis));
@@ -43,25 +43,23 @@ void lowlevel::moveServosToPos(std::vector<unsigned int> aPins, std::vector<unsi
   }
 }
 
-void lowlevel::stopServos(std::vector<unsigned int> aPins, std::vector<unsigned int> aDegrees)
+void lowlevel::stopServos(std::vector<unsigned int> aPins)
 {
-  if (aPins.size() == aDegrees.size())
+  if (aPins.size() > 0)
   {
     std::string lCommand = "";
-   
-    for(int i = 0; i < aPins.size(); ++i)
+
+    for (int i = 0; i < aPins.size(); ++i)
     {
-    unsigned int lPulseWidth = convertDegreesToPulsewidth(aDegrees.at(i));
-
-    lCommand.append("#" + std::to_string(aPins.at(i)));
-    lCommand.append("P" + std::to_string(lPulseWidth));
+      lCommand.append("STOP" + std::to_string(aPins.at(i)));
+      lCommand.append("\r");
     }
-    lCommand.append("\e");
 
-    std::cout << "Command sent via serial: " << lCommand << std::endl;
+    std::cout << "sendStop sent via serial: " << lCommand << std::endl;
     sendSerial(lCommand);
   }
 }
+
 
 unsigned int lowlevel::convertDegreesToPulsewidth(unsigned int aDegrees) const
 {

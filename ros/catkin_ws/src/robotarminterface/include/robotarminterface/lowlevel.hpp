@@ -59,9 +59,8 @@ class lowlevel
   /**
    * @brief stop the movement of the servos
    * @param aPins  - The pins of the servos
-   * @param aDegrees - The degrees to stop them at
    */
-  void stopServos(std::vector<unsigned int> aPins, std::vector<unsigned int> aDegrees);
+  void stopServos(std::vector<unsigned int> aPins);
   
   /**
    * @brief Sends a command over serial
