@@ -20,18 +20,27 @@ lowlevel::~lowlevel()
 {
 }
 
-void lowlevel::moveServoToPos(unsigned int aPin, unsigned int aDegrees, unsigned int aMillis)
+void lowlevel::moveServosToPos(std::vector<unsigned int> aPins, std::vector<unsigned int> aDegrees, unsigned int aMillis)
 {
-  unsigned int lPulseWidth = convertDegreesToPulsewidth(aDegrees);
+  // Every pin should correspond with a degree value, if this is not the case do nothing (input invalid)
+  if (aPins.size() == aDegrees.size())
+  {
+    std::string lCommand = "";
+   
+    for(int i = 0; i < aPins.size(); ++i)
+    {
+    unsigned int lPulseWidth = convertDegreesToPulsewidth(aDegrees.at(i));
 
-  std::string lCommand = "#" + std::to_string(aPin);
+    lCommand.append("#" + std::to_string(aPins.at(i)));
+    lCommand.append("P" + std::to_string(lPulseWidth));
+    }
 
-  lCommand.append("P" + std::to_string(lPulseWidth));
-  lCommand.append("T" + std::to_string(aMillis));
-  lCommand.append("\r");
+    lCommand.append("T" + std::to_string(aMillis));
+    lCommand.append("\r");
 
-  std::cout << lCommand << std::endl;
-  sendSerial(lCommand);
+    std::cout << "Command sent via serial: " << lCommand << std::endl;
+    sendSerial(lCommand);
+  }
 }
 
 unsigned int lowlevel::convertDegreesToPulsewidth(unsigned int aDegrees) const
