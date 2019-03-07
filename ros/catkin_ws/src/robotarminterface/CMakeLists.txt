@@ -50,7 +50,9 @@ find_package(Boost REQUIRED COMPONENTS system)
 ## Generate messages in the 'msg' folder
 add_message_files(
   FILES
-  robotarm.msg
+  servoPosition.msg
+  singleServo.msg
+  allServo.msg
 )
 
 ## Generate services in the 'srv' folder

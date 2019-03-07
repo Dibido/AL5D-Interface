@@ -15,14 +15,14 @@ int main(int argc, char** argv)
 
 highlevel::highlevel()
 {
-  mSubscriber = mNodeHandler.subscribe("robotarm", 1000, &highlevel::robotarmCallback, this);
+  mSingleServoSubscriber = mNodeHandler.subscribe("singleServo", 1000, &highlevel::singleServoCallback, this);
 }
 
 highlevel::~highlevel()
 {
 }
 
-void highlevel::robotarmCallback(const robotarminterface::robotarmConstPtr& aRobotarmMessage)
+void highlevel::singleServoCallback(const robotarminterface::singleServoConstPtr& aRobotarmMessage)
 {
   std::cout << "Callback" << std::endl;
   ROS_INFO("Handling command, Position %d, Time %d", aRobotarmMessage->position, aRobotarmMessage->time);

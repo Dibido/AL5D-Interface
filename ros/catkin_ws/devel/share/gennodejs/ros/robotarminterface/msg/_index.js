@@ -1,8 +1,12 @@
 
 "use strict";
 
-let robotarm = require('./robotarm.js');
+let allServo = require('./allServo.js');
+let singleServo = require('./singleServo.js');
+let servoPosition = require('./servoPosition.js');
 
 module.exports = {
-  robotarm: robotarm,
+  allServo: allServo,
+  singleServo: singleServo,
+  servoPosition: servoPosition,
 };
