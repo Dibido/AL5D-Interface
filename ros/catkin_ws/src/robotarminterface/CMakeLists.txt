@@ -53,6 +53,7 @@ add_message_files(
   servoPosition.msg
   singleServo.msg
   allServo.msg
+  armPosition.msg
 )
 
 ## Generate services in the 'srv' folder

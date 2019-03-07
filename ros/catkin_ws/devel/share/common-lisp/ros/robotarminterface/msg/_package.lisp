@@ -3,6 +3,8 @@
   (:export
    "<ALLSERVO>"
    "ALLSERVO"
+   "<ARMPOSITION>"
+   "ARMPOSITION"
    "<SERVOPOSITION>"
    "SERVOPOSITION"
    "<SINGLESERVO>"
