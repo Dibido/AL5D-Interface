@@ -13,11 +13,19 @@
 
 #include "robotarminterface/lowlevel.hpp"
 #include "robotarminterface/singleServo.h"
+#include "robotarminterface/stopSingleServo.h"
 #include "robotarminterface/allServo.h"
+#include "robotarminterface/stopAllServo.h"
 #include "robotarminterface/armPosition.h"
 
 #include <iostream>
 #include <sstream>
+
+struct robotarmPosition
+{
+  std::vector<unsigned int> servoIds;
+  std::vector<unsigned int> servoDegrees;
+};
 
 class highlevel
 {
@@ -25,8 +33,14 @@ protected:
   ros::NodeHandle mNodeHandler;
   lowlevel mLowLevelDriver;
   ros::Subscriber mSingleServoSubscriber;
+  ros::Subscriber mStopSingleServoSubscriber;
   ros::Subscriber mAllServoSubscriber;
+  ros::Subscriber mStopAllServoSubscriber;
   ros::Subscriber mArmPositionSubscriber;
+
+  robotarmPosition mParkPosition;
+  robotarmPosition mReadyPosition;
+  robotarmPosition mStraightPosition;
 
 public:
   
@@ -34,9 +48,22 @@ public:
   virtual ~highlevel();
 
 private:
+
+  /**
+   * @brief Time to take to go to the park position
+   */
+  unsigned int mInitializeTime;
+
   void singleServoCallback(const robotarminterface::singleServoConstPtr& aSingleServoMessage);
+  void stopSingleServoCallback(const robotarminterface::stopSingleServoConstPtr& aStopSingleServoMessage);
   void allServoCallback(const robotarminterface::allServoConstPtr& aSingleServoMessage);
+  void stopAllServoCallback(const robotarminterface::stopAllServoConstPtr& aStopAllServoMessage);
   void armPositionCallback(const robotarminterface::armPositionConstPtr& aSingleServoMessage);
+
+  /**
+   * @brief Initializes the arm
+   */
+  void initializeArm();
 };
 
 #endif

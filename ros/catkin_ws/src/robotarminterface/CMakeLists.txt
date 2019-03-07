@@ -52,7 +52,9 @@ add_message_files(
   FILES
   servoPosition.msg
   singleServo.msg
+  stopSingleServo.msg
   allServo.msg
+  stopAllServo.msg
   armPosition.msg
 )
 

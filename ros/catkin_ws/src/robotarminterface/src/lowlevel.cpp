@@ -43,6 +43,26 @@ void lowlevel::moveServosToPos(std::vector<unsigned int> aPins, std::vector<unsi
   }
 }
 
+void lowlevel::stopServos(std::vector<unsigned int> aPins, std::vector<unsigned int> aDegrees)
+{
+  if (aPins.size() == aDegrees.size())
+  {
+    std::string lCommand = "";
+   
+    for(int i = 0; i < aPins.size(); ++i)
+    {
+    unsigned int lPulseWidth = convertDegreesToPulsewidth(aDegrees.at(i));
+
+    lCommand.append("#" + std::to_string(aPins.at(i)));
+    lCommand.append("P" + std::to_string(lPulseWidth));
+    }
+    lCommand.append("\e");
+
+    std::cout << "Command sent via serial: " << lCommand << std::endl;
+    sendSerial(lCommand);
+  }
+}
+
 unsigned int lowlevel::convertDegreesToPulsewidth(unsigned int aDegrees) const
 {
   unsigned int lPulseRange = MAX_PULSEWIDTH - MIN_PULSEWIDTH;
