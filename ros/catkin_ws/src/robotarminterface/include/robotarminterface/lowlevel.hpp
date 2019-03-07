@@ -48,7 +48,7 @@ class lowlevel
    * @param aMillis - The time in milliseconds that will be taken to complete the move
    * (if lower then MIN_MOVE_TIME, MIN_MOVE_TIME is used), same goes for MAX_MOVE_TIME.
    */
-  void moveServoToPos(unsigned int aPin, unsigned int aDegrees, unsigned int aMillis);
+  void moveServosToPos(std::vector<unsigned int> aPins, std::vector<unsigned int> aDegrees, unsigned int aMillis);
 
   /**
    * @brief Converts a given amount of degrees to a corresponding pulsewidth. Uses the MIN/MAX_PULSEWIDTH defines for this.

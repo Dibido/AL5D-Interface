@@ -12,7 +12,7 @@
 #include "ros/ros.h"
 
 #include "robotarminterface/lowlevel.hpp"
-#include "robotarminterface/robotarm.h"
+#include "robotarminterface/singleServo.h"
 
 #include <iostream>
 #include <sstream>
@@ -22,20 +22,16 @@ class highlevel
 protected:
   ros::NodeHandle mNodeHandler;
   lowlevel mLowLevelDriver;
-  ros::Subscriber mSubscriber; 
+  ros::Subscriber mSingleServoSubscriber; 
 
 public:
-  highlevel()
-  {
-    mSubscriber = mNodeHandler.subscribe("robotarm", 1000, mRobotarmCallback);
-  }
+  
+  highlevel();
 
-  ~highlevel(void)
-  {
-  }
+  virtual ~highlevel();
 
 private:
-  static void mRobotarmCallback(const robotarminterface::robotarmConstPtr& aRobotarmMessage);
+  void singleServoCallback(const robotarminterface::singleServoConstPtr& aSingleServoMessage);
 };
 
 #endif

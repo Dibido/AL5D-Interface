@@ -1,7 +1,11 @@
 (cl:defpackage robotarminterface-msg
   (:use )
   (:export
-   "<ROBOTARM>"
-   "ROBOTARM"
+   "<ALLSERVO>"
+   "ALLSERVO"
+   "<SERVOPOSITION>"
+   "SERVOPOSITION"
+   "<SINGLESERVO>"
+   "SINGLESERVO"
   ))
 

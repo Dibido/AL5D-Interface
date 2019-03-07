@@ -1,14 +1,14 @@
 #include "ros/ros.h"
 #include <iostream>
 
-#include "robotarminterface/robotarm.h"
+#include "robotarminterface/singleServo.h"
 
 int main(int argc, char** argv)
 {
   ros::init(argc, argv, "servo_client");
 
   ros::NodeHandle lNodeHandler;
-  ros::Publisher lRobotarmPublisher = lNodeHandler.advertise<robotarminterface::robotarm>("robotarm", 1000);
+  ros::Publisher lSingleServoPublisher = lNodeHandler.advertise<robotarminterface::singleServo>("singleServo", 1000);
 
   if(argc != 4)
   {
@@ -20,20 +20,20 @@ int main(int argc, char** argv)
     if(ros::ok())
     {
       //Create message
-      robotarminterface::robotarm lMessage;
+      robotarminterface::singleServo lMessage;
       lMessage.servoId = atoi(argv[1]);
       lMessage.position = atoi(argv[2]);
       lMessage.time = atoi(argv[3]);
       //Show command
       ROS_INFO("Sending data, ServoId : %d, Position : %d, Time : %d", lMessage.servoId, lMessage.position, lMessage.time);
-      while(lRobotarmPublisher.getNumSubscribers() == 0)
+      while(lSingleServoPublisher.getNumSubscribers() == 0)
       {
         //Wait for subs
       }
       //Send message
-      lRobotarmPublisher.publish(lMessage);
+      lSingleServoPublisher.publish(lMessage);
       ros::spinOnce();
-      sleep(1);
+      sleep(0.5);
     }
     else
     {

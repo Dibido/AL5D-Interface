@@ -1,0 +1,7 @@
+servoPosition Servo0
+servoPosition Servo1
+servoPosition Servo2
+servoPosition Servo3
+servoPosition Servo4
+servoPosition Servo5
+uint32 time
