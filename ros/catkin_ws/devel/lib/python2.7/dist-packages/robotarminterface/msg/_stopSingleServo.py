@@ -7,13 +7,12 @@ import struct
 
 
 class stopSingleServo(genpy.Message):
-  _md5sum = "a23dbe6129c6467805107efe6f32b9f1"
+  _md5sum = "c229a51eeb50adb8a4245c15dbd40200"
   _type = "robotarminterface/stopSingleServo"
   _has_header = False #flag to mark the presence of a Header object
-  _full_text = """uint32 servoId
-uint32 position"""
-  __slots__ = ['servoId','position']
-  _slot_types = ['uint32','uint32']
+  _full_text = """uint32 servoId"""
+  __slots__ = ['servoId']
+  _slot_types = ['uint32']
 
   def __init__(self, *args, **kwds):
     """
@@ -23,7 +22,7 @@ uint32 position"""
     changes.  You cannot mix in-order arguments and keyword arguments.
 
     The available fields are:
-       servoId,position
+       servoId
 
     :param args: complete set of field values, in .msg order
     :param kwds: use keyword arguments corresponding to message field names
@@ -34,11 +33,8 @@ uint32 position"""
       #message fields cannot be None, assign default values for those that are
       if self.servoId is None:
         self.servoId = 0
-      if self.position is None:
-        self.position = 0
     else:
       self.servoId = 0
-      self.position = 0
 
   def _get_types(self):
     """
@@ -52,8 +48,7 @@ uint32 position"""
     :param buff: buffer, ``StringIO``
     """
     try:
-      _x = self
-      buff.write(_get_struct_2I().pack(_x.servoId, _x.position))
+      buff.write(_get_struct_I().pack(self.servoId))
     except struct.error as se: self._check_types(struct.error("%s: '%s' when writing '%s'" % (type(se), str(se), str(locals().get('_x', self)))))
     except TypeError as te: self._check_types(ValueError("%s: '%s' when writing '%s'" % (type(te), str(te), str(locals().get('_x', self)))))
 
@@ -64,10 +59,9 @@ uint32 position"""
     """
     try:
       end = 0
-      _x = self
       start = end
-      end += 8
-      (_x.servoId, _x.position,) = _get_struct_2I().unpack(str[start:end])
+      end += 4
+      (self.servoId,) = _get_struct_I().unpack(str[start:end])
       return self
     except struct.error as e:
       raise genpy.DeserializationError(e) #most likely buffer underfill
@@ -80,8 +74,7 @@ uint32 position"""
     :param numpy: numpy python module
     """
     try:
-      _x = self
-      buff.write(_get_struct_2I().pack(_x.servoId, _x.position))
+      buff.write(_get_struct_I().pack(self.servoId))
     except struct.error as se: self._check_types(struct.error("%s: '%s' when writing '%s'" % (type(se), str(se), str(locals().get('_x', self)))))
     except TypeError as te: self._check_types(ValueError("%s: '%s' when writing '%s'" % (type(te), str(te), str(locals().get('_x', self)))))
 
@@ -93,10 +86,9 @@ uint32 position"""
     """
     try:
       end = 0
-      _x = self
       start = end
-      end += 8
-      (_x.servoId, _x.position,) = _get_struct_2I().unpack(str[start:end])
+      end += 4
+      (self.servoId,) = _get_struct_I().unpack(str[start:end])
       return self
     except struct.error as e:
       raise genpy.DeserializationError(e) #most likely buffer underfill
@@ -105,9 +97,3 @@ _struct_I = genpy.struct_I
 def _get_struct_I():
     global _struct_I
     return _struct_I
-_struct_2I = None
-def _get_struct_2I():
-    global _struct_2I
-    if _struct_2I is None:
-        _struct_2I = struct.Struct("<2I")
-    return _struct_2I

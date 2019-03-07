@@ -19,7 +19,6 @@ class stopSingleServo {
     if (initObj === null) {
       // initObj === null is a special case for deserialization where we don't initialize fields
       this.servoId = null;
-      this.position = null;
     }
     else {
       if (initObj.hasOwnProperty('servoId')) {
@@ -28,12 +27,6 @@ class stopSingleServo {
       else {
         this.servoId = 0;
       }
-      if (initObj.hasOwnProperty('position')) {
-        this.position = initObj.position
-      }
-      else {
-        this.position = 0;
-      }
     }
   }
 
@@ -41,8 +34,6 @@ class stopSingleServo {
     // Serializes a message object of type stopSingleServo
     // Serialize message field [servoId]
     bufferOffset = _serializer.uint32(obj.servoId, buffer, bufferOffset);
-    // Serialize message field [position]
-    bufferOffset = _serializer.uint32(obj.position, buffer, bufferOffset);
     return bufferOffset;
   }
 
@@ -52,13 +43,11 @@ class stopSingleServo {
     let data = new stopSingleServo(null);
     // Deserialize message field [servoId]
     data.servoId = _deserializer.uint32(buffer, bufferOffset);
-    // Deserialize message field [position]
-    data.position = _deserializer.uint32(buffer, bufferOffset);
     return data;
   }
 
   static getMessageSize(object) {
-    return 8;
+    return 4;
   }
 
   static datatype() {
@@ -68,14 +57,13 @@ class stopSingleServo {
 
   static md5sum() {
     //Returns md5sum for a message object
-    return 'a23dbe6129c6467805107efe6f32b9f1';
+    return 'c229a51eeb50adb8a4245c15dbd40200';
   }
 
   static messageDefinition() {
     // Returns full string definition for message
     return `
     uint32 servoId
-    uint32 position
     `;
   }
 
@@ -90,13 +78,6 @@ class stopSingleServo {
     }
     else {
       resolved.servoId = 0
-    }
-
-    if (msg.position !== undefined) {
-      resolved.position = msg.position;
-    }
-    else {
-      resolved.position = 0
     }
 
     return resolved;

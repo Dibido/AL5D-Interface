@@ -56,12 +56,10 @@ void highlevel::singleServoCallback(const robotarminterface::singleServoConstPtr
 
 void highlevel::stopSingleServoCallback(const robotarminterface::stopSingleServoConstPtr& aStopSingleServoMessage)
 {
-  ROS_INFO("Handling stop command, Id %d, Position %d", aStopSingleServoMessage->servoId, aStopSingleServoMessage->position);
+  ROS_INFO("Handling stop command, Id %d", aStopSingleServoMessage->servoId);
   std::vector<unsigned int> lPins;
   lPins.push_back(aStopSingleServoMessage->servoId);
-  std::vector<unsigned int> lDegrees;
-  lDegrees.push_back(aStopSingleServoMessage->position);
-  mLowLevelDriver.stopServos(lPins, lDegrees);
+  mLowLevelDriver.stopServos(lPins);
 }
 
 void highlevel::allServoCallback(const robotarminterface::allServoConstPtr& aAllServoMessage)
@@ -89,20 +87,13 @@ void highlevel::stopAllServoCallback(const robotarminterface::stopAllServoConstP
 {
   ROS_INFO("Handling stopAllServo Command");
   std::vector<unsigned int> lPins;
-  lPins.push_back(aStopAllServoMessage->Servo0.servoId);
-  lPins.push_back(aStopAllServoMessage->Servo1.servoId);
-  lPins.push_back(aStopAllServoMessage->Servo2.servoId);
-  lPins.push_back(aStopAllServoMessage->Servo3.servoId);
-  lPins.push_back(aStopAllServoMessage->Servo4.servoId);
-  lPins.push_back(aStopAllServoMessage->Servo5.servoId);
-  std::vector<unsigned int> lDegrees;
-  lDegrees.push_back(aStopAllServoMessage->Servo0.position);
-  lDegrees.push_back(aStopAllServoMessage->Servo1.position);
-  lDegrees.push_back(aStopAllServoMessage->Servo2.position);
-  lDegrees.push_back(aStopAllServoMessage->Servo3.position);
-  lDegrees.push_back(aStopAllServoMessage->Servo4.position);
-  lDegrees.push_back(aStopAllServoMessage->Servo5.position);
-  mLowLevelDriver.stopServos(lPins, lDegrees);
+  lPins.push_back(aStopAllServoMessage->Servo0);
+  lPins.push_back(aStopAllServoMessage->Servo1);
+  lPins.push_back(aStopAllServoMessage->Servo2);
+  lPins.push_back(aStopAllServoMessage->Servo3);
+  lPins.push_back(aStopAllServoMessage->Servo4);
+  lPins.push_back(aStopAllServoMessage->Servo5);
+  mLowLevelDriver.stopServos(lPins);
 }
 
 void highlevel::armPositionCallback(const robotarminterface::armPositionConstPtr& aArmPositionMessage)

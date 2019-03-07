@@ -98,12 +98,12 @@ int main(int argc, char** argv)
     sleep(1);
 
     robotarminterface::stopAllServo lStopServosMessage;
-    lStopServosMessage.Servo0.servoId = 0;
-    lStopServosMessage.Servo1.servoId = 1;
-    lStopServosMessage.Servo2.servoId = 2;
-    lStopServosMessage.Servo3.servoId = 3;
-    lStopServosMessage.Servo4.servoId = 4;
-    lStopServosMessage.Servo5.servoId = 5;
+    lStopServosMessage.Servo0 = 0;
+    lStopServosMessage.Servo1 = 1;
+    lStopServosMessage.Servo2 = 2;
+    lStopServosMessage.Servo3 = 3;
+    lStopServosMessage.Servo4 = 4;
+    lStopServosMessage.Servo5 = 5;
     while(lStopAllServoPublisher.getNumSubscribers() == 0)
     {
       //Wait for subs

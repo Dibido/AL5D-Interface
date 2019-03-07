@@ -5,24 +5,19 @@ python3 = True if sys.hexversion > 0x03000000 else False
 import genpy
 import struct
 
-import robotarminterface.msg
 
 class stopAllServo(genpy.Message):
-  _md5sum = "5ca42d423bd577b7c5ea57f8316de0e6"
+  _md5sum = "a380ddba3e52984021c096a32dd95ec0"
   _type = "robotarminterface/stopAllServo"
   _has_header = False #flag to mark the presence of a Header object
-  _full_text = """servoPosition Servo0
-servoPosition Servo1
-servoPosition Servo2
-servoPosition Servo3
-servoPosition Servo4
-servoPosition Servo5
-================================================================================
-MSG: robotarminterface/servoPosition
-uint32 servoId
-uint32 position"""
+  _full_text = """uint32 Servo0
+uint32 Servo1
+uint32 Servo2
+uint32 Servo3
+uint32 Servo4
+uint32 Servo5"""
   __slots__ = ['Servo0','Servo1','Servo2','Servo3','Servo4','Servo5']
-  _slot_types = ['robotarminterface/servoPosition','robotarminterface/servoPosition','robotarminterface/servoPosition','robotarminterface/servoPosition','robotarminterface/servoPosition','robotarminterface/servoPosition']
+  _slot_types = ['uint32','uint32','uint32','uint32','uint32','uint32']
 
   def __init__(self, *args, **kwds):
     """
@@ -42,24 +37,24 @@ uint32 position"""
       super(stopAllServo, self).__init__(*args, **kwds)
       #message fields cannot be None, assign default values for those that are
       if self.Servo0 is None:
-        self.Servo0 = robotarminterface.msg.servoPosition()
+        self.Servo0 = 0
       if self.Servo1 is None:
-        self.Servo1 = robotarminterface.msg.servoPosition()
+        self.Servo1 = 0
       if self.Servo2 is None:
-        self.Servo2 = robotarminterface.msg.servoPosition()
+        self.Servo2 = 0
       if self.Servo3 is None:
-        self.Servo3 = robotarminterface.msg.servoPosition()
+        self.Servo3 = 0
       if self.Servo4 is None:
-        self.Servo4 = robotarminterface.msg.servoPosition()
+        self.Servo4 = 0
       if self.Servo5 is None:
-        self.Servo5 = robotarminterface.msg.servoPosition()
+        self.Servo5 = 0
     else:
-      self.Servo0 = robotarminterface.msg.servoPosition()
-      self.Servo1 = robotarminterface.msg.servoPosition()
-      self.Servo2 = robotarminterface.msg.servoPosition()
-      self.Servo3 = robotarminterface.msg.servoPosition()
-      self.Servo4 = robotarminterface.msg.servoPosition()
-      self.Servo5 = robotarminterface.msg.servoPosition()
+      self.Servo0 = 0
+      self.Servo1 = 0
+      self.Servo2 = 0
+      self.Servo3 = 0
+      self.Servo4 = 0
+      self.Servo5 = 0
 
   def _get_types(self):
     """
@@ -74,7 +69,7 @@ uint32 position"""
     """
     try:
       _x = self
-      buff.write(_get_struct_12I().pack(_x.Servo0.servoId, _x.Servo0.position, _x.Servo1.servoId, _x.Servo1.position, _x.Servo2.servoId, _x.Servo2.position, _x.Servo3.servoId, _x.Servo3.position, _x.Servo4.servoId, _x.Servo4.position, _x.Servo5.servoId, _x.Servo5.position))
+      buff.write(_get_struct_6I().pack(_x.Servo0, _x.Servo1, _x.Servo2, _x.Servo3, _x.Servo4, _x.Servo5))
     except struct.error as se: self._check_types(struct.error("%s: '%s' when writing '%s'" % (type(se), str(se), str(locals().get('_x', self)))))
     except TypeError as te: self._check_types(ValueError("%s: '%s' when writing '%s'" % (type(te), str(te), str(locals().get('_x', self)))))
 
@@ -84,23 +79,11 @@ uint32 position"""
     :param str: byte array of serialized message, ``str``
     """
     try:
-      if self.Servo0 is None:
-        self.Servo0 = robotarminterface.msg.servoPosition()
-      if self.Servo1 is None:
-        self.Servo1 = robotarminterface.msg.servoPosition()
-      if self.Servo2 is None:
-        self.Servo2 = robotarminterface.msg.servoPosition()
-      if self.Servo3 is None:
-        self.Servo3 = robotarminterface.msg.servoPosition()
-      if self.Servo4 is None:
-        self.Servo4 = robotarminterface.msg.servoPosition()
-      if self.Servo5 is None:
-        self.Servo5 = robotarminterface.msg.servoPosition()
       end = 0
       _x = self
       start = end
-      end += 48
-      (_x.Servo0.servoId, _x.Servo0.position, _x.Servo1.servoId, _x.Servo1.position, _x.Servo2.servoId, _x.Servo2.position, _x.Servo3.servoId, _x.Servo3.position, _x.Servo4.servoId, _x.Servo4.position, _x.Servo5.servoId, _x.Servo5.position,) = _get_struct_12I().unpack(str[start:end])
+      end += 24
+      (_x.Servo0, _x.Servo1, _x.Servo2, _x.Servo3, _x.Servo4, _x.Servo5,) = _get_struct_6I().unpack(str[start:end])
       return self
     except struct.error as e:
       raise genpy.DeserializationError(e) #most likely buffer underfill
@@ -114,7 +97,7 @@ uint32 position"""
     """
     try:
       _x = self
-      buff.write(_get_struct_12I().pack(_x.Servo0.servoId, _x.Servo0.position, _x.Servo1.servoId, _x.Servo1.position, _x.Servo2.servoId, _x.Servo2.position, _x.Servo3.servoId, _x.Servo3.position, _x.Servo4.servoId, _x.Servo4.position, _x.Servo5.servoId, _x.Servo5.position))
+      buff.write(_get_struct_6I().pack(_x.Servo0, _x.Servo1, _x.Servo2, _x.Servo3, _x.Servo4, _x.Servo5))
     except struct.error as se: self._check_types(struct.error("%s: '%s' when writing '%s'" % (type(se), str(se), str(locals().get('_x', self)))))
     except TypeError as te: self._check_types(ValueError("%s: '%s' when writing '%s'" % (type(te), str(te), str(locals().get('_x', self)))))
 
@@ -125,23 +108,11 @@ uint32 position"""
     :param numpy: numpy python module
     """
     try:
-      if self.Servo0 is None:
-        self.Servo0 = robotarminterface.msg.servoPosition()
-      if self.Servo1 is None:
-        self.Servo1 = robotarminterface.msg.servoPosition()
-      if self.Servo2 is None:
-        self.Servo2 = robotarminterface.msg.servoPosition()
-      if self.Servo3 is None:
-        self.Servo3 = robotarminterface.msg.servoPosition()
-      if self.Servo4 is None:
-        self.Servo4 = robotarminterface.msg.servoPosition()
-      if self.Servo5 is None:
-        self.Servo5 = robotarminterface.msg.servoPosition()
       end = 0
       _x = self
       start = end
-      end += 48
-      (_x.Servo0.servoId, _x.Servo0.position, _x.Servo1.servoId, _x.Servo1.position, _x.Servo2.servoId, _x.Servo2.position, _x.Servo3.servoId, _x.Servo3.position, _x.Servo4.servoId, _x.Servo4.position, _x.Servo5.servoId, _x.Servo5.position,) = _get_struct_12I().unpack(str[start:end])
+      end += 24
+      (_x.Servo0, _x.Servo1, _x.Servo2, _x.Servo3, _x.Servo4, _x.Servo5,) = _get_struct_6I().unpack(str[start:end])
       return self
     except struct.error as e:
       raise genpy.DeserializationError(e) #most likely buffer underfill
@@ -150,9 +121,9 @@ _struct_I = genpy.struct_I
 def _get_struct_I():
     global _struct_I
     return _struct_I
-_struct_12I = None
-def _get_struct_12I():
-    global _struct_12I
-    if _struct_12I is None:
-        _struct_12I = struct.Struct("<12I")
-    return _struct_12I
+_struct_6I = None
+def _get_struct_6I():
+    global _struct_6I
+    if _struct_6I is None:
+        _struct_6I = struct.Struct("<6I")
+    return _struct_6I

@@ -15,12 +15,6 @@
 #include <ros/builtin_message_traits.h>
 #include <ros/message_operations.h>
 
-#include <robotarminterface/servoPosition.h>
-#include <robotarminterface/servoPosition.h>
-#include <robotarminterface/servoPosition.h>
-#include <robotarminterface/servoPosition.h>
-#include <robotarminterface/servoPosition.h>
-#include <robotarminterface/servoPosition.h>
 
 namespace robotarminterface
 {
@@ -30,41 +24,41 @@ struct stopAllServo_
   typedef stopAllServo_<ContainerAllocator> Type;
 
   stopAllServo_()
-    : Servo0()
-    , Servo1()
-    , Servo2()
-    , Servo3()
-    , Servo4()
-    , Servo5()  {
+    : Servo0(0)
+    , Servo1(0)
+    , Servo2(0)
+    , Servo3(0)
+    , Servo4(0)
+    , Servo5(0)  {
     }
   stopAllServo_(const ContainerAllocator& _alloc)
-    : Servo0(_alloc)
-    , Servo1(_alloc)
-    , Servo2(_alloc)
-    , Servo3(_alloc)
-    , Servo4(_alloc)
-    , Servo5(_alloc)  {
+    : Servo0(0)
+    , Servo1(0)
+    , Servo2(0)
+    , Servo3(0)
+    , Servo4(0)
+    , Servo5(0)  {
   (void)_alloc;
     }
 
 
 
-   typedef  ::robotarminterface::servoPosition_<ContainerAllocator>  _Servo0_type;
+   typedef uint32_t _Servo0_type;
   _Servo0_type Servo0;
 
-   typedef  ::robotarminterface::servoPosition_<ContainerAllocator>  _Servo1_type;
+   typedef uint32_t _Servo1_type;
   _Servo1_type Servo1;
 
-   typedef  ::robotarminterface::servoPosition_<ContainerAllocator>  _Servo2_type;
+   typedef uint32_t _Servo2_type;
   _Servo2_type Servo2;
 
-   typedef  ::robotarminterface::servoPosition_<ContainerAllocator>  _Servo3_type;
+   typedef uint32_t _Servo3_type;
   _Servo3_type Servo3;
 
-   typedef  ::robotarminterface::servoPosition_<ContainerAllocator>  _Servo4_type;
+   typedef uint32_t _Servo4_type;
   _Servo4_type Servo4;
 
-   typedef  ::robotarminterface::servoPosition_<ContainerAllocator>  _Servo5_type;
+   typedef uint32_t _Servo5_type;
   _Servo5_type Servo5;
 
 
@@ -145,12 +139,12 @@ struct MD5Sum< ::robotarminterface::stopAllServo_<ContainerAllocator> >
 {
   static const char* value()
   {
-    return "5ca42d423bd577b7c5ea57f8316de0e6";
+    return "a380ddba3e52984021c096a32dd95ec0";
   }
 
   static const char* value(const ::robotarminterface::stopAllServo_<ContainerAllocator>&) { return value(); }
-  static const uint64_t static_value1 = 0x5ca42d423bd577b7ULL;
-  static const uint64_t static_value2 = 0xc5ea57f8316de0e6ULL;
+  static const uint64_t static_value1 = 0xa380ddba3e529840ULL;
+  static const uint64_t static_value2 = 0x21c096a32dd95ec0ULL;
 };
 
 template<class ContainerAllocator>
@@ -169,16 +163,12 @@ struct Definition< ::robotarminterface::stopAllServo_<ContainerAllocator> >
 {
   static const char* value()
   {
-    return "servoPosition Servo0\n\
-servoPosition Servo1\n\
-servoPosition Servo2\n\
-servoPosition Servo3\n\
-servoPosition Servo4\n\
-servoPosition Servo5\n\
-================================================================================\n\
-MSG: robotarminterface/servoPosition\n\
-uint32 servoId\n\
-uint32 position\n\
+    return "uint32 Servo0\n\
+uint32 Servo1\n\
+uint32 Servo2\n\
+uint32 Servo3\n\
+uint32 Servo4\n\
+uint32 Servo5\n\
 ";
   }
 
@@ -222,23 +212,17 @@ struct Printer< ::robotarminterface::stopAllServo_<ContainerAllocator> >
   template<typename Stream> static void stream(Stream& s, const std::string& indent, const ::robotarminterface::stopAllServo_<ContainerAllocator>& v)
   {
     s << indent << "Servo0: ";
-    s << std::endl;
-    Printer< ::robotarminterface::servoPosition_<ContainerAllocator> >::stream(s, indent + "  ", v.Servo0);
+    Printer<uint32_t>::stream(s, indent + "  ", v.Servo0);
     s << indent << "Servo1: ";
-    s << std::endl;
-    Printer< ::robotarminterface::servoPosition_<ContainerAllocator> >::stream(s, indent + "  ", v.Servo1);
+    Printer<uint32_t>::stream(s, indent + "  ", v.Servo1);
     s << indent << "Servo2: ";
-    s << std::endl;
-    Printer< ::robotarminterface::servoPosition_<ContainerAllocator> >::stream(s, indent + "  ", v.Servo2);
+    Printer<uint32_t>::stream(s, indent + "  ", v.Servo2);
     s << indent << "Servo3: ";
-    s << std::endl;
-    Printer< ::robotarminterface::servoPosition_<ContainerAllocator> >::stream(s, indent + "  ", v.Servo3);
+    Printer<uint32_t>::stream(s, indent + "  ", v.Servo3);
     s << indent << "Servo4: ";
-    s << std::endl;
-    Printer< ::robotarminterface::servoPosition_<ContainerAllocator> >::stream(s, indent + "  ", v.Servo4);
+    Printer<uint32_t>::stream(s, indent + "  ", v.Servo4);
     s << indent << "Servo5: ";
-    s << std::endl;
-    Printer< ::robotarminterface::servoPosition_<ContainerAllocator> >::stream(s, indent + "  ", v.Servo5);
+    Printer<uint32_t>::stream(s, indent + "  ", v.Servo5);
   }
 };
 

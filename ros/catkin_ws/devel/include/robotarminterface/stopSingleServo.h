@@ -24,12 +24,10 @@ struct stopSingleServo_
   typedef stopSingleServo_<ContainerAllocator> Type;
 
   stopSingleServo_()
-    : servoId(0)
-    , position(0)  {
+    : servoId(0)  {
     }
   stopSingleServo_(const ContainerAllocator& _alloc)
-    : servoId(0)
-    , position(0)  {
+    : servoId(0)  {
   (void)_alloc;
     }
 
@@ -37,9 +35,6 @@ struct stopSingleServo_
 
    typedef uint32_t _servoId_type;
   _servoId_type servoId;
-
-   typedef uint32_t _position_type;
-  _position_type position;
 
 
 
@@ -119,12 +114,12 @@ struct MD5Sum< ::robotarminterface::stopSingleServo_<ContainerAllocator> >
 {
   static const char* value()
   {
-    return "a23dbe6129c6467805107efe6f32b9f1";
+    return "c229a51eeb50adb8a4245c15dbd40200";
   }
 
   static const char* value(const ::robotarminterface::stopSingleServo_<ContainerAllocator>&) { return value(); }
-  static const uint64_t static_value1 = 0xa23dbe6129c64678ULL;
-  static const uint64_t static_value2 = 0x05107efe6f32b9f1ULL;
+  static const uint64_t static_value1 = 0xc229a51eeb50adb8ULL;
+  static const uint64_t static_value2 = 0xa4245c15dbd40200ULL;
 };
 
 template<class ContainerAllocator>
@@ -144,7 +139,6 @@ struct Definition< ::robotarminterface::stopSingleServo_<ContainerAllocator> >
   static const char* value()
   {
     return "uint32 servoId\n\
-uint32 position\n\
 ";
   }
 
@@ -164,7 +158,6 @@ namespace serialization
     template<typename Stream, typename T> inline static void allInOne(Stream& stream, T m)
     {
       stream.next(m.servoId);
-      stream.next(m.position);
     }
 
     ROS_DECLARE_ALLINONE_SERIALIZER
@@ -185,8 +178,6 @@ struct Printer< ::robotarminterface::stopSingleServo_<ContainerAllocator> >
   {
     s << indent << "servoId: ";
     Printer<uint32_t>::stream(s, indent + "  ", v.servoId);
-    s << indent << "position: ";
-    Printer<uint32_t>::stream(s, indent + "  ", v.position);
   }
 };
 

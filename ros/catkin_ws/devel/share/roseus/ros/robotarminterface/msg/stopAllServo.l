@@ -19,132 +19,104 @@
 (defmethod robotarminterface::stopAllServo
   (:init
    (&key
-    ((:Servo0 __Servo0) (instance robotarminterface::servoPosition :init))
-    ((:Servo1 __Servo1) (instance robotarminterface::servoPosition :init))
-    ((:Servo2 __Servo2) (instance robotarminterface::servoPosition :init))
-    ((:Servo3 __Servo3) (instance robotarminterface::servoPosition :init))
-    ((:Servo4 __Servo4) (instance robotarminterface::servoPosition :init))
-    ((:Servo5 __Servo5) (instance robotarminterface::servoPosition :init))
+    ((:Servo0 __Servo0) 0)
+    ((:Servo1 __Servo1) 0)
+    ((:Servo2 __Servo2) 0)
+    ((:Servo3 __Servo3) 0)
+    ((:Servo4 __Servo4) 0)
+    ((:Servo5 __Servo5) 0)
     )
    (send-super :init)
-   (setq _Servo0 __Servo0)
-   (setq _Servo1 __Servo1)
-   (setq _Servo2 __Servo2)
-   (setq _Servo3 __Servo3)
-   (setq _Servo4 __Servo4)
-   (setq _Servo5 __Servo5)
+   (setq _Servo0 (round __Servo0))
+   (setq _Servo1 (round __Servo1))
+   (setq _Servo2 (round __Servo2))
+   (setq _Servo3 (round __Servo3))
+   (setq _Servo4 (round __Servo4))
+   (setq _Servo5 (round __Servo5))
    self)
   (:Servo0
-   (&rest __Servo0)
-   (if (keywordp (car __Servo0))
-       (send* _Servo0 __Servo0)
-     (progn
-       (if __Servo0 (setq _Servo0 (car __Servo0)))
-       _Servo0)))
+   (&optional __Servo0)
+   (if __Servo0 (setq _Servo0 __Servo0)) _Servo0)
   (:Servo1
-   (&rest __Servo1)
-   (if (keywordp (car __Servo1))
-       (send* _Servo1 __Servo1)
-     (progn
-       (if __Servo1 (setq _Servo1 (car __Servo1)))
-       _Servo1)))
+   (&optional __Servo1)
+   (if __Servo1 (setq _Servo1 __Servo1)) _Servo1)
   (:Servo2
-   (&rest __Servo2)
-   (if (keywordp (car __Servo2))
-       (send* _Servo2 __Servo2)
-     (progn
-       (if __Servo2 (setq _Servo2 (car __Servo2)))
-       _Servo2)))
+   (&optional __Servo2)
+   (if __Servo2 (setq _Servo2 __Servo2)) _Servo2)
   (:Servo3
-   (&rest __Servo3)
-   (if (keywordp (car __Servo3))
-       (send* _Servo3 __Servo3)
-     (progn
-       (if __Servo3 (setq _Servo3 (car __Servo3)))
-       _Servo3)))
+   (&optional __Servo3)
+   (if __Servo3 (setq _Servo3 __Servo3)) _Servo3)
   (:Servo4
-   (&rest __Servo4)
-   (if (keywordp (car __Servo4))
-       (send* _Servo4 __Servo4)
-     (progn
-       (if __Servo4 (setq _Servo4 (car __Servo4)))
-       _Servo4)))
+   (&optional __Servo4)
+   (if __Servo4 (setq _Servo4 __Servo4)) _Servo4)
   (:Servo5
-   (&rest __Servo5)
-   (if (keywordp (car __Servo5))
-       (send* _Servo5 __Servo5)
-     (progn
-       (if __Servo5 (setq _Servo5 (car __Servo5)))
-       _Servo5)))
+   (&optional __Servo5)
+   (if __Servo5 (setq _Servo5 __Servo5)) _Servo5)
   (:serialization-length
    ()
    (+
-    ;; robotarminterface/servoPosition _Servo0
-    (send _Servo0 :serialization-length)
-    ;; robotarminterface/servoPosition _Servo1
-    (send _Servo1 :serialization-length)
-    ;; robotarminterface/servoPosition _Servo2
-    (send _Servo2 :serialization-length)
-    ;; robotarminterface/servoPosition _Servo3
-    (send _Servo3 :serialization-length)
-    ;; robotarminterface/servoPosition _Servo4
-    (send _Servo4 :serialization-length)
-    ;; robotarminterface/servoPosition _Servo5
-    (send _Servo5 :serialization-length)
+    ;; uint32 _Servo0
+    4
+    ;; uint32 _Servo1
+    4
+    ;; uint32 _Servo2
+    4
+    ;; uint32 _Servo3
+    4
+    ;; uint32 _Servo4
+    4
+    ;; uint32 _Servo5
+    4
     ))
   (:serialize
    (&optional strm)
    (let ((s (if strm strm
               (make-string-output-stream (send self :serialization-length)))))
-     ;; robotarminterface/servoPosition _Servo0
-       (send _Servo0 :serialize s)
-     ;; robotarminterface/servoPosition _Servo1
-       (send _Servo1 :serialize s)
-     ;; robotarminterface/servoPosition _Servo2
-       (send _Servo2 :serialize s)
-     ;; robotarminterface/servoPosition _Servo3
-       (send _Servo3 :serialize s)
-     ;; robotarminterface/servoPosition _Servo4
-       (send _Servo4 :serialize s)
-     ;; robotarminterface/servoPosition _Servo5
-       (send _Servo5 :serialize s)
+     ;; uint32 _Servo0
+       (write-long _Servo0 s)
+     ;; uint32 _Servo1
+       (write-long _Servo1 s)
+     ;; uint32 _Servo2
+       (write-long _Servo2 s)
+     ;; uint32 _Servo3
+       (write-long _Servo3 s)
+     ;; uint32 _Servo4
+       (write-long _Servo4 s)
+     ;; uint32 _Servo5
+       (write-long _Servo5 s)
      ;;
      (if (null strm) (get-output-stream-string s))))
   (:deserialize
    (buf &optional (ptr- 0))
-   ;; robotarminterface/servoPosition _Servo0
-     (send _Servo0 :deserialize buf ptr-) (incf ptr- (send _Servo0 :serialization-length))
-   ;; robotarminterface/servoPosition _Servo1
-     (send _Servo1 :deserialize buf ptr-) (incf ptr- (send _Servo1 :serialization-length))
-   ;; robotarminterface/servoPosition _Servo2
-     (send _Servo2 :deserialize buf ptr-) (incf ptr- (send _Servo2 :serialization-length))
-   ;; robotarminterface/servoPosition _Servo3
-     (send _Servo3 :deserialize buf ptr-) (incf ptr- (send _Servo3 :serialization-length))
-   ;; robotarminterface/servoPosition _Servo4
-     (send _Servo4 :deserialize buf ptr-) (incf ptr- (send _Servo4 :serialization-length))
-   ;; robotarminterface/servoPosition _Servo5
-     (send _Servo5 :deserialize buf ptr-) (incf ptr- (send _Servo5 :serialization-length))
+   ;; uint32 _Servo0
+     (setq _Servo0 (sys::peek buf ptr- :integer)) (incf ptr- 4)
+   ;; uint32 _Servo1
+     (setq _Servo1 (sys::peek buf ptr- :integer)) (incf ptr- 4)
+   ;; uint32 _Servo2
+     (setq _Servo2 (sys::peek buf ptr- :integer)) (incf ptr- 4)
+   ;; uint32 _Servo3
+     (setq _Servo3 (sys::peek buf ptr- :integer)) (incf ptr- 4)
+   ;; uint32 _Servo4
+     (setq _Servo4 (sys::peek buf ptr- :integer)) (incf ptr- 4)
+   ;; uint32 _Servo5
+     (setq _Servo5 (sys::peek buf ptr- :integer)) (incf ptr- 4)
    ;;
    self)
   )
 
-(setf (get robotarminterface::stopAllServo :md5sum-) "5ca42d423bd577b7c5ea57f8316de0e6")
+(setf (get robotarminterface::stopAllServo :md5sum-) "a380ddba3e52984021c096a32dd95ec0")
 (setf (get robotarminterface::stopAllServo :datatype-) "robotarminterface/stopAllServo")
 (setf (get robotarminterface::stopAllServo :definition-)
-      "servoPosition Servo0
-servoPosition Servo1
-servoPosition Servo2
-servoPosition Servo3
-servoPosition Servo4
-servoPosition Servo5
-================================================================================
-MSG: robotarminterface/servoPosition
-uint32 servoId
-uint32 position
+      "uint32 Servo0
+uint32 Servo1
+uint32 Servo2
+uint32 Servo3
+uint32 Servo4
+uint32 Servo5
 ")
 
 
 
-(provide :robotarminterface/stopAllServo "5ca42d423bd577b7c5ea57f8316de0e6")
+(provide :robotarminterface/stopAllServo "a380ddba3e52984021c096a32dd95ec0")
 
 

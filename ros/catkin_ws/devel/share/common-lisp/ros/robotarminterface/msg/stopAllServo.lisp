@@ -10,33 +10,33 @@
   ((Servo0
     :reader Servo0
     :initarg :Servo0
-    :type robotarminterface-msg:servoPosition
-    :initform (cl:make-instance 'robotarminterface-msg:servoPosition))
+    :type cl:integer
+    :initform 0)
    (Servo1
     :reader Servo1
     :initarg :Servo1
-    :type robotarminterface-msg:servoPosition
-    :initform (cl:make-instance 'robotarminterface-msg:servoPosition))
+    :type cl:integer
+    :initform 0)
    (Servo2
     :reader Servo2
     :initarg :Servo2
-    :type robotarminterface-msg:servoPosition
-    :initform (cl:make-instance 'robotarminterface-msg:servoPosition))
+    :type cl:integer
+    :initform 0)
    (Servo3
     :reader Servo3
     :initarg :Servo3
-    :type robotarminterface-msg:servoPosition
-    :initform (cl:make-instance 'robotarminterface-msg:servoPosition))
+    :type cl:integer
+    :initform 0)
    (Servo4
     :reader Servo4
     :initarg :Servo4
-    :type robotarminterface-msg:servoPosition
-    :initform (cl:make-instance 'robotarminterface-msg:servoPosition))
+    :type cl:integer
+    :initform 0)
    (Servo5
     :reader Servo5
     :initarg :Servo5
-    :type robotarminterface-msg:servoPosition
-    :initform (cl:make-instance 'robotarminterface-msg:servoPosition)))
+    :type cl:integer
+    :initform 0))
 )
 
 (cl:defclass stopAllServo (<stopAllServo>)
@@ -78,21 +78,57 @@
   (Servo5 m))
 (cl:defmethod roslisp-msg-protocol:serialize ((msg <stopAllServo>) ostream)
   "Serializes a message object of type '<stopAllServo>"
-  (roslisp-msg-protocol:serialize (cl:slot-value msg 'Servo0) ostream)
-  (roslisp-msg-protocol:serialize (cl:slot-value msg 'Servo1) ostream)
-  (roslisp-msg-protocol:serialize (cl:slot-value msg 'Servo2) ostream)
-  (roslisp-msg-protocol:serialize (cl:slot-value msg 'Servo3) ostream)
-  (roslisp-msg-protocol:serialize (cl:slot-value msg 'Servo4) ostream)
-  (roslisp-msg-protocol:serialize (cl:slot-value msg 'Servo5) ostream)
+  (cl:write-byte (cl:ldb (cl:byte 8 0) (cl:slot-value msg 'Servo0)) ostream)
+  (cl:write-byte (cl:ldb (cl:byte 8 8) (cl:slot-value msg 'Servo0)) ostream)
+  (cl:write-byte (cl:ldb (cl:byte 8 16) (cl:slot-value msg 'Servo0)) ostream)
+  (cl:write-byte (cl:ldb (cl:byte 8 24) (cl:slot-value msg 'Servo0)) ostream)
+  (cl:write-byte (cl:ldb (cl:byte 8 0) (cl:slot-value msg 'Servo1)) ostream)
+  (cl:write-byte (cl:ldb (cl:byte 8 8) (cl:slot-value msg 'Servo1)) ostream)
+  (cl:write-byte (cl:ldb (cl:byte 8 16) (cl:slot-value msg 'Servo1)) ostream)
+  (cl:write-byte (cl:ldb (cl:byte 8 24) (cl:slot-value msg 'Servo1)) ostream)
+  (cl:write-byte (cl:ldb (cl:byte 8 0) (cl:slot-value msg 'Servo2)) ostream)
+  (cl:write-byte (cl:ldb (cl:byte 8 8) (cl:slot-value msg 'Servo2)) ostream)
+  (cl:write-byte (cl:ldb (cl:byte 8 16) (cl:slot-value msg 'Servo2)) ostream)
+  (cl:write-byte (cl:ldb (cl:byte 8 24) (cl:slot-value msg 'Servo2)) ostream)
+  (cl:write-byte (cl:ldb (cl:byte 8 0) (cl:slot-value msg 'Servo3)) ostream)
+  (cl:write-byte (cl:ldb (cl:byte 8 8) (cl:slot-value msg 'Servo3)) ostream)
+  (cl:write-byte (cl:ldb (cl:byte 8 16) (cl:slot-value msg 'Servo3)) ostream)
+  (cl:write-byte (cl:ldb (cl:byte 8 24) (cl:slot-value msg 'Servo3)) ostream)
+  (cl:write-byte (cl:ldb (cl:byte 8 0) (cl:slot-value msg 'Servo4)) ostream)
+  (cl:write-byte (cl:ldb (cl:byte 8 8) (cl:slot-value msg 'Servo4)) ostream)
+  (cl:write-byte (cl:ldb (cl:byte 8 16) (cl:slot-value msg 'Servo4)) ostream)
+  (cl:write-byte (cl:ldb (cl:byte 8 24) (cl:slot-value msg 'Servo4)) ostream)
+  (cl:write-byte (cl:ldb (cl:byte 8 0) (cl:slot-value msg 'Servo5)) ostream)
+  (cl:write-byte (cl:ldb (cl:byte 8 8) (cl:slot-value msg 'Servo5)) ostream)
+  (cl:write-byte (cl:ldb (cl:byte 8 16) (cl:slot-value msg 'Servo5)) ostream)
+  (cl:write-byte (cl:ldb (cl:byte 8 24) (cl:slot-value msg 'Servo5)) ostream)
 )
 (cl:defmethod roslisp-msg-protocol:deserialize ((msg <stopAllServo>) istream)
   "Deserializes a message object of type '<stopAllServo>"
-  (roslisp-msg-protocol:deserialize (cl:slot-value msg 'Servo0) istream)
-  (roslisp-msg-protocol:deserialize (cl:slot-value msg 'Servo1) istream)
-  (roslisp-msg-protocol:deserialize (cl:slot-value msg 'Servo2) istream)
-  (roslisp-msg-protocol:deserialize (cl:slot-value msg 'Servo3) istream)
-  (roslisp-msg-protocol:deserialize (cl:slot-value msg 'Servo4) istream)
-  (roslisp-msg-protocol:deserialize (cl:slot-value msg 'Servo5) istream)
+    (cl:setf (cl:ldb (cl:byte 8 0) (cl:slot-value msg 'Servo0)) (cl:read-byte istream))
+    (cl:setf (cl:ldb (cl:byte 8 8) (cl:slot-value msg 'Servo0)) (cl:read-byte istream))
+    (cl:setf (cl:ldb (cl:byte 8 16) (cl:slot-value msg 'Servo0)) (cl:read-byte istream))
+    (cl:setf (cl:ldb (cl:byte 8 24) (cl:slot-value msg 'Servo0)) (cl:read-byte istream))
+    (cl:setf (cl:ldb (cl:byte 8 0) (cl:slot-value msg 'Servo1)) (cl:read-byte istream))
+    (cl:setf (cl:ldb (cl:byte 8 8) (cl:slot-value msg 'Servo1)) (cl:read-byte istream))
+    (cl:setf (cl:ldb (cl:byte 8 16) (cl:slot-value msg 'Servo1)) (cl:read-byte istream))
+    (cl:setf (cl:ldb (cl:byte 8 24) (cl:slot-value msg 'Servo1)) (cl:read-byte istream))
+    (cl:setf (cl:ldb (cl:byte 8 0) (cl:slot-value msg 'Servo2)) (cl:read-byte istream))
+    (cl:setf (cl:ldb (cl:byte 8 8) (cl:slot-value msg 'Servo2)) (cl:read-byte istream))
+    (cl:setf (cl:ldb (cl:byte 8 16) (cl:slot-value msg 'Servo2)) (cl:read-byte istream))
+    (cl:setf (cl:ldb (cl:byte 8 24) (cl:slot-value msg 'Servo2)) (cl:read-byte istream))
+    (cl:setf (cl:ldb (cl:byte 8 0) (cl:slot-value msg 'Servo3)) (cl:read-byte istream))
+    (cl:setf (cl:ldb (cl:byte 8 8) (cl:slot-value msg 'Servo3)) (cl:read-byte istream))
+    (cl:setf (cl:ldb (cl:byte 8 16) (cl:slot-value msg 'Servo3)) (cl:read-byte istream))
+    (cl:setf (cl:ldb (cl:byte 8 24) (cl:slot-value msg 'Servo3)) (cl:read-byte istream))
+    (cl:setf (cl:ldb (cl:byte 8 0) (cl:slot-value msg 'Servo4)) (cl:read-byte istream))
+    (cl:setf (cl:ldb (cl:byte 8 8) (cl:slot-value msg 'Servo4)) (cl:read-byte istream))
+    (cl:setf (cl:ldb (cl:byte 8 16) (cl:slot-value msg 'Servo4)) (cl:read-byte istream))
+    (cl:setf (cl:ldb (cl:byte 8 24) (cl:slot-value msg 'Servo4)) (cl:read-byte istream))
+    (cl:setf (cl:ldb (cl:byte 8 0) (cl:slot-value msg 'Servo5)) (cl:read-byte istream))
+    (cl:setf (cl:ldb (cl:byte 8 8) (cl:slot-value msg 'Servo5)) (cl:read-byte istream))
+    (cl:setf (cl:ldb (cl:byte 8 16) (cl:slot-value msg 'Servo5)) (cl:read-byte istream))
+    (cl:setf (cl:ldb (cl:byte 8 24) (cl:slot-value msg 'Servo5)) (cl:read-byte istream))
   msg
 )
 (cl:defmethod roslisp-msg-protocol:ros-datatype ((msg (cl:eql '<stopAllServo>)))
@@ -103,24 +139,24 @@
   "robotarminterface/stopAllServo")
 (cl:defmethod roslisp-msg-protocol:md5sum ((type (cl:eql '<stopAllServo>)))
   "Returns md5sum for a message object of type '<stopAllServo>"
-  "5ca42d423bd577b7c5ea57f8316de0e6")
+  "a380ddba3e52984021c096a32dd95ec0")
 (cl:defmethod roslisp-msg-protocol:md5sum ((type (cl:eql 'stopAllServo)))
   "Returns md5sum for a message object of type 'stopAllServo"
-  "5ca42d423bd577b7c5ea57f8316de0e6")
+  "a380ddba3e52984021c096a32dd95ec0")
 (cl:defmethod roslisp-msg-protocol:message-definition ((type (cl:eql '<stopAllServo>)))
   "Returns full string definition for message of type '<stopAllServo>"
-  (cl:format cl:nil "servoPosition Servo0~%servoPosition Servo1~%servoPosition Servo2~%servoPosition Servo3~%servoPosition Servo4~%servoPosition Servo5~%================================================================================~%MSG: robotarminterface/servoPosition~%uint32 servoId~%uint32 position~%~%"))
+  (cl:format cl:nil "uint32 Servo0~%uint32 Servo1~%uint32 Servo2~%uint32 Servo3~%uint32 Servo4~%uint32 Servo5~%~%"))
 (cl:defmethod roslisp-msg-protocol:message-definition ((type (cl:eql 'stopAllServo)))
   "Returns full string definition for message of type 'stopAllServo"
-  (cl:format cl:nil "servoPosition Servo0~%servoPosition Servo1~%servoPosition Servo2~%servoPosition Servo3~%servoPosition Servo4~%servoPosition Servo5~%================================================================================~%MSG: robotarminterface/servoPosition~%uint32 servoId~%uint32 position~%~%"))
+  (cl:format cl:nil "uint32 Servo0~%uint32 Servo1~%uint32 Servo2~%uint32 Servo3~%uint32 Servo4~%uint32 Servo5~%~%"))
 (cl:defmethod roslisp-msg-protocol:serialization-length ((msg <stopAllServo>))
   (cl:+ 0
-     (roslisp-msg-protocol:serialization-length (cl:slot-value msg 'Servo0))
-     (roslisp-msg-protocol:serialization-length (cl:slot-value msg 'Servo1))
-     (roslisp-msg-protocol:serialization-length (cl:slot-value msg 'Servo2))
-     (roslisp-msg-protocol:serialization-length (cl:slot-value msg 'Servo3))
-     (roslisp-msg-protocol:serialization-length (cl:slot-value msg 'Servo4))
-     (roslisp-msg-protocol:serialization-length (cl:slot-value msg 'Servo5))
+     4
+     4
+     4
+     4
+     4
+     4
 ))
 (cl:defmethod roslisp-msg-protocol:ros-message-to-list ((msg <stopAllServo>))
   "Converts a ROS message object to a list"

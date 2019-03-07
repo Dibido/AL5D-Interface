@@ -1,6 +1,6 @@
-unsigned int Servo0
-unsigned int Servo1
-unsigned int Servo2
-unsigned int Servo3
-unsigned int Servo4
-unsigned int Servo5
+uint32 Servo0
+uint32 Servo1
+uint32 Servo2
+uint32 Servo3
+uint32 Servo4
+uint32 Servo5
