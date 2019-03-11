@@ -12,7 +12,7 @@ int main(int argc, char** argv)
   }
   else
   {
-    //Print help
+    std::cout << "Usage : higleveldriver [baudrate]" << std::endl;
     exit(0);
   }
   
