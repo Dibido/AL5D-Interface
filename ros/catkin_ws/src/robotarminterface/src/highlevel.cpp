@@ -6,7 +6,12 @@ int main(int argc, char** argv)
   ros::init(argc, argv, "highlevel");
   ROS_INFO("Starting Servo high level driver");
   highlevel lHighlevelDriver;
-  if (argc == 2)
+  if(argc == 1)
+  {
+    // Default baudrate, if none is given by user
+    lHighlevelDriver.setBaudRate(115200);
+  } 
+  else if (argc == 2)
   {
     lHighlevelDriver.setBaudRate(atoi(argv[1]));
   }
@@ -114,14 +119,7 @@ void highlevel::allServoCallback(const robotarminterface::allServoConstPtr& aAll
 void highlevel::stopAllServoCallback(const robotarminterface::stopAllServoConstPtr& aStopAllServoMessage)
 {
   ROS_INFO("Handling stopAllServo Command");
-  std::vector<unsigned int> lPins;
-  lPins.push_back(aStopAllServoMessage->Servo0);
-  lPins.push_back(aStopAllServoMessage->Servo1);
-  lPins.push_back(aStopAllServoMessage->Servo2);
-  lPins.push_back(aStopAllServoMessage->Servo3);
-  lPins.push_back(aStopAllServoMessage->Servo4);
-  lPins.push_back(aStopAllServoMessage->Servo5);
-  mLowLevelDriver.stopServos(lPins);
+  mLowLevelDriver.stopServos(aStopAllServoMessage->servoIds);
 }
 
 void highlevel::armPositionCallback(const robotarminterface::armPositionConstPtr& aArmPositionMessage)

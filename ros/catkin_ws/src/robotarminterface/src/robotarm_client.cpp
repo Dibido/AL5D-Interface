@@ -93,14 +93,14 @@ int main(int argc, char** argv)
     sleep(1);
 
     robotarminterface::stopAllServo lStopServosMessage;
-    lStopServosMessage.Servo0 = 0;
-    lStopServosMessage.Servo1 = 1;
-    lStopServosMessage.Servo2 = 2;
-    lStopServosMessage.Servo3 = 3;
-    lStopServosMessage.Servo4 = 4;
-    lStopServosMessage.Servo5 = 5;
+    lStopServosMessage.servoIds.push_back(0);
+    lStopServosMessage.servoIds.push_back(1);
+    lStopServosMessage.servoIds.push_back(2);
+    //lStopServosMessage.servoIds.push_back(3);
+    //lStopServosMessage.servoIds.push_back(4);
+    //lStopServosMessage.servoIds.push_back(5);
     //Send message
-    // lStopAllServoPublisher.publish(lStopServosMessage);
+    lStopAllServoPublisher.publish(lStopServosMessage);
     ros::spinOnce();
     sleep(1);
   }
