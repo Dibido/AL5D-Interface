@@ -20,6 +20,11 @@ lowlevel::~lowlevel()
 {
 }
 
+void lowlevel::setBaudRate(unsigned int aBaudRate)
+{
+  serial.set_option(boost::asio::serial_port_base::baud_rate(aBaudRate));
+}
+
 void lowlevel::moveServosToPos(std::vector<unsigned int> aPins, std::vector<unsigned int> aDegrees, unsigned int aMillis)
 {
   // Every pin should correspond with a degree value, if this is not the case do nothing (input invalid)

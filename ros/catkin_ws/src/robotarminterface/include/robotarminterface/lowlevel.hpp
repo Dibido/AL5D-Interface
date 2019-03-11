@@ -67,6 +67,12 @@ class lowlevel
    * @param aCommand - The command
    */
   void sendSerial(std::string aCommand);
+
+  /**
+   * @brief Set the baud rate of the serial
+   * @param aBaudRate - The baudrate to set
+   */
+  void setBaudRate(unsigned int aBaudRate);
 };
 
 #endif
