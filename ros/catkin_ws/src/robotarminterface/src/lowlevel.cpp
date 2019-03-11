@@ -41,6 +41,11 @@ void lowlevel::moveServosToPos(std::vector<unsigned int> aPins, std::vector<unsi
     std::cout << "Command sent via serial: " << lCommand << std::endl;
     sendSerial(lCommand);
   }
+  else
+  {
+    std::cout << "Error, invalid command recieved." << std::endl;
+  }
+  
 }
 
 void lowlevel::stopServos(std::vector<unsigned int> aPins)
@@ -54,7 +59,6 @@ void lowlevel::stopServos(std::vector<unsigned int> aPins)
       lCommand.append("STOP" + std::to_string(aPins.at(i)));
       lCommand.append("\r");
     }
-
     std::cout << "sendStop sent via serial: " << lCommand << std::endl;
     sendSerial(lCommand);
   }
@@ -72,6 +76,7 @@ unsigned int lowlevel::convertDegreesToPulsewidth(unsigned int aDegrees) const
   double lFactor = (double)aDegrees / (double)lDegreeRange;
 
   unsigned int lReturn = MIN_PULSEWIDTH + lPulseRange * lFactor;
+
   // Bounds checking
   lReturn = (lReturn < MIN_PULSEWIDTH) ? MIN_PULSEWIDTH : lReturn;
   lReturn = (lReturn > MAX_PULSEWIDTH) ? MAX_PULSEWIDTH : lReturn;
@@ -87,7 +92,6 @@ void lowlevel::sendSerial(std::string aCommand)
   std::ostream os(&b);
   os << aCommand << std::endl;
 
-  // serial.open("/dev/ttyUSB0");
   if (serial.is_open())
   {
     boost::asio::write(serial, b.data());
@@ -96,6 +100,7 @@ void lowlevel::sendSerial(std::string aCommand)
   }
   else
   {
-    std::cout << "Unable to open serial";
+    std::cout << "Unable to open serial, stopping program" << std::endl;
+    exit(-1);
   }
 }

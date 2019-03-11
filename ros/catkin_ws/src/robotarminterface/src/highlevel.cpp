@@ -26,7 +26,7 @@ highlevel::highlevel()
   mParkPosition.servoIds = {0,1,2,3,4,5};
   mParkPosition.servoDegrees = {90, 130, 130, 30, 180, 90};
   mReadyPosition.servoIds = {0,1,2,3,4,5};
-  mReadyPosition.servoDegrees = {90, 130, 110, 80 ,180, 90};
+  mReadyPosition.servoDegrees = {90, 130, 110, 80, 0, 90};
   mStraightPosition.servoIds = {0,1,2,3,4,5};
   mStraightPosition.servoDegrees = {90, 90, 10, 90 ,90 ,90};
 

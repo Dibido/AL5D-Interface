@@ -21,17 +21,14 @@ int main(int argc, char** argv)
 
   if(ros::ok())
   {
+    sleep(1);
     //Create message
     robotarminterface::singleServo lSingleServoMessage;
     lSingleServoMessage.servoId = 0;
     lSingleServoMessage.position = 0;
     lSingleServoMessage.time = 200;
-    //Show command
-    while(lSingleServoPublisher.getNumSubscribers() == 0)
-    {
-      //Wait for subs
-    }
     //Send message
+    ROS_INFO("Sending ServoPos");
     lSingleServoPublisher.publish(lSingleServoMessage);
     ros::spinOnce();
     sleep(0.5);
@@ -51,10 +48,6 @@ int main(int argc, char** argv)
     lAllServoMessage.Servo5.position = 90;
     lAllServoMessage.time = 2000;
     ROS_INFO("Sending allServoPos");
-    while(lAllServoPublisher.getNumSubscribers() == 0)
-    {
-      //Wait for subs
-    }
     //Send message
     lAllServoPublisher.publish(lAllServoMessage);
     ros::spinOnce();
@@ -64,10 +57,6 @@ int main(int argc, char** argv)
     lArmPositionMessage.positionName = "park";
     lArmPositionMessage.time = 1000;
     ROS_INFO("Sending armPosition");
-    while(lArmPositionPublisher.getNumSubscribers() == 0)
-    {
-      //Wait for subs
-    }
     //Send message
     lArmPositionPublisher.publish(lArmPositionMessage);
     ros::spinOnce();
@@ -76,10 +65,6 @@ int main(int argc, char** argv)
     lArmPositionMessage.positionName = "ready";
     lArmPositionMessage.time = 1000;
     ROS_INFO("Sending armPosition");
-    while(lArmPositionPublisher.getNumSubscribers() == 0)
-    {
-      //Wait for subs
-    }
     //Send message
     lArmPositionPublisher.publish(lArmPositionMessage);
     ros::spinOnce();
@@ -88,10 +73,6 @@ int main(int argc, char** argv)
     lArmPositionMessage.positionName = "straight";
     lArmPositionMessage.time = 5000;
     ROS_INFO("Sending armPosition");
-    while(lArmPositionPublisher.getNumSubscribers() == 0)
-    {
-      //Wait for subs
-    }
     //Send message
     lArmPositionPublisher.publish(lArmPositionMessage);
     ros::spinOnce();
@@ -104,12 +85,8 @@ int main(int argc, char** argv)
     lStopServosMessage.Servo3 = 3;
     lStopServosMessage.Servo4 = 4;
     lStopServosMessage.Servo5 = 5;
-    while(lStopAllServoPublisher.getNumSubscribers() == 0)
-    {
-      //Wait for subs
-    }
     //Send message
-    lStopAllServoPublisher.publish(lStopServosMessage);
+    // lStopAllServoPublisher.publish(lStopServosMessage);
     ros::spinOnce();
     sleep(1);
   }
