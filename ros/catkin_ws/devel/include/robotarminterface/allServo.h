@@ -16,11 +16,6 @@
 #include <ros/message_operations.h>
 
 #include <robotarminterface/servoPosition.h>
-#include <robotarminterface/servoPosition.h>
-#include <robotarminterface/servoPosition.h>
-#include <robotarminterface/servoPosition.h>
-#include <robotarminterface/servoPosition.h>
-#include <robotarminterface/servoPosition.h>
 
 namespace robotarminterface
 {
@@ -30,44 +25,19 @@ struct allServo_
   typedef allServo_<ContainerAllocator> Type;
 
   allServo_()
-    : Servo0()
-    , Servo1()
-    , Servo2()
-    , Servo3()
-    , Servo4()
-    , Servo5()
+    : servos()
     , time(0)  {
     }
   allServo_(const ContainerAllocator& _alloc)
-    : Servo0(_alloc)
-    , Servo1(_alloc)
-    , Servo2(_alloc)
-    , Servo3(_alloc)
-    , Servo4(_alloc)
-    , Servo5(_alloc)
+    : servos(_alloc)
     , time(0)  {
   (void)_alloc;
     }
 
 
 
-   typedef  ::robotarminterface::servoPosition_<ContainerAllocator>  _Servo0_type;
-  _Servo0_type Servo0;
-
-   typedef  ::robotarminterface::servoPosition_<ContainerAllocator>  _Servo1_type;
-  _Servo1_type Servo1;
-
-   typedef  ::robotarminterface::servoPosition_<ContainerAllocator>  _Servo2_type;
-  _Servo2_type Servo2;
-
-   typedef  ::robotarminterface::servoPosition_<ContainerAllocator>  _Servo3_type;
-  _Servo3_type Servo3;
-
-   typedef  ::robotarminterface::servoPosition_<ContainerAllocator>  _Servo4_type;
-  _Servo4_type Servo4;
-
-   typedef  ::robotarminterface::servoPosition_<ContainerAllocator>  _Servo5_type;
-  _Servo5_type Servo5;
+   typedef std::vector< ::robotarminterface::servoPosition_<ContainerAllocator> , typename ContainerAllocator::template rebind< ::robotarminterface::servoPosition_<ContainerAllocator> >::other >  _servos_type;
+  _servos_type servos;
 
    typedef uint32_t _time_type;
   _time_type time;
@@ -106,8 +76,8 @@ namespace message_traits
 
 
 
-// BOOLTRAITS {'IsFixedSize': True, 'IsMessage': True, 'HasHeader': False}
-// {'robotarminterface': ['/home/owner/git/AL5D-Interface/ros/catkin_ws/src/robotarminterface/msg'], 'std_msgs': ['/opt/ros/melodic/share/std_msgs/cmake/../msg']}
+// BOOLTRAITS {'IsFixedSize': False, 'IsMessage': True, 'HasHeader': False}
+// {'robotarminterface': ['/home/marnix/WoR/World/Interface/AL5D-Interface/ros/catkin_ws/src/robotarminterface/msg'], 'std_msgs': ['/opt/ros/melodic/share/std_msgs/cmake/../msg']}
 
 // !!!!!!!!!!! ['__class__', '__delattr__', '__dict__', '__doc__', '__eq__', '__format__', '__getattribute__', '__hash__', '__init__', '__module__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__str__', '__subclasshook__', '__weakref__', '_parsed_fields', 'constants', 'fields', 'full_name', 'has_header', 'header_present', 'names', 'package', 'parsed_fields', 'short_name', 'text', 'types']
 
@@ -116,12 +86,12 @@ namespace message_traits
 
 template <class ContainerAllocator>
 struct IsFixedSize< ::robotarminterface::allServo_<ContainerAllocator> >
-  : TrueType
+  : FalseType
   { };
 
 template <class ContainerAllocator>
 struct IsFixedSize< ::robotarminterface::allServo_<ContainerAllocator> const>
-  : TrueType
+  : FalseType
   { };
 
 template <class ContainerAllocator>
@@ -150,12 +120,12 @@ struct MD5Sum< ::robotarminterface::allServo_<ContainerAllocator> >
 {
   static const char* value()
   {
-    return "121b57178428382073f8fc86c837ef06";
+    return "89d40dd6cacad948ee11a74add298f6b";
   }
 
   static const char* value(const ::robotarminterface::allServo_<ContainerAllocator>&) { return value(); }
-  static const uint64_t static_value1 = 0x121b571784283820ULL;
-  static const uint64_t static_value2 = 0x73f8fc86c837ef06ULL;
+  static const uint64_t static_value1 = 0x89d40dd6cacad948ULL;
+  static const uint64_t static_value2 = 0xee11a74add298f6bULL;
 };
 
 template<class ContainerAllocator>
@@ -174,13 +144,9 @@ struct Definition< ::robotarminterface::allServo_<ContainerAllocator> >
 {
   static const char* value()
   {
-    return "servoPosition Servo0\n\
-servoPosition Servo1\n\
-servoPosition Servo2\n\
-servoPosition Servo3\n\
-servoPosition Servo4\n\
-servoPosition Servo5\n\
+    return "servoPosition[] servos\n\
 uint32 time\n\
+\n\
 ================================================================================\n\
 MSG: robotarminterface/servoPosition\n\
 uint32 servoId\n\
@@ -203,12 +169,7 @@ namespace serialization
   {
     template<typename Stream, typename T> inline static void allInOne(Stream& stream, T m)
     {
-      stream.next(m.Servo0);
-      stream.next(m.Servo1);
-      stream.next(m.Servo2);
-      stream.next(m.Servo3);
-      stream.next(m.Servo4);
-      stream.next(m.Servo5);
+      stream.next(m.servos);
       stream.next(m.time);
     }
 
@@ -228,24 +189,14 @@ struct Printer< ::robotarminterface::allServo_<ContainerAllocator> >
 {
   template<typename Stream> static void stream(Stream& s, const std::string& indent, const ::robotarminterface::allServo_<ContainerAllocator>& v)
   {
-    s << indent << "Servo0: ";
-    s << std::endl;
-    Printer< ::robotarminterface::servoPosition_<ContainerAllocator> >::stream(s, indent + "  ", v.Servo0);
-    s << indent << "Servo1: ";
-    s << std::endl;
-    Printer< ::robotarminterface::servoPosition_<ContainerAllocator> >::stream(s, indent + "  ", v.Servo1);
-    s << indent << "Servo2: ";
-    s << std::endl;
-    Printer< ::robotarminterface::servoPosition_<ContainerAllocator> >::stream(s, indent + "  ", v.Servo2);
-    s << indent << "Servo3: ";
-    s << std::endl;
-    Printer< ::robotarminterface::servoPosition_<ContainerAllocator> >::stream(s, indent + "  ", v.Servo3);
-    s << indent << "Servo4: ";
-    s << std::endl;
-    Printer< ::robotarminterface::servoPosition_<ContainerAllocator> >::stream(s, indent + "  ", v.Servo4);
-    s << indent << "Servo5: ";
-    s << std::endl;
-    Printer< ::robotarminterface::servoPosition_<ContainerAllocator> >::stream(s, indent + "  ", v.Servo5);
+    s << indent << "servos[]" << std::endl;
+    for (size_t i = 0; i < v.servos.size(); ++i)
+    {
+      s << indent << "  servos[" << i << "]: ";
+      s << std::endl;
+      s << indent;
+      Printer< ::robotarminterface::servoPosition_<ContainerAllocator> >::stream(s, indent + "    ", v.servos[i]);
+    }
     s << indent << "time: ";
     Printer<uint32_t>::stream(s, indent + "  ", v.time);
   }

@@ -34,18 +34,32 @@ int main(int argc, char** argv)
     sleep(0.5);
 
     robotarminterface::allServo lAllServoMessage;
-    lAllServoMessage.Servo0.servoId = 0;
-    lAllServoMessage.Servo0.position = 90;
-    lAllServoMessage.Servo1.servoId = 1;
-    lAllServoMessage.Servo1.position = 130;
-    lAllServoMessage.Servo2.servoId = 2;
-    lAllServoMessage.Servo2.position = 110;
-    lAllServoMessage.Servo3.servoId = 3;
-    lAllServoMessage.Servo3.position = 80;
-    lAllServoMessage.Servo4.servoId = 4;
-    lAllServoMessage.Servo4.position = 180;
-    lAllServoMessage.Servo5.servoId = 5;
-    lAllServoMessage.Servo5.position = 90;
+    robotarminterface::servoPosition lServoPosition;
+
+    lServoPosition.servoId = 0;
+    lServoPosition.position = 90;
+    lAllServoMessage.servos.push_back(lServoPosition);
+
+    lServoPosition.servoId = 1;
+    lServoPosition.position = 130;
+    lAllServoMessage.servos.push_back(lServoPosition);
+    
+    lServoPosition.servoId = 2;
+    lServoPosition.position = 110;
+    lAllServoMessage.servos.push_back(lServoPosition);
+
+    lServoPosition.servoId = 3;
+    lServoPosition.position = 80;
+    lAllServoMessage.servos.push_back(lServoPosition);
+
+    lServoPosition.servoId = 4;
+    lServoPosition.position = 180;
+    lAllServoMessage.servos.push_back(lServoPosition);
+
+    lServoPosition.servoId = 5;
+    lServoPosition.position = 90;
+    lAllServoMessage.servos.push_back(lServoPosition);
+
     lAllServoMessage.time = 2000;
     ROS_INFO("Sending allServoPos");
     //Send message

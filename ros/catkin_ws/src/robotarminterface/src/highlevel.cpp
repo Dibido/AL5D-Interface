@@ -65,21 +65,18 @@ void highlevel::stopSingleServoCallback(const robotarminterface::stopSingleServo
 void highlevel::allServoCallback(const robotarminterface::allServoConstPtr& aAllServoMessage)
 {
   ROS_INFO("Handling allServo Command");
+  
   std::vector<unsigned int> lPins;
-  lPins.push_back(aAllServoMessage->Servo0.servoId);
-  lPins.push_back(aAllServoMessage->Servo1.servoId);
-  lPins.push_back(aAllServoMessage->Servo2.servoId);
-  lPins.push_back(aAllServoMessage->Servo3.servoId);
-  lPins.push_back(aAllServoMessage->Servo4.servoId);
-  lPins.push_back(aAllServoMessage->Servo5.servoId);
   std::vector<unsigned int> lDegrees;
-  lDegrees.push_back(aAllServoMessage->Servo0.position);
-  lDegrees.push_back(aAllServoMessage->Servo1.position);
-  lDegrees.push_back(aAllServoMessage->Servo2.position);
-  lDegrees.push_back(aAllServoMessage->Servo3.position);
-  lDegrees.push_back(aAllServoMessage->Servo4.position);
-  lDegrees.push_back(aAllServoMessage->Servo5.position);
+
+  for(int i = 0; i < aAllServoMessage->servos.size(); ++i)
+  {
+    lPins.push_back(aAllServoMessage->servos[i].servoId);
+    lDegrees.push_back(aAllServoMessage->servos[i].position);
+  }
+
   unsigned int lMillis = aAllServoMessage->time;
+  
   mLowLevelDriver.moveServosToPos(lPins, lDegrees, lMillis);
 }
 
