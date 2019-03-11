@@ -19,50 +19,15 @@ class allServo {
   constructor(initObj={}) {
     if (initObj === null) {
       // initObj === null is a special case for deserialization where we don't initialize fields
-      this.Servo0 = null;
-      this.Servo1 = null;
-      this.Servo2 = null;
-      this.Servo3 = null;
-      this.Servo4 = null;
-      this.Servo5 = null;
+      this.servos = null;
       this.time = null;
     }
     else {
-      if (initObj.hasOwnProperty('Servo0')) {
-        this.Servo0 = initObj.Servo0
+      if (initObj.hasOwnProperty('servos')) {
+        this.servos = initObj.servos
       }
       else {
-        this.Servo0 = new servoPosition();
-      }
-      if (initObj.hasOwnProperty('Servo1')) {
-        this.Servo1 = initObj.Servo1
-      }
-      else {
-        this.Servo1 = new servoPosition();
-      }
-      if (initObj.hasOwnProperty('Servo2')) {
-        this.Servo2 = initObj.Servo2
-      }
-      else {
-        this.Servo2 = new servoPosition();
-      }
-      if (initObj.hasOwnProperty('Servo3')) {
-        this.Servo3 = initObj.Servo3
-      }
-      else {
-        this.Servo3 = new servoPosition();
-      }
-      if (initObj.hasOwnProperty('Servo4')) {
-        this.Servo4 = initObj.Servo4
-      }
-      else {
-        this.Servo4 = new servoPosition();
-      }
-      if (initObj.hasOwnProperty('Servo5')) {
-        this.Servo5 = initObj.Servo5
-      }
-      else {
-        this.Servo5 = new servoPosition();
+        this.servos = [];
       }
       if (initObj.hasOwnProperty('time')) {
         this.time = initObj.time
@@ -75,18 +40,12 @@ class allServo {
 
   static serialize(obj, buffer, bufferOffset) {
     // Serializes a message object of type allServo
-    // Serialize message field [Servo0]
-    bufferOffset = servoPosition.serialize(obj.Servo0, buffer, bufferOffset);
-    // Serialize message field [Servo1]
-    bufferOffset = servoPosition.serialize(obj.Servo1, buffer, bufferOffset);
-    // Serialize message field [Servo2]
-    bufferOffset = servoPosition.serialize(obj.Servo2, buffer, bufferOffset);
-    // Serialize message field [Servo3]
-    bufferOffset = servoPosition.serialize(obj.Servo3, buffer, bufferOffset);
-    // Serialize message field [Servo4]
-    bufferOffset = servoPosition.serialize(obj.Servo4, buffer, bufferOffset);
-    // Serialize message field [Servo5]
-    bufferOffset = servoPosition.serialize(obj.Servo5, buffer, bufferOffset);
+    // Serialize message field [servos]
+    // Serialize the length for message field [servos]
+    bufferOffset = _serializer.uint32(obj.servos.length, buffer, bufferOffset);
+    obj.servos.forEach((val) => {
+      bufferOffset = servoPosition.serialize(val, buffer, bufferOffset);
+    });
     // Serialize message field [time]
     bufferOffset = _serializer.uint32(obj.time, buffer, bufferOffset);
     return bufferOffset;
@@ -96,25 +55,22 @@ class allServo {
     //deserializes a message object of type allServo
     let len;
     let data = new allServo(null);
-    // Deserialize message field [Servo0]
-    data.Servo0 = servoPosition.deserialize(buffer, bufferOffset);
-    // Deserialize message field [Servo1]
-    data.Servo1 = servoPosition.deserialize(buffer, bufferOffset);
-    // Deserialize message field [Servo2]
-    data.Servo2 = servoPosition.deserialize(buffer, bufferOffset);
-    // Deserialize message field [Servo3]
-    data.Servo3 = servoPosition.deserialize(buffer, bufferOffset);
-    // Deserialize message field [Servo4]
-    data.Servo4 = servoPosition.deserialize(buffer, bufferOffset);
-    // Deserialize message field [Servo5]
-    data.Servo5 = servoPosition.deserialize(buffer, bufferOffset);
+    // Deserialize message field [servos]
+    // Deserialize array length for message field [servos]
+    len = _deserializer.uint32(buffer, bufferOffset);
+    data.servos = new Array(len);
+    for (let i = 0; i < len; ++i) {
+      data.servos[i] = servoPosition.deserialize(buffer, bufferOffset)
+    }
     // Deserialize message field [time]
     data.time = _deserializer.uint32(buffer, bufferOffset);
     return data;
   }
 
   static getMessageSize(object) {
-    return 52;
+    let length = 0;
+    length += 8 * object.servos.length;
+    return length + 8;
   }
 
   static datatype() {
@@ -124,19 +80,15 @@ class allServo {
 
   static md5sum() {
     //Returns md5sum for a message object
-    return '121b57178428382073f8fc86c837ef06';
+    return '89d40dd6cacad948ee11a74add298f6b';
   }
 
   static messageDefinition() {
     // Returns full string definition for message
     return `
-    servoPosition Servo0
-    servoPosition Servo1
-    servoPosition Servo2
-    servoPosition Servo3
-    servoPosition Servo4
-    servoPosition Servo5
+    servoPosition[] servos
     uint32 time
+    
     ================================================================================
     MSG: robotarminterface/servoPosition
     uint32 servoId
@@ -150,46 +102,14 @@ class allServo {
       msg = {};
     }
     const resolved = new allServo(null);
-    if (msg.Servo0 !== undefined) {
-      resolved.Servo0 = servoPosition.Resolve(msg.Servo0)
+    if (msg.servos !== undefined) {
+      resolved.servos = new Array(msg.servos.length);
+      for (let i = 0; i < resolved.servos.length; ++i) {
+        resolved.servos[i] = servoPosition.Resolve(msg.servos[i]);
+      }
     }
     else {
-      resolved.Servo0 = new servoPosition()
-    }
-
-    if (msg.Servo1 !== undefined) {
-      resolved.Servo1 = servoPosition.Resolve(msg.Servo1)
-    }
-    else {
-      resolved.Servo1 = new servoPosition()
-    }
-
-    if (msg.Servo2 !== undefined) {
-      resolved.Servo2 = servoPosition.Resolve(msg.Servo2)
-    }
-    else {
-      resolved.Servo2 = new servoPosition()
-    }
-
-    if (msg.Servo3 !== undefined) {
-      resolved.Servo3 = servoPosition.Resolve(msg.Servo3)
-    }
-    else {
-      resolved.Servo3 = new servoPosition()
-    }
-
-    if (msg.Servo4 !== undefined) {
-      resolved.Servo4 = servoPosition.Resolve(msg.Servo4)
-    }
-    else {
-      resolved.Servo4 = new servoPosition()
-    }
-
-    if (msg.Servo5 !== undefined) {
-      resolved.Servo5 = servoPosition.Resolve(msg.Servo5)
-    }
-    else {
-      resolved.Servo5 = new servoPosition()
+      resolved.servos = []
     }
 
     if (msg.time !== undefined) {

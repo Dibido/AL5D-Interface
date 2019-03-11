@@ -22,7 +22,11 @@ lowlevel::~lowlevel()
 
 void lowlevel::setBaudRate(unsigned int aBaudRate)
 {
+  boost::system::error_code ec; // choice: without ec Boost.Asio may throw
+  if (!ec)
+  {
   serial.set_option(boost::asio::serial_port_base::baud_rate(aBaudRate));
+  }
 }
 
 void lowlevel::moveServosToPos(std::vector<unsigned int> aPins, std::vector<unsigned int> aDegrees, unsigned int aMillis)
