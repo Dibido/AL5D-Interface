@@ -45,7 +45,10 @@ protected:
 public:
   
   highlevel();
+  highlevel(unsigned int aBaudRate);
   virtual ~highlevel();
+
+  void setBaudRate(unsigned int aBaudRate);
 
 private:
 
@@ -53,6 +56,8 @@ private:
    * @brief Time to take to go to the park position
    */
   unsigned int mInitializeTime;
+
+  unsigned int mBaudRate;
 
   void singleServoCallback(const robotarminterface::singleServoConstPtr& aSingleServoMessage);
   void stopSingleServoCallback(const robotarminterface::stopSingleServoConstPtr& aStopSingleServoMessage);
@@ -64,6 +69,12 @@ private:
    * @brief Initializes the arm
    */
   void initializeArm();
+
+  void subscribeTopics();
+
+  void initializeValues();
+
+  
 };
 
 #endif

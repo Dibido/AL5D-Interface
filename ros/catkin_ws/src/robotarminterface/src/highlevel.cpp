@@ -5,22 +5,51 @@ int main(int argc, char** argv)
 {
   ros::init(argc, argv, "highlevel");
   ROS_INFO("Starting Servo high level driver");
-
   highlevel lHighlevelDriver;
-
+  if (argc == 2)
+  {
+    lHighlevelDriver.setBaudRate(atoi(argv[1]));
+  }
+  else
+  {
+    std::cout << "Usage : higleveldriver [baudrate]" << std::endl;
+    exit(0);
+  }
+  
   ros::spin();
-
   return 0;
 }
 
-highlevel::highlevel()
+highlevel::highlevel() : mBaudRate(115200)
+{
+  subscribeTopics();
+  initializeValues();
+  initializeArm();
+}
+
+highlevel::highlevel(unsigned int aBaudRate) : mBaudRate(aBaudRate)
+{
+  subscribeTopics();
+  initializeValues();
+  initializeArm();
+}
+
+void highlevel::setBaudRate(unsigned int aBaudRate)
+{
+  mLowLevelDriver.setBaudRate(aBaudRate);
+}
+
+void highlevel::subscribeTopics()
 {
   mSingleServoSubscriber = mNodeHandler.subscribe("singleServo", 1000, &highlevel::singleServoCallback, this);
   mStopSingleServoSubscriber = mNodeHandler.subscribe("stopSingleServo", 1000, &highlevel::stopSingleServoCallback, this);
   mAllServoSubscriber = mNodeHandler.subscribe("allServo", 1000, &highlevel::allServoCallback, this);
   mStopAllServoSubscriber = mNodeHandler.subscribe("stopAllServo", 1000, &highlevel::stopAllServoCallback, this);
   mArmPositionSubscriber = mNodeHandler.subscribe("armPosition", 1000, &highlevel::armPositionCallback, this);
+}
 
+void highlevel::initializeValues()
+{
   mInitializeTime = 3000;
 
   mParkPosition.servoIds = {0,1,2,3,4,5};
@@ -30,8 +59,10 @@ highlevel::highlevel()
   mStraightPosition.servoIds = {0,1,2,3,4,5};
   mStraightPosition.servoDegrees = {90, 90, 10, 90 ,90 ,90};
 
-  initializeArm();
+  mLowLevelDriver.setBaudRate(mBaudRate);
 }
+
+
 
 void highlevel::initializeArm()
 {
