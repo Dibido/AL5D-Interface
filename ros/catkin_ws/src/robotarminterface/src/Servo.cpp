@@ -8,7 +8,7 @@ Servo::~Servo()
 {
 }
 
-unsigned int Servo::getServoId()
+unsigned int Servo::getServoId() const
 {
   return mServoId;
 }
@@ -29,4 +29,34 @@ int Servo::getCurrentDegrees() const
 void Servo::setCurrentDegrees(int aDegrees)
 {
   mCurrentDegrees = aDegrees;
+}
+
+Servo::Servo(const Servo& other)
+{
+  mServoId = other.getServoId();
+  mMinDegrees = other.getMinDegrees();
+  mMaxDegrees = other.getMaxDegrees();
+  mCurrentDegrees = other.getCurrentDegrees();
+}
+
+Servo::Servo()
+{
+}
+
+Servo& Servo::operator=(Servo other)
+{
+  if(other == *this)
+  {
+    return *this;
+  }
+  this->mServoId = other.getServoId();
+  this->mMinDegrees = other.getMinDegrees();
+  this->mMaxDegrees = other.getMaxDegrees();
+  this->mCurrentDegrees = other.getCurrentDegrees();
+  return *this;
+}
+
+bool Servo::operator==(Servo aServo)
+{
+  return (this->mServoId == aServo.mServoId && this->mMinDegrees == aServo.mMinDegrees && this->mMaxDegrees == aServo.mMaxDegrees && this->mCurrentDegrees == aServo.mCurrentDegrees);
 }

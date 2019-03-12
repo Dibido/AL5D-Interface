@@ -5,13 +5,18 @@ class Servo
 {
   public:
     Servo(unsigned int aServoId, int aMinDegrees, int aMaxDegrees);
+    Servo();
     virtual ~Servo();
 
-    unsigned int getServoId();
+    unsigned int getServoId() const;
     int getMinDegrees() const;
     int getMaxDegrees() const;
     int getCurrentDegrees() const;
     void setCurrentDegrees(int aDegrees);
+
+    Servo(const Servo& other); // Copy constructor
+    Servo& operator=(Servo other); // Asignment constructor
+    bool operator==(Servo aServo); // Comparison constructor
 
   private:
     unsigned int mServoId;
