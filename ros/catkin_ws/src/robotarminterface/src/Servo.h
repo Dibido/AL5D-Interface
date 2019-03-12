@@ -8,9 +8,9 @@ class Servo
     virtual ~Servo();
 
     unsigned int getServoId();
-    int getMinDegrees();
-    int getMaxDegrees();
-    int getCurrentDegrees();
+    int getMinDegrees() const;
+    int getMaxDegrees() const;
+    int getCurrentDegrees() const;
     void setCurrentDegrees(int aDegrees);
 
   private:

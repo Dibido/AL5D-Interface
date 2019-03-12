@@ -13,16 +13,16 @@ unsigned int Servo::getServoId()
   return mServoId;
 }
 
-int Servo::getMinDegrees()
+int Servo::getMinDegrees() const
 {
   return mMinDegrees;
 }
 
-int Servo::getMaxDegrees()
+int Servo::getMaxDegrees() const
 {
   return mMaxDegrees;
 }
-int Servo::getCurrentDegrees()
+int Servo::getCurrentDegrees() const
 {
   return mCurrentDegrees;
 }
