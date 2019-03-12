@@ -100,7 +100,7 @@ int main(int argc, char** argv)
     //lStopServosMessage.servoIds.push_back(4);
     //lStopServosMessage.servoIds.push_back(5);
     //Send message
-    lStopAllServoPublisher.publish(lStopServosMessage);
+    // lStopAllServoPublisher.publish(lStopServosMessage);
     ros::spinOnce();
     sleep(1);
   }
