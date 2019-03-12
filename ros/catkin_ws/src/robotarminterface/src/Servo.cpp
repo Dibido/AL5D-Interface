@@ -1,6 +1,7 @@
 #include "Servo.h"
 
-Servo::Servo(unsigned int aServoId, int aMinDegrees, int aMaxDegrees) : mServoId(aServoId), mMinDegrees(aMinDegrees), mMaxDegrees(aMaxDegrees)
+Servo::Servo(unsigned int aServoId, int aMinDegrees, int aMaxDegrees, int aMinDegreesRange, int aMaxDegreesRange)
+  : mServoId(aServoId), mMinDegrees(aMinDegrees), mMaxDegrees(aMaxDegrees), mMinDegreesRange(aMinDegreesRange), mMaxDegreesRange(aMaxDegreesRange)
 {
 }
 
@@ -22,6 +23,17 @@ int Servo::getMaxDegrees() const
 {
   return mMaxDegrees;
 }
+
+int Servo::getMinDegreesRange() const
+{
+  return mMinDegreesRange;
+}
+    
+int Servo::getMaxDegreesRange() const
+{
+  return mMaxDegreesRange;
+}
+
 int Servo::getCurrentDegrees() const
 {
   return mCurrentDegrees;
@@ -36,6 +48,8 @@ Servo::Servo(const Servo& other)
   mServoId = other.getServoId();
   mMinDegrees = other.getMinDegrees();
   mMaxDegrees = other.getMaxDegrees();
+  mMinDegreesRange = other.getMinDegreesRange();
+  mMaxDegreesRange = other.getMaxDegreesRange();
   mCurrentDegrees = other.getCurrentDegrees();
 }
 
@@ -52,6 +66,8 @@ Servo& Servo::operator=(Servo other)
   this->mServoId = other.getServoId();
   this->mMinDegrees = other.getMinDegrees();
   this->mMaxDegrees = other.getMaxDegrees();
+  this->mMinDegreesRange = other.getMinDegreesRange();
+  this->mMaxDegreesRange = other.getMaxDegreesRange();
   this->mCurrentDegrees = other.getCurrentDegrees();
   return *this;
 }

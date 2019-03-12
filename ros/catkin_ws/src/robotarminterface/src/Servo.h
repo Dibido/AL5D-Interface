@@ -4,13 +4,15 @@
 class Servo
 {
   public:
-    Servo(unsigned int aServoId, int aMinDegrees, int aMaxDegrees);
+    Servo(unsigned int aServoId, int aMinDegrees, int aMaxDegrees, int aMinDegreesRange, int aMaxDegreesRange);
     Servo();
     virtual ~Servo();
 
     unsigned int getServoId() const;
     int getMinDegrees() const;
     int getMaxDegrees() const;
+    int getMinDegreesRange() const;
+    int getMaxDegreesRange() const;
     int getCurrentDegrees() const;
     void setCurrentDegrees(int aDegrees);
 
@@ -22,6 +24,8 @@ class Servo
     unsigned int mServoId;
     int mMinDegrees;
     int mMaxDegrees;
+    int mMinDegreesRange;
+    int mMaxDegreesRange;
     int mCurrentDegrees;
 };
 
