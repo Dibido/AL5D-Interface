@@ -8,7 +8,7 @@ Servo::~Servo()
 {
 }
 
-unsigned int Servo::getServoId()
+unsigned int Servo::getServoId() const
 {
   return mServoId;
 }

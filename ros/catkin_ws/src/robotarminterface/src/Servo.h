@@ -7,7 +7,7 @@ class Servo
     Servo(unsigned int aServoId, int aMinDegrees, int aMaxDegrees);
     virtual ~Servo();
 
-    unsigned int getServoId();
+    unsigned int getServoId() const;
     int getMinDegrees() const;
     int getMaxDegrees() const;
     int getCurrentDegrees() const;
