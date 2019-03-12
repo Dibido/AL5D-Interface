@@ -11,6 +11,7 @@
 #include <iostream>
 #include <vector>
 #include <thread>
+#include <stdexcept>
 
 #include <boost/asio.hpp>
 
@@ -50,14 +51,14 @@ class lowlevel
    * @param aMillis - The time in milliseconds that will be taken to complete the move
    * (if lower then MIN_MOVE_TIME, MIN_MOVE_TIME is used), same goes for MAX_MOVE_TIME.
    */
-  void moveServosToPos(std::vector<unsigned int> aPins, std::vector<unsigned int> aDegrees, unsigned int aMillis);
+  void moveServosToPos(std::vector<unsigned int> aPins, std::vector<int> aDegrees, unsigned int aMillis);
 
   /**
    * @brief Converts a given amount of degrees to a corresponding pulsewidth. Uses the MIN/MAX_PULSEWIDTH defines for this.
    * @param aDegrees - The angle in degrees 
    * @param aServo - The servo, is used to check boundaries (min/max range).
    */
-  unsigned int convertDegreesToPulsewidth(unsigned int aDegrees, Servo aServo) const;
+  unsigned int convertDegreesToPulsewidth(int aDegrees, Servo& aServo) const;
 
   /**
    * @brief Checks whether a given amount of degrees is in range
@@ -65,7 +66,7 @@ class lowlevel
    * @param aServo - The servo object, which contains a min/max
    * @return Returns true if min <= aDegrees <= max
    */
-  bool degreesInRange(unsigned int aDegrees, Servo aServo) const;
+  bool degreesInRange(int aDegrees, Servo& aServo) const;
   
   /**
    * @brief stop the movement of the servos
@@ -100,7 +101,7 @@ class lowlevel
    * If it existed, a copy of that servo is returned. If it didn't exist the boolean will be false, and a default
    * Servo is constructed and returned
    */
-   std::pair<bool, Servo> getServoWithId(unsigned int aServoId) const;
+   Servo& getServoWithId(unsigned int aServoId);
 
   private:
   std::vector<Servo> mServos;

@@ -36,7 +36,7 @@ void lowlevel::setBaudRate(unsigned int aBaudRate)
   }
 }
 
-void lowlevel::moveServosToPos(std::vector<unsigned int> aPins, std::vector<unsigned int> aDegrees, unsigned int aMillis)
+void lowlevel::moveServosToPos(std::vector<unsigned int> aPins, std::vector<int> aDegrees, unsigned int aMillis)
 {
   // Every pin should correspond with a degree value, if this is not the case do nothing (input invalid)
   if (aPins.size() == aDegrees.size())
@@ -65,9 +65,10 @@ void lowlevel::moveServosToPos(std::vector<unsigned int> aPins, std::vector<unsi
       // Check if given degrees are within the min/max of the servos
       for (int i = 0; (i < aDegrees.size()) && lValidDegrees; ++i)
       {
-        if ((!degreesInRange(aDegrees.at(i), getServoWithId(aPins.at(i)).second)))
+        if (!degreesInRange(aDegrees.at(i), getServoWithId(aPins.at(i))))
         {
           lValidDegrees = false;
+          std::cout << "Degree: " << std::to_string(aDegrees.at(i)) << " and servomin: " << std::to_string(getServoWithId(aPins.at(i)).getMinDegrees()) << " and servomax: " << std::to_string(getServoWithId(aPins.at(i)).getMaxDegrees()) << std::endl;
         }
       }
 
@@ -82,7 +83,7 @@ void lowlevel::moveServosToPos(std::vector<unsigned int> aPins, std::vector<unsi
 
         for (int i = 0; i < aPins.size(); ++i)
         {
-          unsigned int lPulseWidth = convertDegreesToPulsewidth(aDegrees.at(i), getServoWithId(aPins.at(i)).second);
+          unsigned int lPulseWidth = convertDegreesToPulsewidth(aDegrees.at(i), getServoWithId(aPins.at(i)));
 
           lCommand.append("#" + std::to_string(aPins.at(i)));
           lCommand.append("P" + std::to_string(lPulseWidth));
@@ -108,7 +109,7 @@ void lowlevel::stopServos(std::vector<unsigned int> aPins)
   {
     std::string lCommand = "";
 
-    for (int i = 0; i < aPins.size(); ++i)
+    for (int i = 0; i < aPins.size(); ++i) 
     {
       lCommand.append("STOP" + std::to_string(aPins.at(i)));
       lCommand.append("\r");
@@ -118,27 +119,29 @@ void lowlevel::stopServos(std::vector<unsigned int> aPins)
   }
 }
 
-unsigned int lowlevel::convertDegreesToPulsewidth(unsigned int aDegrees, Servo aServo) const
+unsigned int lowlevel::convertDegreesToPulsewidth(int aDegrees, Servo& aServo) const
 {
   unsigned int lPulseRange = MAX_PULSEWIDTH - MIN_PULSEWIDTH;
 
   // Degree range of the servo's
-  unsigned int lDegreeRange = std::abs(aServo.getMaxDegrees() - aServo.getMinDegrees());
+  unsigned int lDegreeRange = 180;
+  // std::abs(aServo.getMaxDegrees() - aServo.getMinDegrees());
 
-  double lFactor = (double)aDegrees / (double)lDegreeRange;
+  double lFactor = (double)(aDegrees) / (double)lDegreeRange;
+     std::cout << "lFactor: " << std::to_string(lFactor) << std::endl;
 
   unsigned int lReturn = MIN_PULSEWIDTH + lPulseRange * lFactor;
 
   return lReturn;
 }
 
-bool lowlevel::degreesInRange(unsigned int aDegrees, Servo aServo) const
+bool lowlevel::degreesInRange(int aDegrees, Servo& aServo) const
 {
   bool lReturn = false;
 
   if ((aDegrees >= aServo.getMinDegrees()) && (aDegrees <= aServo.getMaxDegrees()))
   {
-    lReturn = false;
+    lReturn = true;
   }
 
   return lReturn;
@@ -180,21 +183,21 @@ bool lowlevel::servoExists(unsigned int aServoId) const
   return lReturn;
 }
 
-std::pair<bool, Servo> lowlevel::getServoWithId(unsigned int aServoId) const
+Servo& lowlevel::getServoWithId(unsigned int aServoId)
 {
   bool lFoundServo = false;
-  Servo lReturnServo;
 
-  for (auto lServo : mServos)
+  for (int i = 0; i < mServos.size(); ++i)
   {
-    if (lServo.getServoId() == aServoId)
+    if (mServos.at(i).getServoId() == aServoId)
     {
       lFoundServo = true;
-      lReturnServo = lServo;
+      return mServos.at(i);
     }
   }
 
-  std::pair<bool, Servo> lReturnPair = std::make_pair(lFoundServo, lReturnServo);
-
-  return lReturnPair;
+  if(!lFoundServo)
+  {
+    throw std::invalid_argument( "Invalid servoId entered.");
+  }
 }

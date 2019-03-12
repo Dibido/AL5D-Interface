@@ -14,8 +14,8 @@ class Servo
     int getCurrentDegrees() const;
     void setCurrentDegrees(int aDegrees);
 
-    Servo(const Servo& other); // Copy constructor
-    Servo& operator=(Servo other); // Asignment constructor
+    Servo(const Servo& aOther); // Copy constructor
+    Servo& operator=(Servo aOther); // Asignment constructor
     bool operator==(Servo aServo); // Comparison constructor
 
   private:

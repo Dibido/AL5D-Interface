@@ -31,28 +31,28 @@ void Servo::setCurrentDegrees(int aDegrees)
   mCurrentDegrees = aDegrees;
 }
 
-Servo::Servo(const Servo& other)
+Servo::Servo(const Servo& aOther)
 {
-  mServoId = other.getServoId();
-  mMinDegrees = other.getMinDegrees();
-  mMaxDegrees = other.getMaxDegrees();
-  mCurrentDegrees = other.getCurrentDegrees();
+  mServoId = aOther.getServoId();
+  mMinDegrees = aOther.getMinDegrees();
+  mMaxDegrees = aOther.getMaxDegrees();
+  mCurrentDegrees = aOther.getCurrentDegrees();
 }
 
 Servo::Servo()
 {
 }
 
-Servo& Servo::operator=(Servo other)
+Servo& Servo::operator=(Servo aOther)
 {
-  if(other == *this)
+  if(aOther == *this)
   {
     return *this;
   }
-  this->mServoId = other.getServoId();
-  this->mMinDegrees = other.getMinDegrees();
-  this->mMaxDegrees = other.getMaxDegrees();
-  this->mCurrentDegrees = other.getCurrentDegrees();
+  this->mServoId = aOther.getServoId();
+  this->mMinDegrees = aOther.getMinDegrees();
+  this->mMaxDegrees = aOther.getMaxDegrees();
+  this->mCurrentDegrees = aOther.getCurrentDegrees();
   return *this;
 }
 
