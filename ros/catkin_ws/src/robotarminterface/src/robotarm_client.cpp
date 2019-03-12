@@ -3,8 +3,8 @@
 
 #include "robotarminterface/singleServo.h"
 #include "robotarminterface/stopSingleServo.h"
-#include "robotarminterface/allServo.h"
-#include "robotarminterface/stopAllServo.h"
+#include "robotarminterface/moveServos.h"
+#include "robotarminterface/stopServos.h"
 #include "robotarminterface/armPosition.h"
 
 
@@ -15,8 +15,8 @@ int main(int argc, char** argv)
   ros::NodeHandle lNodeHandler;
   ros::Publisher lSingleServoPublisher = lNodeHandler.advertise<robotarminterface::singleServo>("singleServo", 1000);
   ros::Publisher lStopSingleServoPublisher = lNodeHandler.advertise<robotarminterface::stopSingleServo>("stopSingleServo", 1000);
-  ros::Publisher lAllServoPublisher = lNodeHandler.advertise<robotarminterface::allServo>("allServo", 1000);
-  ros::Publisher lStopAllServoPublisher = lNodeHandler.advertise<robotarminterface::stopAllServo>("stopAllServo", 1000);
+  ros::Publisher lMoveServosPublisher = lNodeHandler.advertise<robotarminterface::moveServos>("moveServos", 1000);
+  ros::Publisher lStopServosPublisher = lNodeHandler.advertise<robotarminterface::stopServos>("stopServos", 1000);
   ros::Publisher lArmPositionPublisher = lNodeHandler.advertise<robotarminterface::armPosition>("armPosition", 1000);
 
   if(ros::ok())
@@ -33,37 +33,37 @@ int main(int argc, char** argv)
     ros::spinOnce();
     sleep(0.5);
 
-    robotarminterface::allServo lAllServoMessage;
+    robotarminterface::moveServos lMoveServosMessage;
     robotarminterface::servoPosition lServoPosition;
 
     lServoPosition.servoId = 0;
     lServoPosition.position = 90;
-    lAllServoMessage.servos.push_back(lServoPosition);
+    lMoveServosMessage.servos.push_back(lServoPosition);
 
     lServoPosition.servoId = 1;
     lServoPosition.position = 130;
-    lAllServoMessage.servos.push_back(lServoPosition);
+    lMoveServosMessage.servos.push_back(lServoPosition);
     
     lServoPosition.servoId = 2;
     lServoPosition.position = 110;
-    lAllServoMessage.servos.push_back(lServoPosition);
+    lMoveServosMessage.servos.push_back(lServoPosition);
 
     lServoPosition.servoId = 3;
     lServoPosition.position = 80;
-    lAllServoMessage.servos.push_back(lServoPosition);
+    lMoveServosMessage.servos.push_back(lServoPosition);
 
     lServoPosition.servoId = 4;
     lServoPosition.position = 180;
-    lAllServoMessage.servos.push_back(lServoPosition);
+    lMoveServosMessage.servos.push_back(lServoPosition);
 
     lServoPosition.servoId = 5;
     lServoPosition.position = 90;
-    lAllServoMessage.servos.push_back(lServoPosition);
+    lMoveServosMessage.servos.push_back(lServoPosition);
 
-    lAllServoMessage.time = 2000;
+    lMoveServosMessage.time = 2000;
     ROS_INFO("Sending allServoPos");
     //Send message
-    lAllServoPublisher.publish(lAllServoMessage);
+    lMoveServosPublisher.publish(lMoveServosMessage);
     ros::spinOnce();
     sleep(5);
 
@@ -92,7 +92,7 @@ int main(int argc, char** argv)
     ros::spinOnce();
     sleep(1);
 
-    robotarminterface::stopAllServo lStopServosMessage;
+    robotarminterface::stopServos lStopServosMessage;
     lStopServosMessage.servoIds.push_back(0);
     lStopServosMessage.servoIds.push_back(1);
     lStopServosMessage.servoIds.push_back(2);
@@ -100,7 +100,7 @@ int main(int argc, char** argv)
     //lStopServosMessage.servoIds.push_back(4);
     //lStopServosMessage.servoIds.push_back(5);
     //Send message
-    lStopAllServoPublisher.publish(lStopServosMessage);
+    lStopServosPublisher.publish(lStopServosMessage);
     ros::spinOnce();
     sleep(1);
   }

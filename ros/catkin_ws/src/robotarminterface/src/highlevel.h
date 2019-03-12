@@ -14,8 +14,8 @@
 #include "robotarminterface/lowlevel.hpp"
 #include "robotarminterface/singleServo.h"
 #include "robotarminterface/stopSingleServo.h"
-#include "robotarminterface/allServo.h"
-#include "robotarminterface/stopAllServo.h"
+#include "robotarminterface/moveServos.h"
+#include "robotarminterface/stopServos.h"
 #include "robotarminterface/armPosition.h"
 
 #include <iostream>
@@ -34,8 +34,8 @@ protected:
   lowlevel mLowLevelDriver;
   ros::Subscriber mSingleServoSubscriber;
   ros::Subscriber mStopSingleServoSubscriber;
-  ros::Subscriber mAllServoSubscriber;
-  ros::Subscriber mStopAllServoSubscriber;
+  ros::Subscriber mMoveServosSubscriber;
+  ros::Subscriber mStopServosSubscriber;
   ros::Subscriber mArmPositionSubscriber;
 
   robotarmPosition mParkPosition;
@@ -61,8 +61,8 @@ private:
 
   void singleServoCallback(const robotarminterface::singleServoConstPtr& aSingleServoMessage);
   void stopSingleServoCallback(const robotarminterface::stopSingleServoConstPtr& aStopSingleServoMessage);
-  void allServoCallback(const robotarminterface::allServoConstPtr& aSingleServoMessage);
-  void stopAllServoCallback(const robotarminterface::stopAllServoConstPtr& aStopAllServoMessage);
+  void moveServosCallback(const robotarminterface::moveServosConstPtr& aSingleServoMessage);
+  void stopServosCallback(const robotarminterface::stopServosConstPtr& aStopAllServoMessage);
   void armPositionCallback(const robotarminterface::armPositionConstPtr& aSingleServoMessage);
 
   /**

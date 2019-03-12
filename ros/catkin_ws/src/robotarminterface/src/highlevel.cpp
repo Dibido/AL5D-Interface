@@ -48,8 +48,8 @@ void highlevel::subscribeTopics()
 {
   mSingleServoSubscriber = mNodeHandler.subscribe("singleServo", 1000, &highlevel::singleServoCallback, this);
   mStopSingleServoSubscriber = mNodeHandler.subscribe("stopSingleServo", 1000, &highlevel::stopSingleServoCallback, this);
-  mAllServoSubscriber = mNodeHandler.subscribe("allServo", 1000, &highlevel::allServoCallback, this);
-  mStopAllServoSubscriber = mNodeHandler.subscribe("stopAllServo", 1000, &highlevel::stopAllServoCallback, this);
+  mMoveServosSubscriber = mNodeHandler.subscribe("moveServos", 1000, &highlevel::moveServosCallback, this);
+  mStopServosSubscriber = mNodeHandler.subscribe("stopServos", 1000, &highlevel::stopServosCallback, this);
   mArmPositionSubscriber = mNodeHandler.subscribe("armPosition", 1000, &highlevel::armPositionCallback, this);
 }
 
@@ -98,28 +98,28 @@ void highlevel::stopSingleServoCallback(const robotarminterface::stopSingleServo
   mLowLevelDriver.stopServos(lPins);
 }
 
-void highlevel::allServoCallback(const robotarminterface::allServoConstPtr& aAllServoMessage)
+void highlevel::moveServosCallback(const robotarminterface::moveServosConstPtr& aMoveServosMessage)
 {
-  ROS_INFO("Handling allServo Command");
+  ROS_INFO("Handling moveServos Command");
   
   std::vector<unsigned int> lPins;
   std::vector<unsigned int> lDegrees;
 
-  for(int i = 0; i < aAllServoMessage->servos.size(); ++i)
+  for(int i = 0; i < aMoveServosMessage->servos.size(); ++i)
   {
-    lPins.push_back(aAllServoMessage->servos[i].servoId);
-    lDegrees.push_back(aAllServoMessage->servos[i].position);
+    lPins.push_back(aMoveServosMessage->servos[i].servoId);
+    lDegrees.push_back(aMoveServosMessage->servos[i].position);
   }
 
-  unsigned int lMillis = aAllServoMessage->time;
+  unsigned int lMillis = aMoveServosMessage->time;
   
   mLowLevelDriver.moveServosToPos(lPins, lDegrees, lMillis);
 }
 
-void highlevel::stopAllServoCallback(const robotarminterface::stopAllServoConstPtr& aStopAllServoMessage)
+void highlevel::stopServosCallback(const robotarminterface::stopServosConstPtr& aStopServosMessage)
 {
-  ROS_INFO("Handling stopAllServo Command");
-  mLowLevelDriver.stopServos(aStopAllServoMessage->servoIds);
+  ROS_INFO("Handling stopServos Command");
+  mLowLevelDriver.stopServos(aStopServosMessage->servoIds);
 }
 
 void highlevel::armPositionCallback(const robotarminterface::armPositionConstPtr& aArmPositionMessage)
