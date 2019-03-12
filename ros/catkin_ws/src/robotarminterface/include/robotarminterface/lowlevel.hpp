@@ -38,12 +38,6 @@ class lowlevel
   boost::asio::serial_port serial;
 
   public:
-
-  inline int addNumbers(int a, int b)
-  {
-    return a + b;
-  }
-
   /**
    * @brief Sends the command to move a servo to a certain angle in a certain amount if time.
    * @param aPin - The pin number of the servo
@@ -104,8 +98,20 @@ class lowlevel
    Servo& getServoWithId(unsigned int aServoId);
 
   private:
+  /**
+   * @brief A list of servo objects
+   */
   std::vector<Servo> mServos;
 
+  /**
+   * @brief Maps the value from the input range to the output range
+   * @param aDegree - The value to convert
+   * @param aInMin - The minimum value of the input range
+   * @param aInMax - The maximum value of the input range 
+   * @param aOutMin - The minimum value of the output range
+   * @param aOutMax - The maximum value of the output range 
+   * @return unsigned int - The converted value
+   */
   unsigned int mapValues(int aDegree, int aInMin, int aInMax, int aOutMin, int aOutMax) const;
 };
 

@@ -21,6 +21,11 @@
 #include <iostream>
 #include <sstream>
 
+/**
+ * @brief Robotarmposition stores the current configuration of the robotarm
+ * @param servoIds - The id's of the servo's
+ * @param servoDegrees - The degrees that the servo's are in
+ */
 struct robotarmPosition
 {
   std::vector<unsigned int> servoIds;
@@ -48,6 +53,10 @@ public:
   highlevel(unsigned int aBaudRate);
   virtual ~highlevel();
 
+  /**
+   * @brief Set the Baud Rate
+   * @param aBaudRate - The baudrate to set
+   */
   void setBaudRate(unsigned int aBaudRate);
 
 private:
@@ -56,9 +65,12 @@ private:
    * @brief Time to take to go to the park position
    */
   unsigned int mInitializeTime;
-
+  /**
+   * @brief The currently set baudrate
+   */
   unsigned int mBaudRate;
 
+  // Message callbacks
   void singleServoCallback(const robotarminterface::singleServoConstPtr& aSingleServoMessage);
   void stopSingleServoCallback(const robotarminterface::stopSingleServoConstPtr& aStopSingleServoMessage);
   void moveServosCallback(const robotarminterface::moveServosConstPtr& aSingleServoMessage);
@@ -66,15 +78,19 @@ private:
   void armPositionCallback(const robotarminterface::armPositionConstPtr& aSingleServoMessage);
 
   /**
-   * @brief Initializes the arm
+   * @brief Initializes the arm by going to the park position
    */
   void initializeArm();
 
+  /**
+   * @brief subscribes to the necessary topics
+   */
   void subscribeTopics();
 
+  /**
+   * @brief Initializes the position and timing values
+   */
   void initializeValues();
-
-  
 };
 
 #endif
