@@ -60,7 +60,7 @@ int main(int argc, char** argv)
     lServoPosition.position = 90;
     lMoveServosMessage.servos.push_back(lServoPosition);
 
-    lMoveServosMessage.time = 2000;
+    lMoveServosMessage.time = 1000;
     ROS_INFO("Sending allServoPos");
     //Send message
     lMoveServosPublisher.publish(lMoveServosMessage);
@@ -69,7 +69,7 @@ int main(int argc, char** argv)
 
     robotarminterface::armPosition lArmPositionMessage;
     lArmPositionMessage.positionName = "park";
-    lArmPositionMessage.time = 1000;
+    lArmPositionMessage.time = 500;
     ROS_INFO("Sending armPosition");
     //Send message
     lArmPositionPublisher.publish(lArmPositionMessage);
@@ -77,7 +77,7 @@ int main(int argc, char** argv)
     sleep(2);
 
     lArmPositionMessage.positionName = "ready";
-    lArmPositionMessage.time = 1000;
+    lArmPositionMessage.time = 500;
     ROS_INFO("Sending armPosition");
     //Send message
     lArmPositionPublisher.publish(lArmPositionMessage);
@@ -85,7 +85,7 @@ int main(int argc, char** argv)
     sleep(2);
 
     lArmPositionMessage.positionName = "straight";
-    lArmPositionMessage.time = 5000;
+    lArmPositionMessage.time = 1000;
     ROS_INFO("Sending armPosition");
     //Send message
     lArmPositionPublisher.publish(lArmPositionMessage);

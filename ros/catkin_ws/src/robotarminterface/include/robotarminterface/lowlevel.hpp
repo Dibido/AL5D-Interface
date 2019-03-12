@@ -73,6 +73,26 @@ class lowlevel
    * @param aBaudRate - The baudrate to set
    */
   void setBaudRate(unsigned int aBaudRate);
+
+  /**
+   * @brief Checks the servo range and sets the value to max or min when it exceeds the threshold
+   * @param aPin The servo to check
+   * @param aDegree The given degree
+   */
+  int checkServoRange(unsigned int aPin, int aDegree);
+
+  private:
+
+  class Servo {
+    public:
+      Servo(unsigned int aServoId, int aMinDegree, int aMaxDegree) : mServoId(aServoId), mMinDegree(aMinDegree), mMaxDegree(aMaxDegree) {}
+      unsigned int mServoId;
+      int mMinDegree;
+      int mMaxDegree;
+      int mCurrentDegree;
+  };
+
+  std::vector<Servo> mServos;
 };
 
 #endif

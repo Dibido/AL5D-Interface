@@ -2,6 +2,13 @@
 
 lowlevel::lowlevel() : serial(ioservice)
 {
+  // Set the servo ranges
+  mServos.push_back(Servo(0, -90, 90));
+  mServos.push_back(Servo(1, -30, 90));
+  mServos.push_back(Servo(2, 0, 135));
+  mServos.push_back(Servo(3, -90, 90));
+  mServos.push_back(Servo(4, 0, 180));
+  mServos.push_back(Servo(5, -90, 90));
   // Initializing serial
   boost::system::error_code ec; // choice: without ec Boost.Asio may throw
   serial.open("/dev/ttyUSB0", ec);
@@ -22,11 +29,43 @@ lowlevel::~lowlevel()
 
 void lowlevel::setBaudRate(unsigned int aBaudRate)
 {
-  boost::system::error_code ec; // choice: without ec Boost.Asio may throw
+  boost::system::error_code ec; // without ec Boost.Asio may throw
   if (!ec)
   {
   serial.set_option(boost::asio::serial_port_base::baud_rate(aBaudRate));
   }
+}
+
+int lowlevel::checkServoRange(unsigned int aPin, int aDegree)
+{
+  bool lServoFound = false;
+  int lDegree = 0;
+  for (auto lServo : mServos)
+  {
+    if (aPin == lServo.mServoId)
+    {
+      lServoFound = true;
+      if (aDegree < lServo.mMinDegree)
+      {
+        lDegree = lServo.mMinDegree;
+        std::cout << "Degree too small, pin : " << aPin << " Degree : " << aDegree << std::endl;
+      }
+      else if (aDegree > lServo.mMaxDegree)
+      {
+        lDegree = lServo.mMaxDegree;
+        std::cout << "Degree too big, pin : " << aPin << " Degree : " << aDegree << std::endl;
+      }
+      else
+      {
+        lDegree = aDegree; 
+      }
+    }
+  }
+  if (lServoFound == false)
+  {
+    std::cout << "Unable to find the servo with pinId : " << aPin << std::endl;
+  }
+  return lDegree;
 }
 
 void lowlevel::moveServosToPos(std::vector<unsigned int> aPins, std::vector<unsigned int> aDegrees, unsigned int aMillis)
@@ -38,6 +77,10 @@ void lowlevel::moveServosToPos(std::vector<unsigned int> aPins, std::vector<unsi
 
     for (int i = 0; i < aPins.size(); ++i)
     {
+      // Check if the value is in the defined range of motion, if not set the max/min value
+      // int lCurrentCheckedDegree = checkServoRange(aPins.at(i), aDegrees.at(i));
+
+      // unsigned int lPulseWidth = convertDegreesToPulsewidth(lCurrentCheckedDegree);
       unsigned int lPulseWidth = convertDegreesToPulsewidth(aDegrees.at(i));
 
       lCommand.append("#" + std::to_string(aPins.at(i)));
