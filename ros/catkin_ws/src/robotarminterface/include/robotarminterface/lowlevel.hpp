@@ -105,6 +105,8 @@ class lowlevel
 
   private:
   std::vector<Servo> mServos;
+
+  unsigned int mapValues(int aDegree, int aInMin, int aInMax, int aOutMin, int aOutMax) const;
 };
 
 #endif

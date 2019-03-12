@@ -3,12 +3,12 @@
 lowlevel::lowlevel() : serial(ioservice)
 {
   // Set the servo ranges
-  mServos.push_back(Servo(0, -90, 90));
-  mServos.push_back(Servo(1, -30, 90));
-  mServos.push_back(Servo(2, 0, 135));
-  mServos.push_back(Servo(3, -90, 90));
-  mServos.push_back(Servo(4, 0, 180));
-  mServos.push_back(Servo(5, -90, 90));
+  mServos.push_back(Servo(0, -90, 90, -90, 90));
+  mServos.push_back(Servo(1, -30, 90, -90, 90));
+  mServos.push_back(Servo(2, 0, 135, 0, 180));
+  mServos.push_back(Servo(3, -90, 90, -90, 90));
+  mServos.push_back(Servo(4, 0, 180, 0, 180));
+  mServos.push_back(Servo(5, -90, 90, -90, 90));
   // Initializing serial
   boost::system::error_code ec; // choice: without ec Boost.Asio may throw
   serial.open("/dev/ttyUSB0", ec);
@@ -123,12 +123,16 @@ unsigned int lowlevel::convertDegreesToPulsewidth(int aDegrees, Servo& aServo) c
 {
   unsigned int lPulseRange = MAX_PULSEWIDTH - MIN_PULSEWIDTH;
 
+  unsigned int lMappedValue = mapValues(aDegrees, aServo.getMinDegreesRange(), aServo.getMaxDegreesRange(), 0, 180);
+
+  std::cout << lMappedValue << std::endl;
+
   // Degree range of the servo's
   unsigned int lDegreeRange = 180;
   // std::abs(aServo.getMaxDegrees() - aServo.getMinDegrees());
 
-  double lFactor = (double)(aDegrees) / (double)lDegreeRange;
-     std::cout << "lFactor: " << std::to_string(lFactor) << std::endl;
+  double lFactor = (double)(lMappedValue) / (double)lDegreeRange;
+  std::cout << "lFactor: " << std::to_string(lFactor) << std::endl;
 
   unsigned int lReturn = MIN_PULSEWIDTH + lPulseRange * lFactor;
 
@@ -200,4 +204,9 @@ Servo& lowlevel::getServoWithId(unsigned int aServoId)
   {
     throw std::invalid_argument( "Invalid servoId entered.");
   }
+}
+
+unsigned int lowlevel::mapValues(int aDegree, int aInMin, int aInMax, int aOutMin, int aOutMax) const
+{
+  return (aDegree - aInMin) * (aOutMax - aOutMin) / (aInMax - aInMin) + aOutMin;
 }
