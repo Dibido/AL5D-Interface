@@ -117,24 +117,33 @@ void lowlevel::stopServos(std::vector<unsigned int> aPins)
 }
 
 
-unsigned int lowlevel::convertDegreesToPulsewidth(unsigned int aDegrees) const
+unsigned int lowlevel::convertDegreesToPulsewidth(unsigned int aDegrees, Servo& aServo) const
 {
   unsigned int lPulseRange = MAX_PULSEWIDTH - MIN_PULSEWIDTH;
 
-  // TO-DO: Make this variable/define?
   // Degree range of the servo's
-  unsigned int lDegreeRange = 180;
+  unsigned int lDegreeRange = std::abs(aServo.getMaxDegrees() - aServo.getMinDegrees());
 
   double lFactor = (double)aDegrees / (double)lDegreeRange;
 
   unsigned int lReturn = MIN_PULSEWIDTH + lPulseRange * lFactor;
 
-  // Bounds checking
-  lReturn = (lReturn < MIN_PULSEWIDTH) ? MIN_PULSEWIDTH : lReturn;
-  lReturn = (lReturn > MAX_PULSEWIDTH) ? MAX_PULSEWIDTH : lReturn;
+  return lReturn;
+}
+
+bool lowlevel::degreesInRange(unsigned int aDegrees, Servo& aServo) const
+{
+  bool lReturn = false;
+
+  if((aDegrees >= aServo.getMinDegrees()) && (aDegrees <= aServo.getMaxDegrees()))
+  {
+    lReturn = false;
+  }
 
   return lReturn;
 }
+
+
 
 void lowlevel::sendSerial(std::string aCommand)
 {

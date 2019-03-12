@@ -53,9 +53,18 @@ class lowlevel
   /**
    * @brief Converts a given amount of degrees to a corresponding pulsewidth. Uses the MIN/MAX_PULSEWIDTH defines for this.
    * @param aDegrees - The angle in degrees 
+   * @param aServo - The servo, is used to check boundaries (min/max range).
    */
-  unsigned int convertDegreesToPulsewidth(unsigned int aDegrees) const;
+  unsigned int convertDegreesToPulsewidth(unsigned int aDegrees, Servo& aServo) const;
 
+  /**
+   * @brief Checks whether a given amount of degrees is in range
+   * @param aDegrees - The given amount of degrees
+   * @param aServo - The servo object, which contains a min/max
+   * @return Returns true if min <= aDegrees <= max
+   */
+  bool degreesInRange(unsigned int aDegrees, Servo& aServo) const;
+  
   /**
    * @brief stop the movement of the servos
    * @param aPins  - The pins of the servos
