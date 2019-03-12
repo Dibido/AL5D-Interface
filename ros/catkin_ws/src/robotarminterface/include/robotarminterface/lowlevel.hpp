@@ -11,6 +11,7 @@
 #include <iostream>
 #include <vector>
 #include <thread>
+#include <stdexcept>
 
 #include <boost/asio.hpp>
 
@@ -50,14 +51,23 @@ class lowlevel
    * @param aMillis - The time in milliseconds that will be taken to complete the move
    * (if lower then MIN_MOVE_TIME, MIN_MOVE_TIME is used), same goes for MAX_MOVE_TIME.
    */
-  void moveServosToPos(std::vector<unsigned int> aPins, std::vector<unsigned int> aDegrees, unsigned int aMillis);
+  void moveServosToPos(std::vector<unsigned int> aPins, std::vector<int> aDegrees, unsigned int aMillis);
 
   /**
    * @brief Converts a given amount of degrees to a corresponding pulsewidth. Uses the MIN/MAX_PULSEWIDTH defines for this.
    * @param aDegrees - The angle in degrees 
+   * @param aServo - The servo, is used to check boundaries (min/max range).
    */
-  unsigned int convertDegreesToPulsewidth(unsigned int aDegrees) const;
+  unsigned int convertDegreesToPulsewidth(int aDegrees, Servo& aServo) const;
 
+  /**
+   * @brief Checks whether a given amount of degrees is in range
+   * @param aDegrees - The given amount of degrees
+   * @param aServo - The servo object, which contains a min/max
+   * @return Returns true if min <= aDegrees <= max
+   */
+  bool degreesInRange(int aDegrees, Servo& aServo) const;
+  
   /**
    * @brief stop the movement of the servos
    * @param aPins  - The pins of the servos
@@ -77,14 +87,23 @@ class lowlevel
   void setBaudRate(unsigned int aBaudRate);
 
   /**
-   * @brief Checks the servo range and sets the value to max or min when it exceeds the threshold
-   * @param aPin The servo to check
-   * @param aDegree The given degree
+   * @brief Checks whether a servo with given servoId/pin exists
+   * @param aPin - The given servoId
+   * @return Returns true if there exists a servo in mServos with the given id, returns false otherwise
    */
-  int checkServoRange(unsigned int aPin, int aDegree);
+  bool servoExists(unsigned int aServoId) const;
+
+
+  /**
+   * @brief Get the servo from mServos corresponding with given servo id
+   * @param aServoId - The given servo id
+   * @return - A pair, a boolean indicating whether a servo with given id existed in mServos or not.
+   * If it existed, a copy of that servo is returned. If it didn't exist the boolean will be false, and a default
+   * Servo is constructed and returned
+   */
+   Servo& getServoWithId(unsigned int aServoId);
 
   private:
-
   std::vector<Servo> mServos;
 };
 

@@ -32,75 +32,75 @@ void lowlevel::setBaudRate(unsigned int aBaudRate)
   boost::system::error_code ec; // without ec Boost.Asio may throw
   if (!ec)
   {
-  serial.set_option(boost::asio::serial_port_base::baud_rate(aBaudRate));
+    serial.set_option(boost::asio::serial_port_base::baud_rate(aBaudRate));
   }
 }
 
-int lowlevel::checkServoRange(unsigned int aPin, int aDegree)
-{
-  bool lServoFound = false;
-  int lDegree = 0;
-  for (auto lServo : mServos)
-  {
-    if (aPin == lServo.getServoId())
-    {
-      lServoFound = true;
-      if (aDegree < lServo.getMinDegrees())
-      {
-        lDegree = lServo.getMinDegrees();
-        std::cout << "Degree too small, pin : " << aPin << " Degree : " << aDegree << std::endl;
-      }
-      else if (aDegree > lServo.getMaxDegrees())
-      {
-        lDegree = lServo.getMaxDegrees();
-        std::cout << "Degree too big, pin : " << aPin << " Degree : " << aDegree << std::endl;
-      }
-      else
-      {
-        lDegree = aDegree;
-      }
-    }
-    lServo.setCurrentDegrees(lDegree);
-    }
-    if (lServoFound == false)
-    {
-      std::cout << "Unable to find the servo with pinId : " << aPin << std::endl;
-    }
-  return lDegree;
-}
-
-void lowlevel::moveServosToPos(std::vector<unsigned int> aPins, std::vector<unsigned int> aDegrees, unsigned int aMillis)
+void lowlevel::moveServosToPos(std::vector<unsigned int> aPins, std::vector<int> aDegrees, unsigned int aMillis)
 {
   // Every pin should correspond with a degree value, if this is not the case do nothing (input invalid)
   if (aPins.size() == aDegrees.size())
   {
-    std::string lCommand = "";
+    bool lValidPins = true;
 
-    for (int i = 0; i < aPins.size(); ++i)
+    // Check if given pins exist
+    for (int servoId : aPins)
     {
-      // Check if the value is in the defined range of motion, if not set the max/min value
-      int lCurrentCheckedDegree = checkServoRange(aPins.at(i), aDegrees.at(i));
-      
-      std::cout << "Pin : " << aPins.at(i) << " Degree : " << lCurrentCheckedDegree << std::endl;
-
-      unsigned int lPulseWidth = convertDegreesToPulsewidth(lCurrentCheckedDegree);
-      // unsigned int lPulseWidth = convertDegreesToPulsewidth(aDegrees.at(i));
-
-      lCommand.append("#" + std::to_string(aPins.at(i)));
-      lCommand.append("P" + std::to_string(lPulseWidth));
+      if (!servoExists(servoId))
+      {
+        lValidPins = false;
+      }
     }
 
-    lCommand.append("T" + std::to_string(aMillis));
-    lCommand.append("\r");
+    if (!lValidPins)
+    {
+      // The given pins are not valid, do nothing
+      std::cout << "Given pins in moveServosToPos are not valid, ignoring command" << std::endl;
+    }
+    else // If pins are valid
+    {
 
-    std::cout << "Command sent via serial: " << lCommand << std::endl;
-    sendSerial(lCommand);
+      bool lValidDegrees = true;
+
+      // Check if given degrees are within the min/max of the servos
+      for (int i = 0; (i < aDegrees.size()) && lValidDegrees; ++i)
+      {
+        if (!degreesInRange(aDegrees.at(i), getServoWithId(aPins.at(i))))
+        {
+          lValidDegrees = false;
+          std::cout << "Degree: " << std::to_string(aDegrees.at(i)) << " and servomin: " << std::to_string(getServoWithId(aPins.at(i)).getMinDegrees()) << " and servomax: " << std::to_string(getServoWithId(aPins.at(i)).getMaxDegrees()) << std::endl;
+        }
+      }
+
+      if (!lValidDegrees)
+      {
+        // The given degrees are not within the servos range, do nothing
+        std::cout << "Not all of the given degrees in moveServosToPos are within the range of the corresponding servos, ignoring command" << std::endl;
+      }
+      else // Given degrees are valid, continue with procedure
+      {
+        std::string lCommand = "";
+
+        for (int i = 0; i < aPins.size(); ++i)
+        {
+          unsigned int lPulseWidth = convertDegreesToPulsewidth(aDegrees.at(i), getServoWithId(aPins.at(i)));
+
+          lCommand.append("#" + std::to_string(aPins.at(i)));
+          lCommand.append("P" + std::to_string(lPulseWidth));
+        }
+
+        lCommand.append("T" + std::to_string(aMillis));
+        lCommand.append("\r");
+
+        std::cout << "Command sent via serial: " << lCommand << std::endl;
+        sendSerial(lCommand);
+      }
+    }
   }
   else
   {
-    std::cout << "Error, invalid command recieved." << std::endl;
+    std::cout << "Error, moveServosToPos invalid command received: Amount of pins does not match amount of degrees " << std::endl;
   }
-  
 }
 
 void lowlevel::stopServos(std::vector<unsigned int> aPins)
@@ -109,7 +109,7 @@ void lowlevel::stopServos(std::vector<unsigned int> aPins)
   {
     std::string lCommand = "";
 
-    for (int i = 0; i < aPins.size(); ++i)
+    for (int i = 0; i < aPins.size(); ++i) 
     {
       lCommand.append("STOP" + std::to_string(aPins.at(i)));
       lCommand.append("\r");
@@ -119,22 +119,30 @@ void lowlevel::stopServos(std::vector<unsigned int> aPins)
   }
 }
 
-
-unsigned int lowlevel::convertDegreesToPulsewidth(unsigned int aDegrees) const
+unsigned int lowlevel::convertDegreesToPulsewidth(int aDegrees, Servo& aServo) const
 {
   unsigned int lPulseRange = MAX_PULSEWIDTH - MIN_PULSEWIDTH;
 
-  // TO-DO: Make this variable/define?
   // Degree range of the servo's
   unsigned int lDegreeRange = 180;
+  // std::abs(aServo.getMaxDegrees() - aServo.getMinDegrees());
 
-  double lFactor = (double)aDegrees / (double)lDegreeRange;
+  double lFactor = (double)(aDegrees) / (double)lDegreeRange;
+     std::cout << "lFactor: " << std::to_string(lFactor) << std::endl;
 
   unsigned int lReturn = MIN_PULSEWIDTH + lPulseRange * lFactor;
 
-  // Bounds checking
-  lReturn = (lReturn < MIN_PULSEWIDTH) ? MIN_PULSEWIDTH : lReturn;
-  lReturn = (lReturn > MAX_PULSEWIDTH) ? MAX_PULSEWIDTH : lReturn;
+  return lReturn;
+}
+
+bool lowlevel::degreesInRange(int aDegrees, Servo& aServo) const
+{
+  bool lReturn = false;
+
+  if ((aDegrees >= aServo.getMinDegrees()) && (aDegrees <= aServo.getMaxDegrees()))
+  {
+    lReturn = true;
+  }
 
   return lReturn;
 }
@@ -157,5 +165,39 @@ void lowlevel::sendSerial(std::string aCommand)
   {
     std::cout << "Unable to open serial, stopping program" << std::endl;
     exit(-1);
+  }
+}
+
+bool lowlevel::servoExists(unsigned int aServoId) const
+{
+  bool lReturn = false;
+
+  for (int i = 0; (i < mServos.size()) && (!lReturn); ++i)
+  {
+    if (mServos.at(i).getServoId() == aServoId)
+    {
+      lReturn = true;
+    }
+  }
+
+  return lReturn;
+}
+
+Servo& lowlevel::getServoWithId(unsigned int aServoId)
+{
+  bool lFoundServo = false;
+
+  for (int i = 0; i < mServos.size(); ++i)
+  {
+    if (mServos.at(i).getServoId() == aServoId)
+    {
+      lFoundServo = true;
+      return mServos.at(i);
+    }
+  }
+
+  if(!lFoundServo)
+  {
+    throw std::invalid_argument( "Invalid servoId entered.");
   }
 }

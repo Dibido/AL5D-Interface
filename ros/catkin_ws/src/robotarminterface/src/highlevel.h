@@ -24,7 +24,7 @@
 struct robotarmPosition
 {
   std::vector<unsigned int> servoIds;
-  std::vector<unsigned int> servoDegrees;
+  std::vector<int> servoDegrees;
 };
 
 class highlevel

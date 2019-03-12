@@ -58,7 +58,8 @@ void highlevel::initializeValues()
   mInitializeTime = 3000;
 
   mParkPosition.servoIds = {0,1,2,3,4,5};
-  mParkPosition.servoDegrees = {90, 130, 130, 30, 180, 90};
+  //mParkPosition.servoDegrees = {0, 30, 130, 30, 180, 90};
+  mParkPosition.servoDegrees = {0, -30, 0, 0, 0, 0};
   mReadyPosition.servoIds = {0,1,2,3,4,5};
   mReadyPosition.servoDegrees = {90, 130, 110, 80, 0, 90};
   mStraightPosition.servoIds = {0,1,2,3,4,5};
@@ -84,7 +85,7 @@ void highlevel::singleServoCallback(const robotarminterface::singleServoConstPtr
   ROS_INFO("Handling command, Position %d, Time %d", aSingleServoMessage->position, aSingleServoMessage->time);
   std::vector<unsigned int> lPins;
   lPins.push_back(aSingleServoMessage->servoId);
-  std::vector<unsigned int> lDegrees;
+  std::vector<int> lDegrees;
   lDegrees.push_back(aSingleServoMessage->position);
   unsigned int lMillis = aSingleServoMessage->time;
   mLowLevelDriver.moveServosToPos(lPins, lDegrees, lMillis);
@@ -103,7 +104,7 @@ void highlevel::moveServosCallback(const robotarminterface::moveServosConstPtr& 
   ROS_INFO("Handling moveServos Command");
   
   std::vector<unsigned int> lPins;
-  std::vector<unsigned int> lDegrees;
+  std::vector<int> lDegrees;
 
   for(int i = 0; i < aMoveServosMessage->servos.size(); ++i)
   {
