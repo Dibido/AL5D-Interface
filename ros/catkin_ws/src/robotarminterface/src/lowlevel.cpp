@@ -42,29 +42,30 @@ int lowlevel::checkServoRange(unsigned int aPin, int aDegree)
   int lDegree = 0;
   for (auto lServo : mServos)
   {
-    if (aPin == lServo.mServoId)
+    if (aPin == lServo.getServoId())
     {
       lServoFound = true;
-      if (aDegree < lServo.mMinDegree)
+      if (aDegree < lServo.getMinDegrees())
       {
-        lDegree = lServo.mMinDegree;
+        lDegree = lServo.getMinDegrees();
         std::cout << "Degree too small, pin : " << aPin << " Degree : " << aDegree << std::endl;
       }
-      else if (aDegree > lServo.mMaxDegree)
+      else if (aDegree > lServo.getMaxDegrees())
       {
-        lDegree = lServo.mMaxDegree;
+        lDegree = lServo.getMaxDegrees();
         std::cout << "Degree too big, pin : " << aPin << " Degree : " << aDegree << std::endl;
       }
       else
       {
-        lDegree = aDegree; 
+        lDegree = aDegree;
       }
     }
-  }
-  if (lServoFound == false)
-  {
-    std::cout << "Unable to find the servo with pinId : " << aPin << std::endl;
-  }
+    lServo.setCurrentDegrees(lDegree);
+    }
+    if (lServoFound == false)
+    {
+      std::cout << "Unable to find the servo with pinId : " << aPin << std::endl;
+    }
   return lDegree;
 }
 
@@ -78,10 +79,12 @@ void lowlevel::moveServosToPos(std::vector<unsigned int> aPins, std::vector<unsi
     for (int i = 0; i < aPins.size(); ++i)
     {
       // Check if the value is in the defined range of motion, if not set the max/min value
-      // int lCurrentCheckedDegree = checkServoRange(aPins.at(i), aDegrees.at(i));
+      int lCurrentCheckedDegree = checkServoRange(aPins.at(i), aDegrees.at(i));
+      
+      std::cout << "Pin : " << aPins.at(i) << " Degree : " << lCurrentCheckedDegree << std::endl;
 
-      // unsigned int lPulseWidth = convertDegreesToPulsewidth(lCurrentCheckedDegree);
-      unsigned int lPulseWidth = convertDegreesToPulsewidth(aDegrees.at(i));
+      unsigned int lPulseWidth = convertDegreesToPulsewidth(lCurrentCheckedDegree);
+      // unsigned int lPulseWidth = convertDegreesToPulsewidth(aDegrees.at(i));
 
       lCommand.append("#" + std::to_string(aPins.at(i)));
       lCommand.append("P" + std::to_string(lPulseWidth));

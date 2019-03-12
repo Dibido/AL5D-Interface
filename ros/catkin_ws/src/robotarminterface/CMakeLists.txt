@@ -127,7 +127,7 @@ include_directories(
 #   src/${PROJECT_NAME}/robotarminterface.cpp
 # )
 
-add_library(lowleveldriver SHARED src/lowlevel.cpp)
+add_library(lowleveldriver SHARED src/lowlevel.cpp src/Servo.cpp)
 
 add_executable(robotarmclient src/robotarm_client.cpp)
 add_dependencies(robotarmclient robotarminterface_generate_messages_cpp)

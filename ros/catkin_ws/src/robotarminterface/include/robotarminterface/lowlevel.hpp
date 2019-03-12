@@ -14,6 +14,8 @@
 
 #include <boost/asio.hpp>
 
+#include "../src/Servo.h"
+
 // Min and max move time in milliseconds
 #define MIN_MOVE_TIME 100
 #define MAX_MOVE_TIME 65535
@@ -82,15 +84,6 @@ class lowlevel
   int checkServoRange(unsigned int aPin, int aDegree);
 
   private:
-
-  class Servo {
-    public:
-      Servo(unsigned int aServoId, int aMinDegree, int aMaxDegree) : mServoId(aServoId), mMinDegree(aMinDegree), mMaxDegree(aMaxDegree) {}
-      unsigned int mServoId;
-      int mMinDegree;
-      int mMaxDegree;
-      int mCurrentDegree;
-  };
 
   std::vector<Servo> mServos;
 };
