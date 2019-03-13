@@ -1,2 +1,2 @@
 uint32 servoId
-uint32 position
+int32 position

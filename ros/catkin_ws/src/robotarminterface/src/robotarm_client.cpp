@@ -36,20 +36,22 @@ int main(int argc, char** argv)
     robotarminterface::moveServos lMoveServosMessage;
     robotarminterface::servoPosition lServoPosition;
 
+    // Park position, slightly different
+
     lServoPosition.servoId = 0;
     lServoPosition.position = 90;
     lMoveServosMessage.servos.push_back(lServoPosition);
 
     lServoPosition.servoId = 1;
-    lServoPosition.position = 130;
+    lServoPosition.position = 30;
     lMoveServosMessage.servos.push_back(lServoPosition);
     
     lServoPosition.servoId = 2;
-    lServoPosition.position = 110;
+    lServoPosition.position = 135;
     lMoveServosMessage.servos.push_back(lServoPosition);
 
     lServoPosition.servoId = 3;
-    lServoPosition.position = 80;
+    lServoPosition.position = -80;
     lMoveServosMessage.servos.push_back(lServoPosition);
 
     lServoPosition.servoId = 4;
@@ -57,7 +59,7 @@ int main(int argc, char** argv)
     lMoveServosMessage.servos.push_back(lServoPosition);
 
     lServoPosition.servoId = 5;
-    lServoPosition.position = 90;
+    lServoPosition.position = 0;
     lMoveServosMessage.servos.push_back(lServoPosition);
 
     lMoveServosMessage.time = 1000;

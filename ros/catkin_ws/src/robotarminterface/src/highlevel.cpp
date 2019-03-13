@@ -57,13 +57,13 @@ void highlevel::initializeValues()
 {
   mInitializeTime = 3000;
 
+  // robot 6
   mParkPosition.servoIds = {0,1,2,3,4,5};
-  //mParkPosition.servoDegrees = {0, 30, 130, 30, 180, 90};
-  mParkPosition.servoDegrees = {0, 0, 0, 0, 0, 0};
+  mParkPosition.servoDegrees = {0, 30, 135, -80, 180, 0};
   mReadyPosition.servoIds = {0,1,2,3,4,5};
-  mReadyPosition.servoDegrees = {90, 130, 110, 80, 0, 90};
+  mReadyPosition.servoDegrees = {0, 30, 120, -20, 0, 0};
   mStraightPosition.servoIds = {0,1,2,3,4,5};
-  mStraightPosition.servoDegrees = {90, 90, 10, 90 ,90 ,90};
+  mStraightPosition.servoDegrees = {0, 0, 30, 0, 0, 0};
 
   mLowLevelDriver.setBaudRate(mBaudRate);
 }
