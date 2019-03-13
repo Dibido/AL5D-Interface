@@ -58,7 +58,7 @@ void lowlevel::moveServosToPos(std::vector<unsigned int> aPins, std::vector<int>
   {
     if (!degreesInRange(aDegrees.at(i), getServoWithId(aPins.at(i))))
     {
-      std::cout << "Degree: " << std::to_string(aDegrees.at(i)) << " and servomin: " << std::to_string(getServoWithId(aPins.at(i)).getMinDegrees()) << " and servomax: " << std::to_string(getServoWithId(aPins.at(i)).getMaxDegrees()) << std::endl;
+      std::cout << "Degree: " << std::to_string(aDegrees.at(i)) << " and servomin: " << std::to_string(getServoWithId(aPins.at(i)).getMinDegreesLimit()) << " and servomax: " << std::to_string(getServoWithId(aPins.at(i)).getMaxDegreesLimit()) << std::endl;
       std::cout << "Not all of the given degrees in moveServosToPos are within the range of the corresponding servos, ignoring command" << std::endl;
       return;
     }
@@ -120,7 +120,7 @@ bool lowlevel::degreesInRange(int aDegrees, Servo& aServo) const
 {
   bool lReturn = false;
 
-  if ((aDegrees >= aServo.getMinDegrees()) && (aDegrees <= aServo.getMaxDegrees()))
+  if ((aDegrees >= aServo.getMinDegreesLimit()) && (aDegrees <= aServo.getMaxDegreesLimit()))
   {
     lReturn = true;
   }

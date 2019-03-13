@@ -1,7 +1,7 @@
 #include "Servo.h"
 
-Servo::Servo(unsigned int aServoId, int aMinDegrees, int aMaxDegrees, int aMinDegreesRange, int aMaxDegreesRange)
-  : mServoId(aServoId), mMinDegrees(aMinDegrees), mMaxDegrees(aMaxDegrees), mMinDegreesRange(aMinDegreesRange), mMaxDegreesRange(aMaxDegreesRange)
+Servo::Servo(unsigned int aServoId, int aMinDegreesLimit, int aMaxDegreesLimit, int aMinDegreesRange, int aMaxDegreesRange)
+  : mServoId(aServoId), mMinDegreesLimit(aMinDegreesLimit), mMaxDegreesLimit(aMaxDegreesLimit), mMinDegreesRange(aMinDegreesRange), mMaxDegreesRange(aMaxDegreesRange)
 {
 }
 
@@ -14,14 +14,14 @@ unsigned int Servo::getServoId() const
   return mServoId;
 }
 
-int Servo::getMinDegrees() const
+int Servo::getMinDegreesLimit() const
 {
-  return mMinDegrees;
+  return mMinDegreesLimit;
 }
 
-int Servo::getMaxDegrees() const
+int Servo::getMaxDegreesLimit() const
 {
-  return mMaxDegrees;
+  return mMaxDegreesLimit;
 }
 
 int Servo::getMinDegreesRange() const
@@ -46,8 +46,8 @@ void Servo::setCurrentDegrees(int aDegrees)
 Servo::Servo(const Servo& aOther)
 {
   mServoId = aOther.getServoId();
-  mMinDegrees = aOther.getMinDegrees();
-  mMaxDegrees = aOther.getMaxDegrees();
+  mMinDegreesLimit = aOther.getMinDegreesLimit();
+  mMaxDegreesLimit = aOther.getMaxDegreesLimit();
   mMinDegreesRange = aOther.getMinDegreesRange();
   mMaxDegreesRange = aOther.getMaxDegreesRange();
   mCurrentDegrees = aOther.getCurrentDegrees();
@@ -64,8 +64,8 @@ Servo& Servo::operator=(Servo aOther)
     return *this;
   }
   this->mServoId = aOther.getServoId();
-  this->mMinDegrees = aOther.getMinDegrees();
-  this->mMaxDegrees = aOther.getMaxDegrees();
+  this->mMinDegreesLimit = aOther.getMinDegreesLimit();
+  this->mMaxDegreesLimit = aOther.getMaxDegreesLimit();
   this->mMinDegreesRange = aOther.getMinDegreesRange();
   this->mMaxDegreesRange = aOther.getMaxDegreesRange();
   this->mCurrentDegrees = aOther.getCurrentDegrees();
@@ -74,5 +74,5 @@ Servo& Servo::operator=(Servo aOther)
 
 bool Servo::operator==(Servo aServo)
 {
-  return (this->mServoId == aServo.mServoId && this->mMinDegrees == aServo.mMinDegrees && this->mMaxDegrees == aServo.mMaxDegrees && this->mCurrentDegrees == aServo.mCurrentDegrees);
+  return (this->mServoId == aServo.mServoId && this->mMinDegreesLimit == aServo.mMinDegreesLimit && this->mMaxDegreesLimit == aServo.mMaxDegreesLimit && this->mCurrentDegrees == aServo.mCurrentDegrees);
 }
