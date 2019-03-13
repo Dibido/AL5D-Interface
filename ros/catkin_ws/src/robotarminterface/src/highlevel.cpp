@@ -9,7 +9,7 @@ int main(int argc, char** argv)
   if(argc == 1)
   {
     // Default baudrate, if none is given by user
-    lHighlevelDriver.setBaudRate(115200);
+    lHighlevelDriver.setBaudRate(DEFAULT_BAUDRATE);
   } 
   else if (argc == 2)
   {
@@ -25,7 +25,7 @@ int main(int argc, char** argv)
   return 0;
 }
 
-highlevel::highlevel() : mBaudRate(115200)
+highlevel::highlevel() : mBaudRate(DEFAULT_BAUDRATE)
 {
   subscribeTopics();
   initializeValues();

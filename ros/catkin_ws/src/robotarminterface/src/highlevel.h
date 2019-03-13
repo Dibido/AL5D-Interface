@@ -21,6 +21,8 @@
 #include <iostream>
 #include <sstream>
 
+#define DEFAULT_BAUDRATE 115200
+
 /**
  * @brief Robotarmposition stores the current configuration of the robotarm
  * @param servoIds - The id's of the servo's
