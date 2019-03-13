@@ -20,6 +20,7 @@
 
 #include <iostream>
 #include <sstream>
+#include <chrono>
 
 #define DEFAULT_BAUDRATE 115200
 
@@ -27,11 +28,22 @@
  * @brief Robotarmposition stores the current configuration of the robotarm
  * @param servoIds - The id's of the servo's
  * @param servoDegrees - The degrees that the servo's are in
+ * @param time - Defines period (in ms) it should take for the robot to move to the right position
  */
 struct robotarmPosition
 {
   std::vector<unsigned int> servoIds;
   std::vector<int> servoDegrees;
+  uint32_t time;
+
+  robotarmPosition() : time(0)
+  {
+  }
+
+  robotarmPosition(const robotarmPosition& aRobotarmPosition) : servoIds(aRobotarmPosition.servoIds), servoDegrees(aRobotarmPosition.servoDegrees), time(aRobotarmPosition.time)
+  {
+    std::cout << "Copy constructor used" << std::endl;
+  }
 };
 
 class highlevel
@@ -61,16 +73,35 @@ public:
    */
   void setBaudRate(unsigned int aBaudRate);
 
+  /**
+   * @brief Base function used to keep the highlevel active, is a blocking function all logic shud be handled within it.
+   */
+  void run();
+
 private:
 
+  // Any move commands received by message get stored in this queue of commands
+  std::vector<robotarmPosition> mMoveCommands;
+  
   /**
    * @brief Time to take to go to the park position
    */
   unsigned int mInitializeTime;
+
   /**
    * @brief The currently set baudrate
    */
   unsigned int mBaudRate;
+
+  /**
+   * @brief Expected period of time to complete the last sent valid move. Is 0 until the first valid move is sent to the lowlevel.
+   */
+   uint32_t mLastMoveTimeMS;
+
+  /**
+   * @brief Start time of last sent valid move command.
+   */
+   std::chrono::high_resolution_clock::time_point mLastMoveStartTime;
 
   // Message callbacks
   void singleServoCallback(const robotarminterface::singleServoConstPtr& aSingleServoMessage);
@@ -93,6 +124,16 @@ private:
    * @brief Initializes the position and timing values
    */
   void initializeValues();
+
+  /**
+   * @brief Checks if new commands from the mMoveCommands should be sent to the low level driver
+   */
+  void handleMoveCommands();
+  
+  /**
+   * @brief Checks if the period needed to complete last sent valid move has expired
+   */
+  bool lastMovePeriodExpired() const;
 };
 
 #endif

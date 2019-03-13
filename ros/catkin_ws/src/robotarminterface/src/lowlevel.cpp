@@ -36,13 +36,13 @@ void lowlevel::setBaudRate(unsigned int aBaudRate)
   }
 }
 
-void lowlevel::moveServosToPos(std::vector<unsigned int> aPins, std::vector<int> aDegrees, unsigned int aMillis)
+bool lowlevel::moveServosToPos(std::vector<unsigned int> aPins, std::vector<int> aDegrees, unsigned int aMillis)
 {
   // Every pin should correspond with a degree value, if this is not the case do nothing (input invalid)
   if (!(aPins.size() == aDegrees.size()))
   {
     std::cout << "Error, moveServosToPos invalid command received: Amount of pins does not match amount of degrees " << std::endl;
-    return;
+    return false;
   }
   // Check if given pins exist
   for (int servoId : aPins)
@@ -50,7 +50,7 @@ void lowlevel::moveServosToPos(std::vector<unsigned int> aPins, std::vector<int>
     if (!servoExists(servoId))
     {
       std::cout << "Given pins in moveServosToPos are not valid, ignoring command" << std::endl;
-      return;
+      return false;
     }
   }
   // Check if given degrees are within the min/max of the servos
@@ -60,7 +60,7 @@ void lowlevel::moveServosToPos(std::vector<unsigned int> aPins, std::vector<int>
     {
       std::cout << "Degree: " << std::to_string(aDegrees.at(i)) << " and servomin: " << std::to_string(getServoWithId(aPins.at(i)).getMinDegreesLimit()) << " and servomax: " << std::to_string(getServoWithId(aPins.at(i)).getMaxDegreesLimit()) << std::endl;
       std::cout << "Not all of the given degrees in moveServosToPos are within the range of the corresponding servos, ignoring command" << std::endl;
-      return;
+      return false;
     }
   }
   std::string lCommand = "";
@@ -78,6 +78,7 @@ void lowlevel::moveServosToPos(std::vector<unsigned int> aPins, std::vector<int>
 
   std::cout << "Command sent via serial: " << lCommand << std::endl;
   sendSerial(lCommand);
+  return true;
 }
 
 void lowlevel::stopServos(std::vector<unsigned int> aPins)
