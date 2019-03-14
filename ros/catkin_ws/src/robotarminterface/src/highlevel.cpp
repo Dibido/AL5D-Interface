@@ -4,6 +4,12 @@
 int main(int argc, char **argv)
 {
   ros::init(argc, argv, "highlevel");
+
+  if (ros::console::set_logger_level(ROSCONSOLE_DEFAULT_NAME, ros::console::levels::Debug))
+  {
+    ros::console::notifyLoggerLevelsChanged();
+  }
+
   ROS_INFO("Starting Servo high level driver");
   highlevel lHighlevelDriver;
   if (argc == 1)
@@ -26,18 +32,24 @@ int main(int argc, char **argv)
   return 0;
 }
 
-highlevel::highlevel() : mBaudRate(DEFAULT_BAUDRATE), mLastMoveTimeMS(0), mLastMoveStartTime(std::chrono::high_resolution_clock::now())
+highlevel::highlevel() : mMoveCommandSent(false), mIsReady(false), mIsInitialized(false), mBaudRate(DEFAULT_BAUDRATE), mLastMoveTimeMS(0), mLastMoveStartTime(std::chrono::high_resolution_clock::now())
 {
   subscribeTopics();
   initializeValues();
   initializeArm();
 }
 
-highlevel::highlevel(unsigned int aBaudRate) : mBaudRate(aBaudRate), mLastMoveTimeMS(0), mLastMoveStartTime(std::chrono::high_resolution_clock::now())
+highlevel::highlevel(unsigned int aBaudRate) : mMoveCommandSent(false), mIsReady(false), mIsInitialized(false), mBaudRate(DEFAULT_BAUDRATE), mLastMoveTimeMS(0), mLastMoveStartTime(std::chrono::high_resolution_clock::now())
 {
   subscribeTopics();
   initializeValues();
   initializeArm();
+}
+
+void highlevel::signalHandler(int aSignal)
+{
+  // Ctrl-C pressed, shut down
+  exit(1);
 }
 
 void highlevel::setBaudRate(unsigned int aBaudRate)
@@ -56,23 +68,35 @@ void highlevel::subscribeTopics()
 
 void highlevel::initializeValues()
 {
+  // Used to catch ctrl-c event
+  signal(SIGINT, signalHandler);
+
+  mServoIds = {0, 1, 2, 3, 4, 5};
+
   mInitializeTime = 3000;
 
-  // robot 6
+  // robot 1
   mParkPosition.servoIds = {0, 1, 2, 3, 4, 5};
-  mParkPosition.servoDegrees = {0, 30, 135, -80, 180, 0};
+  mParkPosition.servoDegrees = {0, 30, 135, -60, 180, 0};
   mReadyPosition.servoIds = {0, 1, 2, 3, 4, 5};
-  mReadyPosition.servoDegrees = {0, 30, 120, -20, 0, 0};
+  mReadyPosition.servoDegrees = {0, 30, 120, 0, 0, 0};
   mStraightPosition.servoIds = {0, 1, 2, 3, 4, 5};
-  mStraightPosition.servoDegrees = {0, 0, 30, 0, 0, 0};
+  mStraightPosition.servoDegrees = {0, 0, 30, 20, 0, 0};
 
   mLowLevelDriver.setBaudRate(mBaudRate);
 }
 
 void highlevel::initializeArm()
 {
-  //Go to park
-  mLowLevelDriver.moveServosToPos(mParkPosition.servoIds, mParkPosition.servoDegrees, mInitializeTime);
+  ROS_INFO("STATE: {initializing}");
+
+  // Go to park
+  robotarmPosition lMoveCommand;
+
+  lMoveCommand.servoIds = mParkPosition.servoIds;
+  lMoveCommand.servoDegrees = mParkPosition.servoDegrees;
+  lMoveCommand.time = mInitializeTime;
+  mMoveCommands.push_back(lMoveCommand);
 }
 
 highlevel::~highlevel()
@@ -127,17 +151,50 @@ void highlevel::stopServosCallback(const robotarminterface::stopServosConstPtr &
 void highlevel::armPositionCallback(const robotarminterface::armPositionConstPtr &aArmPositionMessage)
 {
   ROS_INFO("Handling armPosition command, position : %s, time : %d", aArmPositionMessage->positionName.c_str(), aArmPositionMessage->time);
+
+  bool lValidCommand = false;
+  robotarmPosition lMoveCommand;
+
   if (aArmPositionMessage->positionName == "park")
   {
-    mLowLevelDriver.moveServosToPos(mParkPosition.servoIds, mParkPosition.servoDegrees, aArmPositionMessage->time);
+    lMoveCommand.servoIds = mParkPosition.servoIds;
+    lMoveCommand.servoDegrees = mParkPosition.servoDegrees;
+    lMoveCommand.time = aArmPositionMessage->time;
+    mMoveCommands.push_back(lMoveCommand);
   }
   else if (aArmPositionMessage->positionName == "ready")
   {
-    mLowLevelDriver.moveServosToPos(mReadyPosition.servoIds, mReadyPosition.servoDegrees, aArmPositionMessage->time);
+    lMoveCommand.servoIds = mReadyPosition.servoIds;
+    lMoveCommand.servoDegrees = mReadyPosition.servoDegrees;
+    lMoveCommand.time = aArmPositionMessage->time;
+    mMoveCommands.push_back(lMoveCommand);
   }
   else if (aArmPositionMessage->positionName == "straight")
   {
-    mLowLevelDriver.moveServosToPos(mStraightPosition.servoIds, mStraightPosition.servoDegrees, aArmPositionMessage->time);
+    lMoveCommand.servoIds = mStraightPosition.servoIds;
+    lMoveCommand.servoDegrees = mStraightPosition.servoDegrees;
+    lMoveCommand.time = aArmPositionMessage->time;
+    mMoveCommands.push_back(lMoveCommand);
+  }
+  else if (aArmPositionMessage->positionName == "stop")
+  {
+    ROS_DEBUG("EVENT: {stop}");
+    ROS_INFO("STATE: {stopped}");
+    mLowLevelDriver.stopServos(mServoIds);
+    mMoveCommands.clear();
+    mLowLevelDriver.setArmLocked(true);
+  }
+  else if (aArmPositionMessage->positionName == "release")
+  {
+    ROS_DEBUG("EVENT: {release}");
+    mLowLevelDriver.setArmLocked(false);
+    mMoveCommands.clear();
+  }
+  else if (aArmPositionMessage->positionName == "shutdown")
+  {
+    mMoveCommands.clear();
+    mLowLevelDriver.moveServosToPos(mParkPosition.servoIds, mParkPosition.servoDegrees, mInitializeTime);
+    exit(-1);
   }
 }
 
@@ -152,6 +209,19 @@ void highlevel::run()
 
 void highlevel::handleMoveCommands()
 {
+  if (!mIsInitialized && mMoveCommandSent && lastMovePeriodExpired())
+  {
+    mIsInitialized = true;
+    mIsReady = true;
+    ROS_INFO("STATE: {ready}");
+  }
+
+  if (mMoveCommands.size() == 0 && lastMovePeriodExpired() && !mIsReady && mIsInitialized)
+  {
+    mIsReady = true;
+    ROS_INFO("STATE: {ready}");
+  }
+
   // Last move had time to be excuted and there are remainig move commands in queue:
   if (lastMovePeriodExpired() && mMoveCommands.size() > 0)
   {
@@ -161,11 +231,25 @@ void highlevel::handleMoveCommands()
     // Send move command to lowlevel
     bool lValidMove = mLowLevelDriver.moveServosToPos(lNewMoveCommand.servoIds, lNewMoveCommand.servoDegrees, lNewMoveCommand.time);
 
-    // If the command was valid and thus sent to the robot
+    // Remove the first command from the list
+    mMoveCommands.erase(mMoveCommands.begin());
+
+    // If the command was valid and thus sent through to the robot
     if (lValidMove)
     {
-      // Remove the command from the list
-      mMoveCommands.erase(mMoveCommands.begin());
+      // Set MoveCommand, so it is known atleast one valid move command has been sent by serial
+      if (!mMoveCommandSent)
+      {
+        mMoveCommandSent = true;
+      }
+
+      if (mIsReady)
+      {
+        // Robot will move, so we're not ready
+        mIsReady = false;
+        ROS_DEBUG("EVENT: {handleCommand}");
+        ROS_INFO("STATE: {moving}");
+      }
 
       // Update times
       mLastMoveStartTime = std::chrono::high_resolution_clock::now();

@@ -1,6 +1,6 @@
 #include "robotarminterface/lowlevel.hpp"
 
-lowlevel::lowlevel() : serial(ioservice)
+lowlevel::lowlevel() : serial(ioservice), mArmLocked(false)
 {
   // Set the servo ranges
   mServos.push_back(Servo(0, -90, 90, -90, 90));
@@ -38,6 +38,13 @@ void lowlevel::setBaudRate(unsigned int aBaudRate)
 
 bool lowlevel::moveServosToPos(std::vector<unsigned int> aPins, std::vector<int> aDegrees, unsigned int aMillis)
 {
+  // If arm is locked, any movement commands shud be ignored
+  if(mArmLocked)
+  {
+    std::cout << "Arm is locked, refusing to send movement commands to it" << std::endl;
+    return false;
+  }
+
   // Every pin should correspond with a degree value, if this is not the case do nothing (input invalid)
   if (!(aPins.size() == aDegrees.size()))
   {
@@ -76,7 +83,6 @@ bool lowlevel::moveServosToPos(std::vector<unsigned int> aPins, std::vector<int>
   lCommand.append("T" + std::to_string(aMillis));
   lCommand.append("\r");
 
-  std::cout << "Command sent via serial: " << lCommand << std::endl;
   sendSerial(lCommand);
   return true;
 }
@@ -87,37 +93,32 @@ void lowlevel::stopServos(std::vector<unsigned int> aPins)
   {
     std::string lCommand = "";
 
-    for (int i = 0; i < aPins.size(); ++i) 
+    for (int i = 0; i < aPins.size(); ++i)
     {
       lCommand.append("STOP" + std::to_string(aPins.at(i)));
       lCommand.append("\r");
     }
-    std::cout << "sendStop sent via serial: " << lCommand << std::endl;
     sendSerial(lCommand);
   }
 }
 
-unsigned int lowlevel::convertDegreesToPulsewidth(int aDegrees, Servo& aServo) const
+unsigned int lowlevel::convertDegreesToPulsewidth(int aDegrees, Servo &aServo) const
 {
   unsigned int lPulseRange = MAX_PULSEWIDTH - MIN_PULSEWIDTH;
 
   unsigned int lMappedValue = mapValues(aDegrees, aServo.getMinDegreesRange(), aServo.getMaxDegreesRange(), 0, 180);
 
-  std::cout << lMappedValue << std::endl;
-
   // Degree range of the servo's
   unsigned int lDegreeRange = 180;
-  // std::abs(aServo.getMaxDegrees() - aServo.getMinDegrees());
 
   double lFactor = (double)(lMappedValue) / (double)lDegreeRange;
-  std::cout << "lFactor: " << std::to_string(lFactor) << std::endl;
 
   unsigned int lReturn = MIN_PULSEWIDTH + lPulseRange * lFactor;
 
   return lReturn;
 }
 
-bool lowlevel::degreesInRange(int aDegrees, Servo& aServo) const
+bool lowlevel::degreesInRange(int aDegrees, Servo &aServo) const
 {
   bool lReturn = false;
 
@@ -140,7 +141,6 @@ void lowlevel::sendSerial(std::string aCommand)
   if (serial.is_open())
   {
     boost::asio::write(serial, b.data());
-    std::cout << "written" << std::endl;
     os.flush();
   }
   else
@@ -165,7 +165,7 @@ bool lowlevel::servoExists(unsigned int aServoId) const
   return lReturn;
 }
 
-Servo& lowlevel::getServoWithId(unsigned int aServoId)
+Servo &lowlevel::getServoWithId(unsigned int aServoId)
 {
   bool lFoundServo = false;
 
@@ -178,10 +178,15 @@ Servo& lowlevel::getServoWithId(unsigned int aServoId)
     }
   }
 
-  if(!lFoundServo)
+  if (!lFoundServo)
   {
-    throw std::invalid_argument( "Invalid servoId entered.");
+    throw std::invalid_argument("Invalid servoId entered.");
   }
+}
+
+void lowlevel::setArmLocked(bool aLocked)
+{
+  mArmLocked = aLocked;
 }
 
 unsigned int lowlevel::mapValues(int aDegree, int aInMin, int aInMax, int aOutMin, int aOutMax) const

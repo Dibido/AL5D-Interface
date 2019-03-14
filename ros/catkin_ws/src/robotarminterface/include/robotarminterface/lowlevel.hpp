@@ -97,7 +97,21 @@ class lowlevel
    */
    Servo& getServoWithId(unsigned int aServoId);
 
+
+   /**
+    * @brief Set the mArmLocked variable.
+    * @param aLocked - True = locked, false = unlocked
+    */
+   void setArmLocked(bool aLocked);
+
   private:
+  
+  /**
+   * @brief If true, the low level driver refuses to send any move commands to the arm.
+   * Is set true when for emergency stop for example.
+   */
+  bool mArmLocked;
+
   /**
    * @brief A list of servo objects
    */

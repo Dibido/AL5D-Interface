@@ -10,6 +10,7 @@
 #define HIGHLEVEL_H_
 
 #include "ros/ros.h"
+#include <ros/console.h>
 
 #include "robotarminterface/lowlevel.hpp"
 #include "robotarminterface/singleServo.h"
@@ -17,6 +18,8 @@
 #include "robotarminterface/moveServos.h"
 #include "robotarminterface/stopServos.h"
 #include "robotarminterface/armPosition.h"
+
+#include <signal.h>
 
 #include <iostream>
 #include <sstream>
@@ -42,7 +45,6 @@ struct robotarmPosition
 
   robotarmPosition(const robotarmPosition& aRobotarmPosition) : servoIds(aRobotarmPosition.servoIds), servoDegrees(aRobotarmPosition.servoDegrees), time(aRobotarmPosition.time)
   {
-    std::cout << "Copy constructor used" << std::endl;
   }
 };
 
@@ -68,6 +70,11 @@ public:
   virtual ~highlevel();
 
   /**
+   * @brief Is used to catch ctrl-c event to kill the application
+   */
+  static void signalHandler(int aSignal);
+
+  /**
    * @brief Set the Baud Rate
    * @param aBaudRate - The baudrate to set
    */
@@ -79,6 +86,24 @@ public:
   void run();
 
 private:
+  
+  /**
+   * @brief False intitially, becomes true as soon as atleast one valid move command has been sent to the robot by serial
+   */
+  bool mMoveCommandSent;
+
+  /**
+   * @brief False initially, whether the system is in the ready state
+   */
+  bool mIsReady;
+
+  /**
+   * @brief False initially, should become true when the robot completed its first move to park position
+   */
+  bool mIsInitialized;
+
+  // List of all servo ids
+  std::vector<unsigned int> mServoIds;
 
   // Any move commands received by message get stored in this queue of commands
   std::vector<robotarmPosition> mMoveCommands;
