@@ -20,11 +20,33 @@ int main(int argc, char **argv)
 
   if (ros::ok())
   {
+    // Delay, as messages might not get accross right after starting
+    sleep(2);
+
+    robotarminterface::armPosition lArmPositionMessage;
+
+    // Move to ready
+    lArmPositionMessage.positionName = "ready";
+    lArmPositionMessage.time = 2000;
+    ROS_INFO("Sending armPosition ready");
+    //Send message
+    lArmPositionPublisher.publish(lArmPositionMessage);
+    ros::spinOnce();
+    sleep(3);
+
+    // Move to straight
+    lArmPositionMessage.positionName = "straight";
+    lArmPositionMessage.time = 2000;
+    ROS_INFO("Sending armPosition straight");
+    //Send message
+    lArmPositionPublisher.publish(lArmPositionMessage);
+    ros::spinOnce();
+    sleep(3);
+  
     robotarminterface::moveServos lMoveServosMessage;
     robotarminterface::servoPosition lServoPosition;
 
-    // Park position, slightly different
-    /*
+    // Sequence of 3 different locations
     lServoPosition.servoId = 0;
     lServoPosition.position = 90;
     lMoveServosMessage.servos.push_back(lServoPosition);
@@ -34,11 +56,11 @@ int main(int argc, char **argv)
     lMoveServosMessage.servos.push_back(lServoPosition);
 
     lServoPosition.servoId = 2;
-    lServoPosition.position = 135;
+    lServoPosition.position = 65;
     lMoveServosMessage.servos.push_back(lServoPosition);
 
     lServoPosition.servoId = 3;
-    lServoPosition.position = -80;
+    lServoPosition.position = -60;
     lMoveServosMessage.servos.push_back(lServoPosition);
 
     lServoPosition.servoId = 4;
@@ -51,50 +73,77 @@ int main(int argc, char **argv)
 
     lMoveServosMessage.time = 1000;
     ROS_INFO("Sending allServoPos");
+
     //Send message
     lMoveServosPublisher.publish(lMoveServosMessage);
     ros::spinOnce();
-    */
 
-    robotarminterface::armPosition lArmPositionMessage;
-    lArmPositionMessage.positionName = "straight";
-    lArmPositionMessage.time = 2000;
-    ROS_INFO("Sending armPosition");
+    // Sequence of 3 different locations
+    lServoPosition.servoId = 0;
+    lServoPosition.position = -50;
+    lMoveServosMessage.servos.push_back(lServoPosition);
+
+    lServoPosition.servoId = 1;
+    lServoPosition.position = 20;
+    lMoveServosMessage.servos.push_back(lServoPosition);
+
+    lServoPosition.servoId = 2;
+    lServoPosition.position = 65;
+    lMoveServosMessage.servos.push_back(lServoPosition);
+
+    lServoPosition.servoId = 3;
+    lServoPosition.position = -60;
+    lMoveServosMessage.servos.push_back(lServoPosition);
+
+    lServoPosition.servoId = 4;
+    lServoPosition.position = 180;
+    lMoveServosMessage.servos.push_back(lServoPosition);
+
+    lServoPosition.servoId = 5;
+    lServoPosition.position = 0;
+    lMoveServosMessage.servos.push_back(lServoPosition);
+
+    lMoveServosMessage.time = 1000;
+    ROS_INFO("Sending allServoPos");
+
     //Send message
-    lArmPositionPublisher.publish(lArmPositionMessage);
+    lMoveServosPublisher.publish(lMoveServosMessage);
     ros::spinOnce();
-    sleep(5);
-   
+
+    // Sequence of 3 different locations
+    lServoPosition.servoId = 0;
+    lServoPosition.position = 50;
+    lMoveServosMessage.servos.push_back(lServoPosition);
+
+    lServoPosition.servoId = 1;
+    lServoPosition.position = 20;
+    lMoveServosMessage.servos.push_back(lServoPosition);
+
+    lServoPosition.servoId = 2;
+    lServoPosition.position = 90;
+    lMoveServosMessage.servos.push_back(lServoPosition);
+
+    lServoPosition.servoId = 3;
+    lServoPosition.position = -60;
+    lMoveServosMessage.servos.push_back(lServoPosition);
+
+    lServoPosition.servoId = 4;
+    lServoPosition.position = 0;
+    lMoveServosMessage.servos.push_back(lServoPosition);
+
+    lServoPosition.servoId = 5;
+    lServoPosition.position = 0;
+    lMoveServosMessage.servos.push_back(lServoPosition);
+
+    lMoveServosMessage.time = 1000;
+    ROS_INFO("Sending allServoPos");
+
+    //Send message
+    lMoveServosPublisher.publish(lMoveServosMessage);
+    ros::spinOnce();
+
+    // Go to ready
     lArmPositionMessage.positionName = "ready";
-    lArmPositionMessage.time = 2000;
-    ROS_INFO("Sending armPosition");
-    //Send message
-    lArmPositionPublisher.publish(lArmPositionMessage);
-    ros::spinOnce();
-    sleep(1);
-
-    lArmPositionMessage.positionName = "straight";
-    lArmPositionMessage.time = 2000;
-    ROS_INFO("Sending armPosition");
-    //Send message
-    lArmPositionPublisher.publish(lArmPositionMessage);
-    ros::spinOnce();
-
-    lArmPositionMessage.positionName = "stop";
-    lArmPositionMessage.time = 2000;
-    ROS_INFO("Sending stop");
-    //Send message
-    lArmPositionPublisher.publish(lArmPositionMessage);
-    ros::spinOnce();
-
-    lArmPositionMessage.positionName = "ready";
-    lArmPositionMessage.time = 2000;
-    ROS_INFO("Sending armPosition");
-    //Send message
-    lArmPositionPublisher.publish(lArmPositionMessage);
-    ros::spinOnce();
-
-    lArmPositionMessage.positionName = "straight";
     lArmPositionMessage.time = 2000;
     ROS_INFO("Sending armPosition");
     //Send message
@@ -102,16 +151,28 @@ int main(int argc, char **argv)
     ros::spinOnce();
     sleep(10);
 
-    lArmPositionMessage.positionName = "release";
-    lArmPositionMessage.time = 2000;
-    ROS_INFO("Sending release");
+    // Move slowly towards straight
+    lArmPositionMessage.positionName = "straight";
+    lArmPositionMessage.time = 5000;
+    ROS_INFO("Sending armPosition");
     //Send message
     lArmPositionPublisher.publish(lArmPositionMessage);
     ros::spinOnce();
+    sleep(2.5);
+ 
+    // Send stop command, so robot stops halfway~ during its transition to straight
+    lArmPositionMessage.positionName = "stop";
+    lArmPositionMessage.time = 5000;
+    ROS_INFO("Sending STOP!");
+    //Send message
+    lArmPositionPublisher.publish(lArmPositionMessage);
+    ros::spinOnce();
+    sleep(3);
 
-    lArmPositionMessage.positionName = "park";
+    // Sending 2 move commands, which will be ignored because the robot got stopped and needs to be released first
+    lArmPositionMessage.positionName = "ready";
     lArmPositionMessage.time = 2000;
-    ROS_INFO("Sending armPosition ready");
+    ROS_INFO("Sending armPosition");
     //Send message
     lArmPositionPublisher.publish(lArmPositionMessage);
     ros::spinOnce();
@@ -119,27 +180,26 @@ int main(int argc, char **argv)
 
     lArmPositionMessage.positionName = "straight";
     lArmPositionMessage.time = 2000;
-    ROS_INFO("Sending armPosition straight");
+    ROS_INFO("Sending armPosition");
     //Send message
     lArmPositionPublisher.publish(lArmPositionMessage);
     ros::spinOnce();
-
     sleep(2);
-    lArmPositionMessage.positionName = "shutdown";
-    lArmPositionMessage.time = 20013403;
-    lArmPositionPublisher.publish(lArmPositionMessage);
 
-    robotarminterface::stopServos lStopServosMessage;
-    lStopServosMessage.servoIds.push_back(0);
-    lStopServosMessage.servoIds.push_back(1);
-    lStopServosMessage.servoIds.push_back(2);
-    //lStopServosMessage.servoIds.push_back(3);
-    //lStopServosMessage.servoIds.push_back(4);
-    //lStopServosMessage.servoIds.push_back(5);
+    // Now unlocking the robot again
+    lArmPositionMessage.positionName = "release";
+    lArmPositionMessage.time = 2000;
+    ROS_INFO("Sending release");
     //Send message
-    //lStopServosPublisher.publish(lStopServosMessage);
+    lArmPositionPublisher.publish(lArmPositionMessage);
     ros::spinOnce();
-    sleep(0.5);
+
+    lArmPositionMessage.positionName = "shutdown";
+    lArmPositionMessage.time = 3000;
+    ROS_INFO("Sending shutdown");
+    lArmPositionPublisher.publish(lArmPositionMessage);
+    ros::spinOnce();
+    sleep(1);
   }
   else
   {

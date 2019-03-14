@@ -124,7 +124,7 @@ void highlevel::stopSingleServoCallback(const robotarminterface::stopSingleServo
 
 void highlevel::moveServosCallback(const robotarminterface::moveServosConstPtr &aMoveServosMessage)
 {
-  ROS_INFO("Handling moveServos Command");
+  ROS_INFO("Handling moveMultipleServos command");
 
   robotarmPosition lMoveCommand;
 
@@ -192,6 +192,7 @@ void highlevel::armPositionCallback(const robotarminterface::armPositionConstPtr
   }
   else if (aArmPositionMessage->positionName == "shutdown")
   {
+    ROS_DEBUG("EVENT: {shutdown}");
     mMoveCommands.clear();
     mLowLevelDriver.moveServosToPos(mParkPosition.servoIds, mParkPosition.servoDegrees, mInitializeTime);
     exit(-1);
@@ -209,6 +210,8 @@ void highlevel::run()
 
 void highlevel::handleMoveCommands()
 {
+  /* If not initialized before, but there was a (initialize/park)move command sent and 
+  the time needed to complete the command has expired */
   if (!mIsInitialized && mMoveCommandSent && lastMovePeriodExpired())
   {
     mIsInitialized = true;
@@ -216,7 +219,10 @@ void highlevel::handleMoveCommands()
     ROS_INFO("STATE: {ready}");
   }
 
-  if (mMoveCommands.size() == 0 && lastMovePeriodExpired() && !mIsReady && mIsInitialized)
+  /* If initialization has been done, and there are no new commands. 
+  Robot was moving and time needed to complete last move has elapsed.
+  Arm also not locked */
+  if (mMoveCommands.size() == 0 && lastMovePeriodExpired() && !mIsReady && mIsInitialized && !mLowLevelDriver.isArmLocked())
   {
     mIsReady = true;
     ROS_INFO("STATE: {ready}");
