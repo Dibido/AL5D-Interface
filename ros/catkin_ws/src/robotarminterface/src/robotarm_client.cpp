@@ -5,7 +5,7 @@
 #include "robotarminterface/stopSingleServo.h"
 #include "robotarminterface/moveServos.h"
 #include "robotarminterface/stopServos.h"
-#include "robotarminterface/armPosition.h"
+#include "robotarminterface/armInstruction.h"
 
 int main(int argc, char **argv)
 {
@@ -16,30 +16,30 @@ int main(int argc, char **argv)
   ros::Publisher lStopSingleServoPublisher = lNodeHandler.advertise<robotarminterface::stopSingleServo>("stopSingleServo", 1000);
   ros::Publisher lMoveServosPublisher = lNodeHandler.advertise<robotarminterface::moveServos>("moveServos", 1000);
   ros::Publisher lStopServosPublisher = lNodeHandler.advertise<robotarminterface::stopServos>("stopServos", 1000);
-  ros::Publisher lArmPositionPublisher = lNodeHandler.advertise<robotarminterface::armPosition>("armPosition", 1000);
+  ros::Publisher lArmInstructionPublisher = lNodeHandler.advertise<robotarminterface::armInstruction>("armInstructionPosition", 1000);
 
   if (ros::ok())
   {
     // Delay, as messages might not get accross right after starting
     sleep(2);
 
-    robotarminterface::armPosition lArmPositionMessage;
+    robotarminterface::armInstruction lArmInstructionMessage;
 
     // Move to ready
-    lArmPositionMessage.positionName = "ready";
-    lArmPositionMessage.time = 2000;
+    lArmInstructionMessage.instruction = "ready";
+    lArmInstructionMessage.time = 2000;
     ROS_INFO("Sending armPosition ready");
     //Send message
-    lArmPositionPublisher.publish(lArmPositionMessage);
+    lArmInstructionPublisher.publish(lArmInstructionMessage);
     ros::spinOnce();
     sleep(3);
 
     // Move to straight
-    lArmPositionMessage.positionName = "straight";
-    lArmPositionMessage.time = 2000;
+    lArmInstructionMessage.instruction = "straight";
+    lArmInstructionMessage.time = 2000;
     ROS_INFO("Sending armPosition straight");
     //Send message
-    lArmPositionPublisher.publish(lArmPositionMessage);
+    lArmInstructionPublisher.publish(lArmInstructionMessage);
     ros::spinOnce();
     sleep(3);
   
@@ -143,61 +143,61 @@ int main(int argc, char **argv)
     ros::spinOnce();
 
     // Go to ready
-    lArmPositionMessage.positionName = "ready";
-    lArmPositionMessage.time = 2000;
+    lArmInstructionMessage.instruction = "ready";
+    lArmInstructionMessage.time = 2000;
     ROS_INFO("Sending armPosition");
     //Send message
-    lArmPositionPublisher.publish(lArmPositionMessage);
+    lArmInstructionPublisher.publish(lArmInstructionMessage);
     ros::spinOnce();
     sleep(10);
 
     // Move slowly towards straight
-    lArmPositionMessage.positionName = "straight";
-    lArmPositionMessage.time = 5000;
+    lArmInstructionMessage.instruction = "straight";
+    lArmInstructionMessage.time = 5000;
     ROS_INFO("Sending armPosition");
     //Send message
-    lArmPositionPublisher.publish(lArmPositionMessage);
+    lArmInstructionPublisher.publish(lArmInstructionMessage);
     ros::spinOnce();
     sleep(2.5);
  
     // Send stop command, so robot stops halfway~ during its transition to straight
-    lArmPositionMessage.positionName = "stop";
-    lArmPositionMessage.time = 5000;
+    lArmInstructionMessage.instruction = "stop";
+    lArmInstructionMessage.time = 5000;
     ROS_INFO("Sending STOP!");
     //Send message
-    lArmPositionPublisher.publish(lArmPositionMessage);
+    lArmInstructionPublisher.publish(lArmInstructionMessage);
     ros::spinOnce();
     sleep(3);
 
     // Sending 2 move commands, which will be ignored because the robot got stopped and needs to be released first
-    lArmPositionMessage.positionName = "ready";
-    lArmPositionMessage.time = 2000;
+    lArmInstructionMessage.instruction = "ready";
+    lArmInstructionMessage.time = 2000;
     ROS_INFO("Sending armPosition");
     //Send message
-    lArmPositionPublisher.publish(lArmPositionMessage);
+    lArmInstructionPublisher.publish(lArmInstructionMessage);
     ros::spinOnce();
     sleep(2);
 
-    lArmPositionMessage.positionName = "straight";
-    lArmPositionMessage.time = 2000;
+    lArmInstructionMessage.instruction = "straight";
+    lArmInstructionMessage.time = 2000;
     ROS_INFO("Sending armPosition");
     //Send message
-    lArmPositionPublisher.publish(lArmPositionMessage);
+    lArmInstructionPublisher.publish(lArmInstructionMessage);
     ros::spinOnce();
     sleep(2);
 
     // Now unlocking the robot again
-    lArmPositionMessage.positionName = "release";
-    lArmPositionMessage.time = 2000;
+    lArmInstructionMessage.instruction = "release";
+    lArmInstructionMessage.time = 2000;
     ROS_INFO("Sending release");
     //Send message
-    lArmPositionPublisher.publish(lArmPositionMessage);
+    lArmInstructionPublisher.publish(lArmInstructionMessage);
     ros::spinOnce();
 
-    lArmPositionMessage.positionName = "shutdown";
-    lArmPositionMessage.time = 3000;
+    lArmInstructionMessage.instruction = "shutdown";
+    lArmInstructionMessage.time = 3000;
     ROS_INFO("Sending shutdown");
-    lArmPositionPublisher.publish(lArmPositionMessage);
+    lArmInstructionPublisher.publish(lArmInstructionMessage);
     ros::spinOnce();
     sleep(1);
   }

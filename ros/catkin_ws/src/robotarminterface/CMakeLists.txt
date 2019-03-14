@@ -54,7 +54,7 @@ add_message_files(
   stopSingleServo.msg
   stopServos.msg
   moveServos.msg
-  armPosition.msg
+  armInstruction.msg
 )
 
 ## Generate services in the 'srv' folder

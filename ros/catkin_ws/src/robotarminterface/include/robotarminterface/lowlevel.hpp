@@ -12,8 +12,12 @@
 #include <vector>
 #include <thread>
 #include <stdexcept>
+#include <algorithm>
 
 #include <boost/asio.hpp>
+
+#include "ros/ros.h"
+#include <ros/console.h>
 
 #include "../src/Servo.h"
 
@@ -24,6 +28,11 @@
 // The pulsewidth range accepted by the hardware
 #define MIN_PULSEWIDTH 500
 #define MAX_PULSEWIDTH 2500
+
+// The time it takes for a servo to move a single degree
+// https://www.servocity.com/hs-805bb-servo
+// No-Load Speed (4.8V) 	0.19sec/60° evaluates to 3.16 in 1ms
+#define MS_PER_DEGREE 3.16
 
 class lowlevel
 {
@@ -132,6 +141,8 @@ class lowlevel
    * @return unsigned int - The converted value
    */
   unsigned int mapValues(int aDegree, int aInMin, int aInMax, int aOutMin, int aOutMax) const;
+
+  void checkTimeToMoveInRange(std::vector<unsigned int> aPins, std::vector<int> aDegrees, unsigned int aMillis);
 };
 
 #endif

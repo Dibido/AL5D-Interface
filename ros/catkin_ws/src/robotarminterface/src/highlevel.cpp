@@ -63,7 +63,7 @@ void highlevel::subscribeTopics()
   mStopSingleServoSubscriber = mNodeHandler.subscribe("stopSingleServo", 1000, &highlevel::stopSingleServoCallback, this);
   mMoveServosSubscriber = mNodeHandler.subscribe("moveServos", 1000, &highlevel::moveServosCallback, this);
   mStopServosSubscriber = mNodeHandler.subscribe("stopServos", 1000, &highlevel::stopServosCallback, this);
-  mArmPositionSubscriber = mNodeHandler.subscribe("armPosition", 1000, &highlevel::armPositionCallback, this);
+  mArmInstructionSubscriber = mNodeHandler.subscribe("armInstructionPosition", 1000, &highlevel::armInstructionCallback, this);
 }
 
 void highlevel::initializeValues()
@@ -148,35 +148,35 @@ void highlevel::stopServosCallback(const robotarminterface::stopServosConstPtr &
   mMoveCommands.clear();
 }
 
-void highlevel::armPositionCallback(const robotarminterface::armPositionConstPtr &aArmPositionMessage)
+void highlevel::armInstructionCallback(const robotarminterface::armInstructionConstPtr &aArmInstructionMessage)
 {
-  ROS_INFO("Handling armPosition command, position : %s, time : %d", aArmPositionMessage->positionName.c_str(), aArmPositionMessage->time);
+  ROS_INFO("Handling armPosition command, position : %s, time : %d", aArmInstructionMessage->instruction.c_str(), aArmInstructionMessage->time);
 
   bool lValidCommand = false;
   robotarmPosition lMoveCommand;
 
-  if (aArmPositionMessage->positionName == "park")
+  if (aArmInstructionMessage->instruction == "park")
   {
     lMoveCommand.servoIds = mParkPosition.servoIds;
     lMoveCommand.servoDegrees = mParkPosition.servoDegrees;
-    lMoveCommand.time = aArmPositionMessage->time;
+    lMoveCommand.time = aArmInstructionMessage->time;
     mMoveCommands.push_back(lMoveCommand);
   }
-  else if (aArmPositionMessage->positionName == "ready")
+  else if (aArmInstructionMessage->instruction == "ready")
   {
     lMoveCommand.servoIds = mReadyPosition.servoIds;
     lMoveCommand.servoDegrees = mReadyPosition.servoDegrees;
-    lMoveCommand.time = aArmPositionMessage->time;
+    lMoveCommand.time = aArmInstructionMessage->time;
     mMoveCommands.push_back(lMoveCommand);
   }
-  else if (aArmPositionMessage->positionName == "straight")
+  else if (aArmInstructionMessage->instruction == "straight")
   {
     lMoveCommand.servoIds = mStraightPosition.servoIds;
     lMoveCommand.servoDegrees = mStraightPosition.servoDegrees;
-    lMoveCommand.time = aArmPositionMessage->time;
+    lMoveCommand.time = aArmInstructionMessage->time;
     mMoveCommands.push_back(lMoveCommand);
   }
-  else if (aArmPositionMessage->positionName == "stop")
+  else if (aArmInstructionMessage->instruction == "stop")
   {
     ROS_DEBUG("EVENT: {stop}");
     ROS_INFO("STATE: {stopped}");
@@ -184,13 +184,13 @@ void highlevel::armPositionCallback(const robotarminterface::armPositionConstPtr
     mMoveCommands.clear();
     mLowLevelDriver.setArmLocked(true);
   }
-  else if (aArmPositionMessage->positionName == "release")
+  else if (aArmInstructionMessage->instruction == "release")
   {
     ROS_DEBUG("EVENT: {release}");
     mLowLevelDriver.setArmLocked(false);
     mMoveCommands.clear();
   }
-  else if (aArmPositionMessage->positionName == "shutdown")
+  else if (aArmInstructionMessage->instruction == "shutdown")
   {
     ROS_DEBUG("EVENT: {shutdown}");
     mMoveCommands.clear();

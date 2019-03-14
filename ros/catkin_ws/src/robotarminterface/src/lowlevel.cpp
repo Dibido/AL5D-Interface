@@ -70,6 +70,10 @@ bool lowlevel::moveServosToPos(std::vector<unsigned int> aPins, std::vector<int>
       return false;
     }
   }
+
+  // Check if the time QoS constraint are met with the current values
+  checkTimeToMoveInRange(aPins, aDegrees, aMillis);
+
   std::string lCommand = "";
 
   for (int i = 0; i < aPins.size(); ++i)
@@ -197,4 +201,24 @@ bool lowlevel::isArmLocked() const
 unsigned int lowlevel::mapValues(int aDegree, int aInMin, int aInMax, int aOutMin, int aOutMax) const
 {
   return (aDegree - aInMin) * (aOutMax - aOutMin) / (aInMax - aInMin) + aOutMin;
+}
+
+void lowlevel::checkTimeToMoveInRange(std::vector<unsigned int> aPins, std::vector<int> aDegrees, unsigned int aMillis)
+{
+  std::vector<unsigned int> lMovementRanges;
+  for (size_t i = 0; i < aPins.size(); i++)
+  {
+    Servo lServo = getServoWithId(aPins.at(i));
+    // Calculate the difference between the current degree and the goal degree
+    lMovementRanges.push_back(abs(lServo.getCurrentDegrees() - aDegrees.at(lServo.getServoId())));
+  }
+  // Get the biggest change
+  double lMaxChange = static_cast<double>(*std::max_element(lMovementRanges.begin(), lMovementRanges.end()));
+  // Calculate time needed
+  double lTimeNeededToCompleteMove = lMaxChange * MS_PER_DEGREE;
+  // Check if the time is available
+  if (static_cast<double>(aMillis) < lTimeNeededToCompleteMove)
+  {
+    ROS_WARN("QoS-Warning: {Move has goal time of %d ms to be completed, but move needs %f ms}", aMillis, lTimeNeededToCompleteMove);
+  }
 }

@@ -17,7 +17,7 @@
 #include "robotarminterface/stopSingleServo.h"
 #include "robotarminterface/moveServos.h"
 #include "robotarminterface/stopServos.h"
-#include "robotarminterface/armPosition.h"
+#include "robotarminterface/armInstruction.h"
 
 #include <signal.h>
 
@@ -57,7 +57,7 @@ protected:
   ros::Subscriber mStopSingleServoSubscriber;
   ros::Subscriber mMoveServosSubscriber;
   ros::Subscriber mStopServosSubscriber;
-  ros::Subscriber mArmPositionSubscriber;
+  ros::Subscriber mArmInstructionSubscriber;
 
   robotarmPosition mParkPosition;
   robotarmPosition mReadyPosition;
@@ -133,7 +133,7 @@ private:
   void stopSingleServoCallback(const robotarminterface::stopSingleServoConstPtr& aStopSingleServoMessage);
   void moveServosCallback(const robotarminterface::moveServosConstPtr& aSingleServoMessage);
   void stopServosCallback(const robotarminterface::stopServosConstPtr& aStopAllServoMessage);
-  void armPositionCallback(const robotarminterface::armPositionConstPtr& aSingleServoMessage);
+  void armInstructionCallback(const robotarminterface::armInstructionConstPtr& aArmPosition);
 
   /**
    * @brief Initializes the arm by going to the park position
