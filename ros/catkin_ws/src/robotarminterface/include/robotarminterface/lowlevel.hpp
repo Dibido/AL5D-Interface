@@ -97,13 +97,18 @@ class lowlevel
    */
    Servo& getServoWithId(unsigned int aServoId);
 
-
    /**
     * @brief Set the mArmLocked variable.
     * @param aLocked - True = locked, false = unlocked
     */
    void setArmLocked(bool aLocked);
 
+   /**
+    * @brief Whether the arm is locked or not
+    * @return True if arm locked, false if not   
+    */
+   bool isArmLocked() const;
+  
   private:
   
   /**

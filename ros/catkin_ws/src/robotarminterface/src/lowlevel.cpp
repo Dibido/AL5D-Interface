@@ -189,6 +189,11 @@ void lowlevel::setArmLocked(bool aLocked)
   mArmLocked = aLocked;
 }
 
+bool lowlevel::isArmLocked() const
+{
+  return mArmLocked;
+}
+
 unsigned int lowlevel::mapValues(int aDegree, int aInMin, int aInMax, int aOutMin, int aOutMax) const
 {
   return (aDegree - aInMin) * (aOutMax - aOutMin) / (aInMax - aInMin) + aOutMin;
