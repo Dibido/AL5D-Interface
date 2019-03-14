@@ -81,7 +81,7 @@ public:
   void setBaudRate(unsigned int aBaudRate);
 
   /**
-   * @brief Base function used to keep the highlevel active, is a blocking function all logic shud be handled within it.
+   * @brief Base function used to keep the highlevel active, is a blocking function all logic should be handled within it.
    */
   void run();
 
@@ -157,6 +157,7 @@ private:
   
   /**
    * @brief Checks if the period needed to complete last sent valid move has expired
+   * @return whethet the move has expired
    */
   bool lastMovePeriodExpired() const;
 };

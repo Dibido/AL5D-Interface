@@ -53,6 +53,7 @@ class lowlevel
    * @param aDegrees - The angle in degrees
    * @param aMillis - The time in milliseconds that will be taken to complete the move
    * (if lower then MIN_MOVE_TIME, MIN_MOVE_TIME is used), same goes for MAX_MOVE_TIME.
+   * @return - whether the move succeeded
    */
   bool moveServosToPos(std::vector<unsigned int> aPins, std::vector<int> aDegrees, unsigned int aMillis);
 
@@ -67,7 +68,7 @@ class lowlevel
    * @brief Checks whether a given amount of degrees is in range
    * @param aDegrees - The given amount of degrees
    * @param aServo - The servo object, which contains a min/max
-   * @return Returns true if min <= aDegrees <= max
+   * @return - true if min <= aDegrees <= max
    */
   bool degreesInRange(int aDegrees, Servo& aServo) const;
   
@@ -96,13 +97,11 @@ class lowlevel
    */
   bool servoExists(unsigned int aServoId) const;
 
-
   /**
    * @brief Get the servo from mServos corresponding with given servo id
+   *  If the servo does not exist a invalidArgument exception is thrown
    * @param aServoId - The given servo id
-   * @return - A pair, a boolean indicating whether a servo with given id existed in mServos or not.
-   * If it existed, a copy of that servo is returned. If it didn't exist the boolean will be false, and a default
-   * Servo is constructed and returned
+   * @return - A reference to the requested Servo
    */
    Servo& getServoWithId(unsigned int aServoId);
 
@@ -135,13 +134,20 @@ class lowlevel
    * @brief Maps the value from the input range to the output range
    * @param aDegree - The value to convert
    * @param aInMin - The minimum value of the input range
-   * @param aInMax - The maximum value of the input range 
+   * @param aInMax - The maximum value of the input range
    * @param aOutMin - The minimum value of the output range
    * @param aOutMax - The maximum value of the output range 
    * @return unsigned int - The converted value
    */
   unsigned int mapValues(int aDegree, int aInMin, int aInMax, int aOutMin, int aOutMax) const;
 
+  /**
+   * @brief Checks whether the given change in degrees for each servo can be reached within the given timeframe
+   * If it is not possible a warning will be generated
+   * @param aPins - The pins of the servo's that will be moved
+   * @param aDegrees - The target degrees for each servo
+   * @param aMillis - The target timeframe in milliseconds
+   */
   void checkTimeToMoveInRange(std::vector<unsigned int> aPins, std::vector<int> aDegrees, unsigned int aMillis);
 };
 

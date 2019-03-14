@@ -11,7 +11,8 @@ lowlevel::lowlevel() : serial(ioservice), mArmLocked(false)
   mServos.push_back(Servo(5, -90, 90, -90, 90));
   // Initializing serial
   boost::system::error_code ec;
-  serial.open("/dev/ttyUSB0", ec);
+  // serial.open("/dev/ttyUSB0", ec);
+  serial.open("/dev/pts/6", ec);
 
   if (!ec)
   {
@@ -210,7 +211,8 @@ void lowlevel::checkTimeToMoveInRange(std::vector<unsigned int> aPins, std::vect
   {
     Servo lServo = getServoWithId(aPins.at(i));
     // Calculate the difference between the current degree and the goal degree
-    lMovementRanges.push_back(abs(lServo.getCurrentDegrees() - aDegrees.at(lServo.getServoId())));
+    int lCurrentDegreeDifference = abs(lServo.getCurrentDegrees() - aDegrees.at(lServo.getServoId()));
+    lMovementRanges.push_back(lCurrentDegreeDifference);
   }
   // Get the biggest change
   double lMaxChange = static_cast<double>(*std::max_element(lMovementRanges.begin(), lMovementRanges.end()));
