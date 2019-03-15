@@ -111,7 +111,6 @@ void highlevel::stopServosCallback(const robotarminterface::stopServosConstPtr& 
   ROS_INFO("Handling stopServos Command");
   mLowLevelDriver.stopServos(aStopServosMessage->servoIds);
 
-  // TO-DO: only clear move commands if ALL servos are stopped (seperate message?)
   mMoveCommands.clear();
 }
 
