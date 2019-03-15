@@ -91,7 +91,7 @@ void highlevel::stopSingleServoCallback(const robotarminterface::stopSingleServo
 
 void highlevel::moveServosCallback(const robotarminterface::moveServosConstPtr &aMoveServosMessage)
 {
-  ROS_INFO("Handling moveMultipleServos command");
+  ROS_INFO("Receiving moveMultipleServos command");
 
   robotarmPosition lMoveCommand;
 
@@ -117,7 +117,7 @@ void highlevel::stopServosCallback(const robotarminterface::stopServosConstPtr &
 
 void highlevel::armInstructionCallback(const robotarminterface::armInstructionConstPtr &aArmInstructionMessage)
 {
-  ROS_INFO("Handling armPosition command, position : %s, time : %d", aArmInstructionMessage->instruction.c_str(), aArmInstructionMessage->time);
+  ROS_INFO("Receiving armPosition command, position : %s, time : %d", aArmInstructionMessage->instruction.c_str(), aArmInstructionMessage->time);
 
   bool lValidCommand = false;
   robotarmPosition lMoveCommand;

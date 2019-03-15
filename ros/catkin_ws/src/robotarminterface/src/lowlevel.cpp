@@ -13,8 +13,7 @@ lowlevel::lowlevel() : serial(ioservice), mArmLocked(false)
   // Initializing serial
   boost::system::error_code ec;
 
-  // serial.open("/dev/ttyUSB0", ec);
-  serial.open("/dev/pts/6", ec);
+  serial.open("/dev/ttyUSB0", ec);
 
   if (!ec)
   {
@@ -35,7 +34,7 @@ bool lowlevel::moveServosToPos(std::vector<unsigned int> aPins, std::vector<int>
   // If arm is locked, any movement commands shud be ignored
   if(mArmLocked)
   {
-    std::cout << "Arm is locked, refusing to send movement commands to it" << std::endl;
+    ROS_WARN("Arm is locked, refusing to send movement commands to it");
     return false;
   }
 
@@ -64,9 +63,6 @@ bool lowlevel::moveServosToPos(std::vector<unsigned int> aPins, std::vector<int>
       return false;
     }
   }
-
-  // Check if the time QoS constraint are met with the current values
-  checkTimeToMoveInRange(aPins, aDegrees, aMillis);
 
   std::string lCommand = "";
 
@@ -220,7 +216,7 @@ unsigned int lowlevel::checkTimeToMoveInRange(std::vector<unsigned int> aPins, s
   // If not the case, warn and return timeframe needed
   if (static_cast<double>(aMillis) < lTimeNeededToCompleteMove)
   {
-    ROS_WARN("QoS-Warning: {Move has goal time of %d ms to be completed, but move needs %f ms}", aMillis, lTimeNeededToCompleteMove);
+    ROS_WARN("QoS-Warning: {Move has goal time of %d ms to be completed, but move needs %d ms}", aMillis, static_cast<unsigned int>(lTimeNeededToCompleteMove));
     return static_cast<unsigned int>(lTimeNeededToCompleteMove);
   }
   else // If move can be handled within the aMillis, return this original timeframe.
