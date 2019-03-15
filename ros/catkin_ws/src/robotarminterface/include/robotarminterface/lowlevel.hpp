@@ -1,23 +1,25 @@
 /**
  * @file lowlevel.hpp
- * @author your name (you@domain.com)
+ * @author Dibran & Marnix
  * @brief lowlevel interface
- * @version 0.1
+ * @version 1.0
  * @date 2019-02-18
+ * @copyright Copyright (c) 2019
  */
+
 #ifndef LOWLEVEL_H_
 #define LOWLEVEL_H_
+
+#include <ros/ros.h>
+#include <ros/console.h>
+
+#include <boost/asio.hpp>
 
 #include <iostream>
 #include <vector>
 #include <thread>
 #include <stdexcept>
 #include <algorithm>
-
-#include <boost/asio.hpp>
-
-#include "ros/ros.h"
-#include <ros/console.h>
 
 #include "../src/Servo.h"
 
@@ -36,17 +38,20 @@
 
 class lowlevel
 {
-  public:
-
+public:
+  /**
+   * @brief Construct a new lowlevel object
+   */
   lowlevel();
-  virtual ~lowlevel();
 
-  protected:
+  /**
+   * @brief Destroy the lowlevel object
+   */
+  virtual ~lowlevel();
 
   boost::asio::io_service ioservice;
   boost::asio::serial_port serial;
 
-  public:
   /**
    * @brief Sends the command to move a servo to a certain angle in a certain amount if time.
    * @param aPin - The pin number of the servo
@@ -62,7 +67,13 @@ class lowlevel
    * @param aDegrees - The angle in degrees 
    * @param aServo - The servo, is used to check boundaries (min/max range).
    */
-  unsigned int convertDegreesToPulsewidth(int aDegrees, Servo& aServo) const;
+  unsigned int convertDegreesToPulsewidth(int aDegrees, Servo &aServo) const;
+
+  /**
+   * @brief stop the movement of the servos
+   * @param aPins  - The pins of the servos
+   */
+  void stopServos(std::vector<unsigned int> aPins);
 
   /**
    * @brief Checks whether a given amount of degrees is in range
@@ -70,14 +81,8 @@ class lowlevel
    * @param aServo - The servo object, which contains a min/max
    * @return - true if min <= aDegrees <= max
    */
-  bool degreesInRange(int aDegrees, Servo& aServo) const;
-  
-  /**
-   * @brief stop the movement of the servos
-   * @param aPins  - The pins of the servos
-   */
-  void stopServos(std::vector<unsigned int> aPins);
-  
+  bool degreesInRange(int aDegrees, Servo &aServo) const;
+
   /**
    * @brief Sends a command over serial
    * @param aCommand - The command
@@ -99,26 +104,36 @@ class lowlevel
 
   /**
    * @brief Get the servo from mServos corresponding with given servo id
-   *  If the servo does not exist a invalidArgument exception is thrown
+   * If the servo does not exist a invalidArgument exception is thrown, 
+   * recommended to use method servoExists before getting it with this method.
    * @param aServoId - The given servo id
    * @return - A reference to the requested Servo
    */
-   Servo& getServoWithId(unsigned int aServoId);
+  Servo &getServoWithId(unsigned int aServoId);
 
-   /**
+  /**
     * @brief Set the mArmLocked variable.
     * @param aLocked - True = locked, false = unlocked
     */
-   void setArmLocked(bool aLocked);
+  void setArmLocked(bool aLocked);
 
-   /**
+  /**
     * @brief Whether the arm is locked or not
     * @return True if arm locked, false if not   
     */
-   bool isArmLocked() const;
-  
-  private:
-  
+  bool isArmLocked() const;
+
+  /**
+   * @brief Checks whether the given change in degrees for each servo can be reached within the target timeframe
+   * If it is not possible a warning will be generated, and the actual time needed will be returned.
+   * @param aPins - The pins of the servo's that will be moved
+   * @param aDegrees - The target degrees for each servo
+   * @param aMillis - The target timeframe in milliseconds
+   * @return The minimum time needed to complete the move.
+   */
+  unsigned int checkTimeToMoveInRange(std::vector<unsigned int> aPins, std::vector<int> aDegrees, unsigned int aMillis);
+
+private:
   /**
    * @brief If true, the low level driver refuses to send any move commands to the arm.
    * Is set true when for emergency stop for example.
@@ -140,15 +155,6 @@ class lowlevel
    * @return unsigned int - The converted value
    */
   unsigned int mapValues(int aDegree, int aInMin, int aInMax, int aOutMin, int aOutMax) const;
-
-  /**
-   * @brief Checks whether the given change in degrees for each servo can be reached within the given timeframe
-   * If it is not possible a warning will be generated
-   * @param aPins - The pins of the servo's that will be moved
-   * @param aDegrees - The target degrees for each servo
-   * @param aMillis - The target timeframe in milliseconds
-   */
-  void checkTimeToMoveInRange(std::vector<unsigned int> aPins, std::vector<int> aDegrees, unsigned int aMillis);
 };
 
 #endif

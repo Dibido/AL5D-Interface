@@ -32,24 +32,22 @@ int main(int argc, char **argv)
   return 0;
 }
 
-highlevel::highlevel() : mMoveCommandSent(false), mIsReady(false), mIsInitialized(false), mBaudRate(DEFAULT_BAUDRATE), mLastMoveTimeMS(0), mLastMoveStartTime(std::chrono::high_resolution_clock::now())
+highlevel::highlevel() : mMoveCommandSent(false), mIsReady(false), mIsInitialized(false), mInitializeTime(INITIALIZE_TIME), mBaudRate(DEFAULT_BAUDRATE), mLastMoveTimeMS(0), mLastMoveStartTime(std::chrono::high_resolution_clock::now())
 {
   subscribeTopics();
   initializeValues();
   initializeArm();
 }
 
-highlevel::highlevel(unsigned int aBaudRate) : mMoveCommandSent(false), mIsReady(false), mIsInitialized(false), mBaudRate(DEFAULT_BAUDRATE), mLastMoveTimeMS(0), mLastMoveStartTime(std::chrono::high_resolution_clock::now())
+highlevel::highlevel(unsigned int aBaudRate) : mMoveCommandSent(false), mIsReady(false), mIsInitialized(false), mInitializeTime(INITIALIZE_TIME), mBaudRate(DEFAULT_BAUDRATE), mLastMoveTimeMS(0), mLastMoveStartTime(std::chrono::high_resolution_clock::now())
 {
   subscribeTopics();
   initializeValues();
   initializeArm();
 }
 
-void highlevel::signalHandler(int aSignal)
+highlevel::~highlevel()
 {
-  // Ctrl-C pressed, shut down
-  exit(1);
 }
 
 void highlevel::setBaudRate(unsigned int aBaudRate)
@@ -57,50 +55,19 @@ void highlevel::setBaudRate(unsigned int aBaudRate)
   mLowLevelDriver.setBaudRate(aBaudRate);
 }
 
-void highlevel::subscribeTopics()
+void highlevel::run()
 {
-  mSingleServoSubscriber = mNodeHandler.subscribe("singleServo", 1000, &highlevel::singleServoCallback, this);
-  mStopSingleServoSubscriber = mNodeHandler.subscribe("stopSingleServo", 1000, &highlevel::stopSingleServoCallback, this);
-  mMoveServosSubscriber = mNodeHandler.subscribe("moveServos", 1000, &highlevel::moveServosCallback, this);
-  mStopServosSubscriber = mNodeHandler.subscribe("stopServos", 1000, &highlevel::stopServosCallback, this);
-  mArmInstructionSubscriber = mNodeHandler.subscribe("armInstructionPosition", 1000, &highlevel::armInstructionCallback, this);
+  while (true)
+  {
+    ros::spinOnce();
+    handleMoveCommands();
+  }
 }
 
-void highlevel::initializeValues()
+void highlevel::signalHandler(int aSignal)
 {
-  // Used to catch ctrl-c event
-  signal(SIGINT, signalHandler);
-
-  mServoIds = {0, 1, 2, 3, 4, 5};
-
-  mInitializeTime = 3000;
-
-  // robot 1
-  mParkPosition.servoIds = {0, 1, 2, 3, 4, 5};
-  mParkPosition.servoDegrees = {0, 30, 135, -60, 180, 0};
-  mReadyPosition.servoIds = {0, 1, 2, 3, 4, 5};
-  mReadyPosition.servoDegrees = {0, 30, 120, 0, 0, 0};
-  mStraightPosition.servoIds = {0, 1, 2, 3, 4, 5};
-  mStraightPosition.servoDegrees = {0, 0, 30, 20, 0, 0};
-
-  mLowLevelDriver.setBaudRate(mBaudRate);
-}
-
-void highlevel::initializeArm()
-{
-  ROS_INFO("STATE: {initializing}");
-
-  // Go to park
-  robotarmPosition lMoveCommand;
-
-  lMoveCommand.servoIds = mParkPosition.servoIds;
-  lMoveCommand.servoDegrees = mParkPosition.servoDegrees;
-  lMoveCommand.time = mInitializeTime;
-  mMoveCommands.push_back(lMoveCommand);
-}
-
-highlevel::~highlevel()
-{
+  // Used when Ctrl-C pressed, shut down
+  exit(1);
 }
 
 void highlevel::singleServoCallback(const robotarminterface::singleServoConstPtr &aSingleServoMessage)
@@ -199,13 +166,44 @@ void highlevel::armInstructionCallback(const robotarminterface::armInstructionCo
   }
 }
 
-void highlevel::run()
+void highlevel::initializeArm()
 {
-  while (true)
-  {
-    ros::spinOnce();
-    handleMoveCommands();
-  }
+  ROS_INFO("STATE: {initializing}");
+
+  // Go to park
+  robotarmPosition lMoveCommand;
+
+  lMoveCommand.servoIds = mParkPosition.servoIds;
+  lMoveCommand.servoDegrees = mParkPosition.servoDegrees;
+  lMoveCommand.time = mInitializeTime;
+  mMoveCommands.push_back(lMoveCommand);
+}
+
+void highlevel::subscribeTopics()
+{
+  mSingleServoSubscriber = mNodeHandler.subscribe("singleServo", 1000, &highlevel::singleServoCallback, this);
+  mStopSingleServoSubscriber = mNodeHandler.subscribe("stopSingleServo", 1000, &highlevel::stopSingleServoCallback, this);
+  mMoveServosSubscriber = mNodeHandler.subscribe("moveServos", 1000, &highlevel::moveServosCallback, this);
+  mStopServosSubscriber = mNodeHandler.subscribe("stopServos", 1000, &highlevel::stopServosCallback, this);
+  mArmInstructionSubscriber = mNodeHandler.subscribe("armInstructionPosition", 1000, &highlevel::armInstructionCallback, this);
+}
+
+void highlevel::initializeValues()
+{
+  // Used to catch ctrl-c event
+  signal(SIGINT, signalHandler);
+
+  mServoIds = {0, 1, 2, 3, 4, 5};
+
+  // Understanding values have been found by experimenting with the robot arm, and may differ slightly from robot to robot.
+  mParkPosition.servoIds = {0, 1, 2, 3, 4, 5};
+  mParkPosition.servoDegrees = {0, 30, 135, -60, 180, 0};
+  mReadyPosition.servoIds = {0, 1, 2, 3, 4, 5};
+  mReadyPosition.servoDegrees = {0, 30, 120, 0, 0, 0};
+  mStraightPosition.servoIds = {0, 1, 2, 3, 4, 5};
+  mStraightPosition.servoDegrees = {0, 0, 30, 20, 0, 0};
+
+  mLowLevelDriver.setBaudRate(mBaudRate);
 }
 
 void highlevel::handleMoveCommands()
@@ -234,10 +232,13 @@ void highlevel::handleMoveCommands()
     // Select first command
     robotarmPosition lNewMoveCommand = mMoveCommands.at(0);
 
+    // Check if move can be completed within the given time, if this is not the case time will get corrected.
+    lNewMoveCommand.time = mLowLevelDriver.checkTimeToMoveInRange(lNewMoveCommand.servoIds, lNewMoveCommand.servoDegrees, lNewMoveCommand.time);
+    
     // Send move command to lowlevel
     bool lValidMove = mLowLevelDriver.moveServosToPos(lNewMoveCommand.servoIds, lNewMoveCommand.servoDegrees, lNewMoveCommand.time);
 
-    // Remove the first command from the list
+    // Remove the first command of the list
     mMoveCommands.erase(mMoveCommands.begin());
 
     // If the command was valid and thus sent through to the robot

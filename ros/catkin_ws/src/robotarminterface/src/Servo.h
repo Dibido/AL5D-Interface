@@ -1,13 +1,47 @@
+/**
+ * @file Servo.h
+ * @author Dibran & Marnix
+ * @brief Servo
+ * @version 1.0
+ * @date 2019-02-18
+ * @copyright Copyright (c) 2019
+ */
+
 #ifndef SERVO_H_
 #define SERVO_H_
 
 class Servo
 {
   public:
+    /**
+     * @brief Construct a new Servo object
+     * 
+     * @param aServoId - Id of the servo, this should correspond with the Id/pin of the real servo
+     * @param aMinDegreesLimit - Minimum amount of degrees required to be considered a "safe/allowed" amount of degrees, software constraint.
+     * @param aMaxDegreesLimit - Maximum amount of degrees required to be considered a "safe/allowed" amount of degrees, software constraint.
+     * @param aMinDegreesRange - Lower limit of the range of degrees the servo is actually able to move (hardware-wise).
+     * @param aMaxDegreesRange - Uppr limit of the range of degrees the servo is actually able to move (hardware-wise).
+     */
     Servo(unsigned int aServoId, int aMinDegreesLimit, int aMaxDegreesLimit, int aMinDegreesRange, int aMaxDegreesRange);
-    Servo();
+    
+    /**
+     * @brief Copy constructor
+     * @param aOther - The servo object to be copied.
+     */
+    Servo(const Servo& aOther); 
+    
+    /**
+     * @brief Destroy the Servo object
+     */
     virtual ~Servo();
 
+    // Forbidden default constructor, no point in having a servo object without the right attribute values.
+    Servo() = delete;
+
+    /**
+     * @brief Get the servoId
+     * @return The servoId
+     */
     unsigned int getServoId() const;
 
     /**
@@ -45,9 +79,8 @@ class Servo
      */
     void setCurrentDegrees(int aDegrees);
 
-    Servo(const Servo& aOther); // Copy constructor
-    Servo& operator=(Servo aOther); // Asignment constructor
-    bool operator==(Servo aServo); // Comparison constructor
+    Servo& operator=(Servo aOther); // Assignment operator
+    bool operator==(Servo aServo); // Comparison operator
 
   private:
     unsigned int mServoId;
@@ -60,6 +93,7 @@ class Servo
     int mMinDegreesRange;
     int mMaxDegreesRange;
     
+    // Current degrees of the servo, to be more precise: The number of degrees the servo lastly got instructed to move to.
     int mCurrentDegrees;
 };
 

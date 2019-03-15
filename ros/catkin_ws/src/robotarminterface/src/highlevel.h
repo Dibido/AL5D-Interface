@@ -1,16 +1,23 @@
 /**
  * @file highlevel.h
- * @author dibran
+ * @author Dibran & Marnix
  * @brief the high level driver for the robotarm
- * @version 0.1
+ * @version 1.0
  * @date 2019-02-18
  * @copyright Copyright (c) 2019
  */
+
 #ifndef HIGHLEVEL_H_
 #define HIGHLEVEL_H_
 
-#include "ros/ros.h"
+#include <ros/ros.h>
 #include <ros/console.h>
+
+#include <signal.h>
+
+#include <iostream>
+#include <sstream>
+#include <chrono>
 
 #include "robotarminterface/lowlevel.hpp"
 #include "robotarminterface/singleServo.h"
@@ -19,19 +26,16 @@
 #include "robotarminterface/stopServos.h"
 #include "robotarminterface/armInstruction.h"
 
-#include <signal.h>
-
-#include <iostream>
-#include <sstream>
-#include <chrono>
-
 #define DEFAULT_BAUDRATE 115200
 
+// Time robot will take to move to park position on initialization/shutdown
+#define INITIALIZE_TIME 3000
+
 /**
- * @brief Robotarmposition stores the current configuration of the robotarm
+ * @brief Robotarmposition stores a configuration of the robotarm
  * @param servoIds - The id's of the servo's
  * @param servoDegrees - The degrees that the servo's are in
- * @param time - Defines period (in ms) it should take for the robot to move to the right position
+ * @param time - Defines period (in ms) the robot should take to move to this position
  */
 struct robotarmPosition
 {
@@ -39,40 +43,40 @@ struct robotarmPosition
   std::vector<int> servoDegrees;
   uint32_t time;
 
+  /**
+   * @brief Construct a new robotarm Position object
+   */
   robotarmPosition() : time(0)
   {
   }
 
-  robotarmPosition(const robotarmPosition& aRobotarmPosition) : servoIds(aRobotarmPosition.servoIds), servoDegrees(aRobotarmPosition.servoDegrees), time(aRobotarmPosition.time)
+  /**
+   * @brief Copy constructor
+   * @param aRobotarmPosition - The object to be copied 
+   */
+  robotarmPosition(const robotarmPosition &aRobotarmPosition) : servoIds(aRobotarmPosition.servoIds), servoDegrees(aRobotarmPosition.servoDegrees), time(aRobotarmPosition.time)
   {
   }
 };
 
 class highlevel
 {
-protected:
-  ros::NodeHandle mNodeHandler;
-  lowlevel mLowLevelDriver;
-  ros::Subscriber mSingleServoSubscriber;
-  ros::Subscriber mStopSingleServoSubscriber;
-  ros::Subscriber mMoveServosSubscriber;
-  ros::Subscriber mStopServosSubscriber;
-  ros::Subscriber mArmInstructionSubscriber;
-
-  robotarmPosition mParkPosition;
-  robotarmPosition mReadyPosition;
-  robotarmPosition mStraightPosition;
-
 public:
-  
+  /**
+   * @brief Default constructor
+   */
   highlevel();
-  highlevel(unsigned int aBaudRate);
-  virtual ~highlevel();
 
   /**
-   * @brief Is used to catch ctrl-c event to kill the application
+   * @brief Constructor
+   * @param aBaudRate 
    */
-  static void signalHandler(int aSignal);
+  highlevel(unsigned int aBaudRate);
+
+  /**
+   * @brief Destroy the highlevel object
+   */
+  virtual ~highlevel();
 
   /**
    * @brief Set the Baud Rate
@@ -86,7 +90,18 @@ public:
   void run();
 
 private:
-  
+  ros::NodeHandle mNodeHandler;
+  lowlevel mLowLevelDriver;
+  ros::Subscriber mSingleServoSubscriber;
+  ros::Subscriber mStopSingleServoSubscriber;
+  ros::Subscriber mMoveServosSubscriber;
+  ros::Subscriber mStopServosSubscriber;
+  ros::Subscriber mArmInstructionSubscriber;
+
+  robotarmPosition mParkPosition;
+  robotarmPosition mReadyPosition;
+  robotarmPosition mStraightPosition;
+
   /**
    * @brief False intitially, becomes true as soon as atleast one valid move command has been sent to the robot by serial
    */
@@ -102,12 +117,16 @@ private:
    */
   bool mIsInitialized;
 
-  // List of all servo ids
+  /**
+   * @brief List of all servo ids
+   */
   std::vector<unsigned int> mServoIds;
-
-  // Any move commands received by message get stored in this queue of commands
-  std::vector<robotarmPosition> mMoveCommands;
   
+  /**
+   * @brief Any move commands received by message get stored in this queue of commands
+   */
+  std::vector<robotarmPosition> mMoveCommands;
+
   /**
    * @brief Time to take to go to the park position
    */
@@ -121,19 +140,24 @@ private:
   /**
    * @brief Expected period of time to complete the last sent valid move. Is 0 until the first valid move is sent to the lowlevel.
    */
-   uint32_t mLastMoveTimeMS;
+  uint32_t mLastMoveTimeMS;
 
   /**
    * @brief Start time of last sent valid move command.
    */
-   std::chrono::high_resolution_clock::time_point mLastMoveStartTime;
+  std::chrono::high_resolution_clock::time_point mLastMoveStartTime;
+
+  /**
+   * @brief Is used to catch ctrl-c event to kill the application
+   */
+  static void signalHandler(int aSignal);
 
   // Message callbacks
-  void singleServoCallback(const robotarminterface::singleServoConstPtr& aSingleServoMessage);
-  void stopSingleServoCallback(const robotarminterface::stopSingleServoConstPtr& aStopSingleServoMessage);
-  void moveServosCallback(const robotarminterface::moveServosConstPtr& aSingleServoMessage);
-  void stopServosCallback(const robotarminterface::stopServosConstPtr& aStopAllServoMessage);
-  void armInstructionCallback(const robotarminterface::armInstructionConstPtr& aArmPosition);
+  void singleServoCallback(const robotarminterface::singleServoConstPtr &aSingleServoMessage);
+  void stopSingleServoCallback(const robotarminterface::stopSingleServoConstPtr &aStopSingleServoMessage);
+  void moveServosCallback(const robotarminterface::moveServosConstPtr &aSingleServoMessage);
+  void stopServosCallback(const robotarminterface::stopServosConstPtr &aStopAllServoMessage);
+  void armInstructionCallback(const robotarminterface::armInstructionConstPtr &aArmPosition);
 
   /**
    * @brief Initializes the arm by going to the park position
@@ -154,10 +178,10 @@ private:
    * @brief Checks if new commands from the mMoveCommands should be sent to the low level driver
    */
   void handleMoveCommands();
-  
+
   /**
    * @brief Checks if the period needed to complete last sent valid move has expired
-   * @return whethet the move has expired
+   * @return whether the move has expired
    */
   bool lastMovePeriodExpired() const;
 };
