@@ -54,7 +54,7 @@ struct robotarmPosition
    * @brief Copy constructor
    * @param aRobotarmPosition - The object to be copied 
    */
-  robotarmPosition(const robotarmPosition &aRobotarmPosition) : servoIds(aRobotarmPosition.servoIds), servoDegrees(aRobotarmPosition.servoDegrees), time(aRobotarmPosition.time)
+  robotarmPosition(const robotarmPosition& aRobotarmPosition) : servoIds(aRobotarmPosition.servoIds), servoDegrees(aRobotarmPosition.servoDegrees), time(aRobotarmPosition.time)
   {
   }
 };
@@ -153,11 +153,11 @@ private:
   static void signalHandler(int aSignal);
 
   // Message callbacks
-  void singleServoCallback(const robotarminterface::singleServoConstPtr &aSingleServoMessage);
-  void stopSingleServoCallback(const robotarminterface::stopSingleServoConstPtr &aStopSingleServoMessage);
-  void moveServosCallback(const robotarminterface::moveServosConstPtr &aSingleServoMessage);
-  void stopServosCallback(const robotarminterface::stopServosConstPtr &aStopAllServoMessage);
-  void armInstructionCallback(const robotarminterface::armInstructionConstPtr &aArmPosition);
+  void singleServoCallback(const robotarminterface::singleServoConstPtr& aSingleServoMessage);
+  void stopSingleServoCallback(const robotarminterface::stopSingleServoConstPtr& aStopSingleServoMessage);
+  void moveServosCallback(const robotarminterface::moveServosConstPtr& aSingleServoMessage);
+  void stopServosCallback(const robotarminterface::stopServosConstPtr& aStopAllServoMessage);
+  void armInstructionCallback(const robotarminterface::armInstructionConstPtr& aArmPosition);
 
   /**
    * @brief Initializes the arm by going to the park position

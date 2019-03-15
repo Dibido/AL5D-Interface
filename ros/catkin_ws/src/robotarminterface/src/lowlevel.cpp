@@ -81,7 +81,7 @@ bool lowlevel::moveServosToPos(std::vector<unsigned int> aPins, std::vector<int>
   return true;
 }
 
-unsigned int lowlevel::convertDegreesToPulsewidth(int aDegrees, Servo &aServo) const
+unsigned int lowlevel::convertDegreesToPulsewidth(int aDegrees, Servo& aServo) const
 {
   unsigned int lPulseRange = MAX_PULSEWIDTH - MIN_PULSEWIDTH;
 
@@ -111,7 +111,7 @@ void lowlevel::stopServos(std::vector<unsigned int> aPins)
   }
 }
 
-bool lowlevel::degreesInRange(int aDegrees, Servo &aServo) const
+bool lowlevel::degreesInRange(int aDegrees, Servo& aServo) const
 {
   bool lReturn = false;
 
@@ -167,7 +167,7 @@ bool lowlevel::servoExists(unsigned int aServoId) const
   return lReturn;
 }
 
-Servo &lowlevel::getServoWithId(unsigned int aServoId)
+Servo& lowlevel::getServoWithId(unsigned int aServoId)
 {
   bool lFoundServo = false;
 

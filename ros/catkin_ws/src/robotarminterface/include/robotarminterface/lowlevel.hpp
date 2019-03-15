@@ -67,7 +67,7 @@ public:
    * @param aDegrees - The angle in degrees 
    * @param aServo - The servo, is used to check boundaries (min/max range).
    */
-  unsigned int convertDegreesToPulsewidth(int aDegrees, Servo &aServo) const;
+  unsigned int convertDegreesToPulsewidth(int aDegrees, Servo& aServo) const;
 
   /**
    * @brief stop the movement of the servos
@@ -81,7 +81,7 @@ public:
    * @param aServo - The servo object, which contains a min/max
    * @return - true if min <= aDegrees <= max
    */
-  bool degreesInRange(int aDegrees, Servo &aServo) const;
+  bool degreesInRange(int aDegrees, Servo& aServo) const;
 
   /**
    * @brief Sends a command over serial
@@ -109,7 +109,7 @@ public:
    * @param aServoId - The given servo id
    * @return - A reference to the requested Servo
    */
-  Servo &getServoWithId(unsigned int aServoId);
+  Servo& getServoWithId(unsigned int aServoId);
 
   /**
     * @brief Set the mArmLocked variable.

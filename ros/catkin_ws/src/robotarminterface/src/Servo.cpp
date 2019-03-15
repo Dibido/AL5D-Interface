@@ -5,7 +5,7 @@ Servo::Servo(unsigned int aServoId, int aMinDegreesLimit, int aMaxDegreesLimit, 
 {
 }
 
-Servo::Servo(const Servo &aOther) : mServoId(aOther.mServoId), mMinDegreesLimit(aOther.mMinDegreesLimit), mMaxDegreesLimit(aOther.mMaxDegreesLimit), mMinDegreesRange(aOther.mMinDegreesRange), mMaxDegreesRange(aOther.mMaxDegreesRange), mCurrentDegrees(aOther.mCurrentDegrees)
+Servo::Servo(const Servo& aOther) : mServoId(aOther.mServoId), mMinDegreesLimit(aOther.mMinDegreesLimit), mMaxDegreesLimit(aOther.mMaxDegreesLimit), mMinDegreesRange(aOther.mMinDegreesRange), mMaxDegreesRange(aOther.mMaxDegreesRange), mCurrentDegrees(aOther.mCurrentDegrees)
 {
 }
 
@@ -47,7 +47,7 @@ void Servo::setCurrentDegrees(int aDegrees)
   mCurrentDegrees = aDegrees;
 }
 
-Servo &Servo::operator=(Servo aOther)
+Servo& Servo::operator=(Servo aOther)
 {
   if (aOther == *this)
   {
